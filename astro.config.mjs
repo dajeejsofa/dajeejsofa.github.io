@@ -13,7 +13,7 @@ const hasProducts = existsSync(productsDir) && readdirSync(productsDir)
 
 // عنوان الموقع النهائي في مكان واحد.
 // بعد شراء الدومين وربطه: غيّره إلى 'https://dajeejsofa.com' وأضف public/CNAME.
-export const SITE = 'https://dajeejsofa.github.io';
+export const SITE = 'https://dajeejsofa.com';
 
 export default defineConfig({
   site: SITE,

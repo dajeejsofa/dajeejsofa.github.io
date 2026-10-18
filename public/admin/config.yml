@@ -8,8 +8,8 @@ backend:
 
 app_title: "لوحة قنفات الضجيج"
 logo_url: /favicon.svg
-site_url: https://dajeejsofa.github.io
-display_url: https://dajeejsofa.github.io
+site_url: https://dajeejsofa.com
+display_url: https://dajeejsofa.com
 output:
   omit_empty_optional_fields: true
 editor:
