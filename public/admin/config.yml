@@ -1,0 +1,144 @@
+# لوحة التحكم (Sveltia CMS) — تكتب مباشرة إلى GitHub، بلا قاعدة بيانات ولا خادم.
+# أسماء الحقول (name) مطابقة لـ src/content.config.ts — لا تغيّرها وإلا يفشل البناء.
+
+backend:
+  name: github
+  repo: dajeejsofa/dajeejsofa.github.io
+  branch: main
+
+app_title: "لوحة قنفات الضجيج"
+logo_url: /favicon.svg
+site_url: https://dajeejsofa.github.io
+display_url: https://dajeejsofa.github.io
+output:
+  omit_empty_optional_fields: true
+editor:
+  preview: false
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# الصور تُضغط في المتصفح قبل الرفع: WebP بجودة 85 وأقصى بُعد 2000 بكسل.
+# مكتبات الصور الجاهزة مُعطّلة: الموقع لا يعرض إلا صورًا حقيقية من المعرض والمشغل.
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image: {format: webp, quality: 85, width: 2000, height: 2000}
+  stock_assets:
+    providers: []
+
+collections:
+  - name: "products"
+    label: "المنتجات"
+    label_singular: "منتج"
+    icon: "chair"
+    description: "كل منتج يظهر في صفحته وفي صفحة قسمه وفي «كل المنتجات». القسم يظهر في الموقع تلقائيًا عند إضافة أول منتج له."
+    folder: "src/content/products"
+    create: true
+    slug: "{{fields.urlSlug}}"
+    preview_path: "/products/{{slug}}/"
+    identifier_field: title
+    summary: "{{title}} · {{price}} د.ك"
+    thumbnail: image
+    sortable_fields: ["title", "order", "price"]
+    view_filters:
+      - {label: "المنشور", field: draft, pattern: false}
+      - {label: "المسودات", field: draft, pattern: true}
+    view_groups:
+      - {label: "القسم", field: category}
+    media_folder: "images"
+    public_folder: "./images"
+    fields:
+      - {label: "اسم المنتج", name: "title", widget: "string", hint: "اسم رسمي حسب النوع، مثل: كنب زاوية مودرن رمادي"}
+      - {label: "رابط الصفحة (بالإنجليزي)", name: "urlSlug", widget: "string", pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "أحرف إنجليزية صغيرة وأرقام وشرطات فقط"], hint: "مثل: kanab-zawiya-modern-ramadi. لا تغيّره بعد النشر."}
+      - {label: "الصورة الرئيسية", name: "image", widget: "image", required: false, choose_url: false}
+      - {label: "وصف الصورة", name: "imageAlt", widget: "string", required: false, hint: "النوع واللون والمكان، مثل: كنب زاوية رمادي في صالة"}
+      - label: "القسم"
+        name: "category"
+        widget: "relation"
+        collection: "categories"
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        required: false
+      - {label: "السعر (د.ك)", name: "price", widget: "number", required: false, value_type: "float", min: 0, step: 0.5, hint: "اتركه فارغًا ليظهر «السعر عبر واتساب»"}
+      - {label: "ملاحظة السعر", name: "priceNote", widget: "string", required: false, hint: "مثل: السعر للطقم كامل"}
+      - {label: "متوفر في المعرض", name: "inStock", widget: "boolean", default: true}
+      - {label: "صور إضافية", name: "gallery", widget: "list", required: false, field: {label: "صورة", name: "img", widget: "image", choose_url: false, required: false}}
+      - {label: "عدد المقاعد", name: "seats", widget: "number", required: false, value_type: "int", min: 1}
+      - {label: "الطول (سم)", name: "width", widget: "number", required: false, value_type: "int", min: 1}
+      - {label: "العمق (سم)", name: "depth", widget: "number", required: false, value_type: "int", min: 1}
+      - {label: "الارتفاع (سم)", name: "height", widget: "number", required: false, value_type: "int", min: 1}
+      - {label: "القماش", name: "fabric", widget: "string", required: false, hint: "فقط إن كنت متأكدًا"}
+      - {label: "الألوان المتاحة", name: "colors", widget: "list", required: false, field: {label: "لون", name: "color", widget: "string"}}
+      - {label: "الوصف", name: "body", widget: "markdown", required: false}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false, hint: "110–160 حرفًا تظهر تحت العنوان في نتائج البحث"}
+      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
+      - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
+      - {label: "⚙️ الترتيب", name: "order", widget: "number", default: 0, value_type: "int"}
+      - {label: "⚙️ مسودة (لا تظهر في الموقع)", name: "draft", widget: "boolean", default: false}
+
+  - name: "categories"
+    label: "الأقسام"
+    label_singular: "قسم"
+    icon: "category"
+    description: "صفحة القسم تظهر في الموقع فقط عندما يكون فيه منتج منشور."
+    folder: "src/content/categories"
+    create: false
+    delete: false
+    identifier_field: title
+    fields:
+      - {label: "اسم القسم", name: "title", widget: "string"}
+      - {label: "العنوان الرئيسي (H1)", name: "h1", widget: "string"}
+      - {label: "المقدمة", name: "body", widget: "markdown", required: false}
+      - label: "أسئلة شائعة"
+        name: "faqs"
+        widget: "list"
+        required: false
+        fields:
+          - {label: "السؤال", name: "question", widget: "string"}
+          - {label: "الجواب", name: "answer", widget: "text"}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false}
+      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
+      - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
+      - {label: "⚙️ الترتيب", name: "order", widget: "number", default: 0, value_type: "int"}
+
+  - name: "services"
+    label: "الخدمات"
+    label_singular: "خدمة"
+    icon: "construction"
+    folder: "src/content/services"
+    create: false
+    delete: false
+    identifier_field: title
+    fields:
+      - {label: "اسم الخدمة", name: "title", widget: "string"}
+      - {label: "العنوان الرئيسي (H1)", name: "h1", widget: "string"}
+      - {label: "المحتوى", name: "body", widget: "markdown", required: false}
+      - label: "أسئلة شائعة"
+        name: "faqs"
+        widget: "list"
+        required: false
+        fields:
+          - {label: "السؤال", name: "question", widget: "string"}
+          - {label: "الجواب", name: "answer", widget: "text"}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false}
+      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
+      - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
+      - {label: "⚙️ الترتيب", name: "order", widget: "number", default: 0, value_type: "int"}
+
+  - name: "settings"
+    label: "بيانات المعرض"
+    icon: "storefront"
+    files:
+      - name: "showroom"
+        label: "بيانات المعرض"
+        file: "src/data/settings.json"
+        fields:
+          - {label: "رقم المحل أو الطابق في مجمع كتارا", name: "unit", widget: "string", required: false, hint: "مثل: محل 12، الدور الأرضي"}
+          - {label: "ساعات العمل (كما تظهر للزائر)", name: "openingHoursText", widget: "string", required: false, hint: "مثل: يوميًا من 10 صباحًا إلى 10 مساءً"}
+          - {label: "ساعات العمل لجوجل", name: "openingHours", widget: "list", required: false, hint: "صيغة إنجليزية مثل: Sa-Th 10:00-22:00", field: {label: "فترة", name: "h", widget: "string"}}
+          - {label: "رابط الموقع على الخريطة", name: "mapUrl", widget: "string", required: false}
+          - {label: "رابط إنستقرام", name: "instagram", widget: "string", required: false}
+          - {label: "رابط تيك توك", name: "tiktok", widget: "string", required: false}

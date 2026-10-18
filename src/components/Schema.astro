@@ -1,0 +1,85 @@
+---
+import { business } from '../data/business';
+
+export interface Props {
+  faqs?: { question: string; answer: string }[];
+  breadcrumbs?: { name: string; url: string }[];
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean };
+  service?: { name: string; url: string; description?: string };
+}
+const { faqs = [], breadcrumbs = [], product, service } = Astro.props;
+const site = Astro.site!.toString().replace(/\/$/, '');
+const storeId = `${site}/#store`;
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'FurnitureStore',
+    '@id': storeId,
+    name: business.name,
+    alternateName: business.nameEn,
+    description: business.description,
+    url: `${site}/`,
+    telephone: `+965${business.phone}`,
+    currenciesAccepted: 'KWD',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: business.unit ? `${business.unit}، ${business.street}` : business.street,
+      addressLocality: business.locality,
+      addressCountry: business.countryCode,
+    },
+    areaServed: { '@type': 'Country', name: 'Kuwait' },
+    ...(business.geo ? { geo: { '@type': 'GeoCoordinates', ...business.geo } } : {}),
+    ...(business.mapUrl ? { hasMap: business.mapUrl } : {}),
+    ...(business.openingHours.length ? { openingHours: business.openingHours } : {}),
+    ...(business.sameAs.length ? { sameAs: business.sameAs } : {}),
+  },
+  { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: business.name, inLanguage: 'ar-KW', publisher: { '@id': storeId } },
+];
+
+if (breadcrumbs.length > 1) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.name, item: b.url })),
+  });
+}
+if (faqs.length) {
+  graph.push({
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+  });
+}
+if (product) {
+  graph.push({
+    '@type': 'Product',
+    name: product.name,
+    url: product.url,
+    ...(product.image ? { image: product.image } : {}),
+    ...(product.description ? { description: product.description } : {}),
+    brand: { '@type': 'Brand', name: business.name },
+    ...(typeof product.price === 'number' && product.price > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            url: product.url,
+            price: product.price.toFixed(3),
+            priceCurrency: 'KWD',
+            availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+            seller: { '@id': storeId },
+          },
+        }
+      : {}),
+  });
+}
+if (service) {
+  graph.push({
+    '@type': 'Service',
+    name: service.name,
+    url: service.url,
+    ...(service.description ? { description: service.description } : {}),
+    provider: { '@id': storeId },
+    areaServed: { '@type': 'Country', name: 'Kuwait' },
+  });
+}
+const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+---
+<script type="application/ld+json" set:html={json} />

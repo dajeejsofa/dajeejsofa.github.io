@@ -1,0 +1,31 @@
+---
+import { business } from '../data/business';
+const links = [
+  { href: '/shop/', label: 'كل المنتجات' },
+  { href: '/tanjeed-kanab/', label: 'تنجيد' },
+  { href: '/tafseel-kanab/', label: 'تفصيل' },
+  { href: '/maarad-dajeej/', label: 'المعرض' },
+];
+const path = Astro.url.pathname;
+---
+<header class="border-b border-line bg-white">
+  <div class="container-page flex items-center justify-between gap-4 py-3">
+    <a href="/" class="text-lg font-bold">{business.name}</a>
+    <nav aria-label="القائمة الرئيسية" class="hidden gap-5 text-sm md:flex">
+      {links.map((l) => (
+        <a href={l.href} class:list={['hover:text-accent', path.startsWith(l.href) && 'font-bold text-accent']}>{l.label}</a>
+      ))}
+    </nav>
+    <div class="flex items-center gap-2">
+      <button type="button" data-cart-open class="btn btn-line px-3 py-2 text-sm" aria-label="فتح السلة">
+        السلة <span data-cart-count class="min-w-5 rounded-full bg-ink px-1.5 text-xs text-white" hidden>0</span>
+      </button>
+      <details class="relative md:hidden">
+        <summary class="btn btn-line cursor-pointer list-none px-3 py-2 text-sm" aria-label="القائمة">☰</summary>
+        <nav class="absolute left-0 z-40 mt-2 w-48 rounded-lg border border-line bg-white p-2 shadow-lg">
+          {links.map((l) => <a href={l.href} class="block rounded px-3 py-2 hover:bg-sand">{l.label}</a>)}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>

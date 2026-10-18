@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import FAQ from '../components/FAQ.astro';
+import { business, fullAddress, services } from '../data/business';
+import { waGeneral } from '../data/whatsapp';
+import { publishedProducts, categoriesWithProducts } from '../lib/catalog';
+
+const products = (await publishedProducts()).slice(0, 8);
+const cats = await categoriesWithProducts();
+
+// إجابات من معلومات مؤكدة فقط
+const faqs = [
+  { question: `أين يقع معرض ${business.name}؟`, answer: `في ${fullAddress}.` },
+  { question: 'ما الخدمات التي تقدمونها؟', answer: 'بيع كنب وقنفات جاهزة من المعرض، وتفصيل الكنب حسب المقاس، وتنجيد وتلبيس الكنب القديم، وتصليح الكنب.' },
+  { question: 'كيف أطلب من الموقع؟', answer: `أضف المنتجات إلى السلة ثم اضغط «أرسل الطلب عبر واتساب»، أو راسلنا مباشرة على واتساب ${business.phone}.` },
+  { question: 'هل الأسعار بالدينار الكويتي؟', answer: 'نعم، كل الأسعار في الموقع بالدينار الكويتي.' },
+];
+---
+<BaseLayout
+  title={`كنب وقنفات في الكويت — ${business.name}، معرض ومشغل`}
+  description={`معرض ومشغل كنب وقنفات في مجمع كتارا بالضجيج: كنب جاهز بأسعار بالدينار، تفصيل حسب المقاس، تنجيد وتلبيس وتصليح. اطلب عبر واتساب ${business.phone}.`}
+  faqs={faqs}
+>
+  <section class="container-page pt-10">
+    <h1 class="max-w-3xl text-3xl font-bold leading-snug md:text-4xl">قنفات وكنب في الكويت من معرضنا ومشغلنا بالضجيج</h1>
+    <p class="mt-4 max-w-3xl text-lg text-muted">{business.description}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn btn-dark" href="/shop/">تصفح الكنب والقنفات</a>
+      <a class="btn btn-wa" href={waGeneral()} target="_blank" rel="noopener">اطلب عبر واتساب</a>
+    </div>
+  </section>
+
+  <section class="container-page mt-14">
+    <h2 class="text-2xl font-bold">خدماتنا</h2>
+    <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <li class="rounded-xl border border-line bg-white p-5">
+        <a href="/shop/" class="font-bold hover:text-accent">كنب جاهز من المعرض</a>
+        <p class="mt-1 text-sm text-muted">كنب وقنفات جاهزة بأسعار بالدينار الكويتي.</p>
+      </li>
+      {services.map((s) => (
+        <li class="rounded-xl border border-line bg-white p-5">
+          <a href={`/${s.slug}/`} class="font-bold hover:text-accent">{s.title}</a>
+          <p class="mt-1 text-sm text-muted">{s.short}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {cats.length > 0 && (
+    <section class="container-page mt-14">
+      <h2 class="text-2xl font-bold">الأقسام</h2>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {cats.map((c) => <a class="btn btn-line" href={`/${c.id}/`}>{c.data.title}</a>)}
+      </div>
+    </section>
+  )}
+
+  {products.length > 0 && (
+    <section class="container-page mt-14">
+      <div class="flex items-end justify-between">
+        <h2 class="text-2xl font-bold">أحدث الكنب والقنفات</h2>
+        <a class="text-sm underline" href="/shop/">كل المنتجات</a>
+      </div>
+      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((p, i) => <ProductCard product={p} eager={i < 2} />)}
+      </div>
+    </section>
+  )}
+
+  <section class="container-page mt-14">
+    <div class="rounded-xl border border-line bg-white p-6">
+      <h2 class="text-2xl font-bold">زورنا في المعرض</h2>
+      <p class="mt-2">{fullAddress}</p>
+      <p class="mt-1">الهاتف وواتساب: <a dir="ltr" class="font-semibold" href={`tel:+965${business.phone}`}>{business.phone}</a></p>
+      <a class="mt-3 inline-block underline" href="/maarad-dajeej/">تفاصيل المعرض</a>
+    </div>
+  </section>
+
+  <div class="container-page"><FAQ faqs={faqs} /></div>
+</BaseLayout>

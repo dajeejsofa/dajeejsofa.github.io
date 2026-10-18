@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { business } from '../data/business';
+import { waGeneral } from '../data/whatsapp';
+import { publishedProducts, categoriesWithProducts } from '../lib/catalog';
+const products = await publishedProducts();
+const cats = await categoriesWithProducts();
+const site = Astro.site!.toString().replace(/\/$/, '');
+---
+<BaseLayout
+  title="كل المنتجات — كنب وقنفات في الكويت"
+  noindex={products.length === 0}
+  description={`تصفح كنب وقنفات ${business.name} بأسعار بالدينار الكويتي، واطلب عبر واتساب ${business.phone}.`}
+  breadcrumbs={[{ name: 'الرئيسية', url: `${site}/` }, { name: 'كل المنتجات', url: `${site}/shop/` }]}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={[{ name: 'الرئيسية', href: '/' }, { name: 'كل المنتجات', href: '/shop/' }]} />
+    <h1 class="mt-3 text-3xl font-bold">كل الكنب والقنفات</h1>
+    {cats.length > 0 && (
+      <div class="mt-4 flex flex-wrap gap-2">
+        {cats.map((c) => <a class="btn btn-line px-3 py-1.5 text-sm" href={`/${c.id}/`}>{c.data.title}</a>)}
+      </div>
+    )}
+    {products.length > 0 ? (
+      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((p, i) => <ProductCard product={p} eager={i < 2} />)}
+      </div>
+    ) : (
+      <div class="mt-8 rounded-xl border border-line bg-white p-6">
+        <p>نضيف المنتجات قريبًا. للاستفسار عن الكنب المتوفر في المعرض راسلنا على واتساب.</p>
+        <a class="btn btn-wa mt-4" href={waGeneral()} target="_blank" rel="noopener">اسأل عن المتوفر</a>
+      </div>
+    )}
+  </section>
+</BaseLayout>

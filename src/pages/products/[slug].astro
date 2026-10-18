@@ -1,0 +1,113 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getEntry } from 'astro:content';
+import { publishedProducts, productUrl, type Product } from '../../lib/catalog';
+import { formatKWD } from '../../lib/price';
+import { waProduct } from '../../data/whatsapp';
+
+export async function getStaticPaths() {
+  const products = await publishedProducts();
+  return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props as { product: Product };
+const d = product.data;
+const site = Astro.site!.toString().replace(/\/$/, '');
+const url = `${site}${productUrl(product)}`;
+const category = d.category ? await getEntry('categories', d.category) : undefined;
+const { Content } = await render(product);
+
+const thumb = d.image ? await getImage({ src: d.image, width: 160, format: 'webp' }) : undefined;
+const ogImg = d.image ? await getImage({ src: d.image, width: 1200, format: 'jpeg' }) : undefined;
+
+const related = (await publishedProducts())
+  .filter((p) => p.id !== product.id && d.category && p.data.category === d.category)
+  .slice(0, 4);
+
+const specs = [
+  d.seats ? ['عدد المقاعد', String(d.seats)] : null,
+  d.width ? ['الطول', `${d.width} سم`] : null,
+  d.depth ? ['العمق', `${d.depth} سم`] : null,
+  d.height ? ['الارتفاع', `${d.height} سم`] : null,
+  d.fabric ? ['القماش', d.fabric] : null,
+  d.colors.length ? ['الألوان المتاحة', d.colors.join('، ')] : null,
+].filter(Boolean) as [string, string][];
+
+const crumbs = [
+  { name: 'الرئيسية', href: '/' },
+  category ? { name: category.data.title, href: `/${category.id}/` } : { name: 'كل المنتجات', href: '/shop/' },
+  { name: d.title, href: productUrl(product) },
+];
+---
+<BaseLayout
+  title={d.seoTitle || d.title}
+  description={d.description || `${d.title}${typeof d.price === 'number' && d.price > 0 ? ` بسعر ${formatKWD(d.price)}` : ''} من معرض قنفات الضجيج في مجمع كتارا، الكويت. اطلب عبر واتساب.`}
+  ogImage={ogImg?.src}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+  product={{
+    name: d.title,
+    url,
+    image: ogImg ? new URL(ogImg.src, site).toString() : undefined,
+    description: d.description || undefined,
+    price: d.price,
+    inStock: d.inStock,
+  }}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={crumbs} />
+    <div class="mt-5 grid gap-8 lg:grid-cols-2">
+      <div class="space-y-3">
+        {d.image && (
+          <Image src={d.image} alt={d.imageAlt || d.title} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 50vw, 100vw" class="w-full rounded-xl border border-line object-cover" loading="eager" fetchpriority="high" />
+        )}
+        {d.gallery && d.gallery.length > 0 && (
+          <div class="grid grid-cols-3 gap-3">
+            {d.gallery.map((g, i) => <Image src={g} alt={`${d.title} — صورة ${i + 2}`} widths={[240, 480]} sizes="33vw" class="aspect-square w-full rounded-lg object-cover" />)}
+          </div>
+        )}
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold leading-snug">{d.title}</h1>
+        {typeof d.price === 'number' && d.price > 0
+          ? <p class="mt-3 text-2xl font-bold">{formatKWD(d.price)}</p>
+          : <p class="mt-3 text-muted">{d.priceNote || 'السعر عبر واتساب'}</p>}
+        {typeof d.price === 'number' && d.price > 0 && d.priceNote && <p class="text-sm text-muted">{d.priceNote}</p>}
+        {!d.inStock && <p class="mt-2 text-sm font-semibold text-accent">غير متوفر حاليًا في المعرض — يمكن طلبه تفصيلًا.</p>}
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button
+            type="button"
+            class="btn btn-dark"
+            data-add-to-cart
+            data-id={product.id}
+            data-title={d.title}
+            data-price={typeof d.price === 'number' && d.price > 0 ? String(d.price) : ''}
+            data-url={url}
+            data-image={thumb?.src || ''}
+          >أضف إلى السلة</button>
+          <a class="btn btn-wa" href={waProduct(d.title, url)} target="_blank" rel="noopener">اسأل عن هذا المنتج عبر واتساب</a>
+        </div>
+
+        {specs.length > 0 && (
+          <dl class="mt-8 divide-y divide-line rounded-xl border border-line bg-white">
+            {specs.map(([k, v]) => <div class="flex justify-between gap-4 p-3"><dt class="text-muted">{k}</dt><dd class="font-semibold">{v}</dd></div>)}
+          </dl>
+        )}
+        <div class="prose-ar mt-6"><Content /></div>
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="container-page mt-14">
+      <h2 class="text-2xl font-bold">منتجات مشابهة</h2>
+      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {related.map((p) => <ProductCard product={p} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>

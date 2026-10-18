@@ -1,0 +1,131 @@
+---
+import { business } from '../data/business';
+---
+<div data-cart-root hidden class="fixed inset-0 z-50">
+  <div data-cart-close class="absolute inset-0 bg-black/40"></div>
+  <aside
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cart-title"
+    class="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-xl"
+  >
+    <div class="flex items-center justify-between border-b border-line p-4">
+      <h2 id="cart-title" class="text-lg font-bold">سلة الطلب</h2>
+      <button type="button" data-cart-close class="btn btn-line px-3 py-1" aria-label="إغلاق السلة">✕</button>
+    </div>
+    <p class="px-4 pt-3 text-sm text-muted">اختر المنتجات ثم أرسل الطلب عبر واتساب، ونرد عليك لتأكيد التفاصيل.</p>
+    <ul data-cart-items class="flex-1 divide-y divide-line overflow-y-auto px-4"></ul>
+    <p data-cart-empty class="flex-1 px-4 py-10 text-center text-muted">السلة فارغة.</p>
+    <div class="border-t border-line p-4">
+      <div class="mb-3 flex items-center justify-between">
+        <span>المجموع</span>
+        <strong data-cart-total>—</strong>
+      </div>
+      <a data-cart-send class="btn btn-wa w-full" href="#" target="_blank" rel="noopener">أرسل الطلب عبر واتساب</a>
+    </div>
+  </aside>
+</div>
+
+<script define:vars={{ shopName: business.name, wa: business.whatsapp }} is:inline>
+  (function () {
+    var KEY = 'dajeejsofa_cart_v1';
+    var root = document.querySelector('[data-cart-root]');
+    if (!root) return;
+    var list = root.querySelector('[data-cart-items]');
+    var empty = root.querySelector('[data-cart-empty]');
+    var totalEl = root.querySelector('[data-cart-total]');
+    var send = root.querySelector('[data-cart-send]');
+
+    function load() {
+      try { var v = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+    }
+    function save(items) { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {} }
+    function kwd(n) {
+      return n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + ' د.ك';
+    }
+    function priced(i) { return typeof i.price === 'number' && i.price > 0; }
+
+    function message(items) {
+      var lines = ['مرحبًا ' + shopName + '، أريد طلب:', ''];
+      items.forEach(function (i, n) {
+        var row = (n + 1) + ') ' + i.title + ' × ' + i.qty + (priced(i) ? ' — ' + kwd(i.price) : '');
+        lines.push(row);
+        if (i.url) lines.push(i.url);
+      });
+      var total = items.reduce(function (s, i) { return s + (priced(i) ? i.price * i.qty : 0); }, 0);
+      if (total > 0) {
+        lines.push('', 'المجموع: ' + kwd(total) + (items.some(function (i) { return !priced(i); }) ? ' (بدون المنتجات التي سعرها عبر واتساب)' : ''));
+      }
+      return lines.join('\n');
+    }
+
+    function render() {
+      var items = load();
+      var count = items.reduce(function (s, i) { return s + i.qty; }, 0);
+      document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+        el.textContent = String(count);
+        el.hidden = count === 0;
+      });
+      list.innerHTML = '';
+      items.forEach(function (i, idx) {
+        var li = document.createElement('li');
+        li.className = 'flex items-center gap-3 py-3';
+        var img = i.image ? '<img src="' + i.image + '" alt="" class="h-14 w-14 rounded object-cover" loading="lazy">' : '<span class="h-14 w-14 rounded bg-sand"></span>';
+        li.innerHTML =
+          img +
+          '<div class="flex-1"><a class="font-semibold"></a><p class="text-sm text-muted"></p></div>' +
+          '<div class="flex items-center gap-1">' +
+          '<button type="button" class="btn btn-line px-2 py-0.5" data-dec aria-label="تقليل الكمية">−</button>' +
+          '<span class="w-6 text-center"></span>' +
+          '<button type="button" class="btn btn-line px-2 py-0.5" data-inc aria-label="زيادة الكمية">+</button>' +
+          '</div>' +
+          '<button type="button" class="text-muted" data-del aria-label="حذف من السلة">✕</button>';
+        var a = li.querySelector('a'); a.textContent = i.title; a.href = i.url || '#';
+        li.querySelector('p').textContent = priced(i) ? kwd(i.price) : 'السعر عبر واتساب';
+        li.querySelector('.w-6').textContent = String(i.qty);
+        li.querySelector('[data-dec]').onclick = function () { change(idx, -1); };
+        li.querySelector('[data-inc]').onclick = function () { change(idx, 1); };
+        li.querySelector('[data-del]').onclick = function () { change(idx, -Infinity); };
+        list.appendChild(li);
+      });
+      empty.hidden = items.length > 0;
+      list.hidden = items.length === 0;
+      var total = items.reduce(function (s, i) { return s + (priced(i) ? i.price * i.qty : 0); }, 0);
+      totalEl.textContent = total > 0 ? kwd(total) : '—';
+      send.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(message(items));
+      send.toggleAttribute('aria-disabled', items.length === 0);
+      send.style.opacity = items.length ? '1' : '.5';
+      send.style.pointerEvents = items.length ? 'auto' : 'none';
+    }
+
+    function change(idx, delta) {
+      var items = load();
+      if (!items[idx]) return;
+      items[idx].qty = Math.max(0, items[idx].qty + delta);
+      if (!items[idx].qty) items.splice(idx, 1);
+      save(items); render();
+    }
+
+    function open() { root.hidden = false; document.body.style.overflow = 'hidden'; }
+    function close() { root.hidden = true; document.body.style.overflow = ''; }
+
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-cart-open]')) { render(); open(); }
+      if (t.closest('[data-cart-close]')) close();
+      var add = t.closest('[data-add-to-cart]');
+      if (add) {
+        var d = add.dataset;
+        var items = load();
+        var found = items.find(function (i) { return i.id === d.id; });
+        if (found) found.qty += 1;
+        else items.push({ id: d.id, title: d.title, price: d.price ? Number(d.price) : null, url: d.url, image: d.image || '', qty: 1 });
+        save(items); render(); open();
+      }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !root.hidden) close(); });
+    window.addEventListener('storage', function (e) { if (e.key === KEY) render(); });
+    render();
+  })();
+</script>

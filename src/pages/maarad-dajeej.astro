@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import FAQ from '../components/FAQ.astro';
+import { business, fullAddress } from '../data/business';
+import { waGeneral } from '../data/whatsapp';
+const site = Astro.site!.toString().replace(/\/$/, '');
+const faqs = [
+  { question: `أين معرض ${business.name}؟`, answer: `في ${fullAddress}.` },
+  { question: 'هل يوجد مشغل مع المعرض؟', answer: 'نعم، لدينا معرض ومشغل كنب وقنفات.' },
+  { question: 'كيف أتواصل معكم؟', answer: `بالهاتف أو واتساب على ${business.phone}.` },
+];
+const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'المعرض', href: '/maarad-dajeej/' }];
+---
+<BaseLayout
+  title={`معرض كنب في الضجيج — مجمع كتارا | ${business.name}`}
+  description={`معرض ومشغل ${business.name} في ${fullAddress}: كنب وقنفات جاهزة، تفصيل، تنجيد وتصليح. واتساب ${business.phone}.`}
+  faqs={faqs}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-3 text-3xl font-bold">معرض قنفات الضجيج في مجمع كتارا</h1>
+    <p class="mt-4 max-w-3xl text-lg text-muted">{business.description}</p>
+    <dl class="mt-6 max-w-xl divide-y divide-line rounded-xl border border-line bg-white">
+      <div class="flex justify-between gap-4 p-4"><dt class="text-muted">العنوان</dt><dd class="font-semibold">{fullAddress}</dd></div>
+      <div class="flex justify-between gap-4 p-4"><dt class="text-muted">الهاتف وواتساب</dt><dd><a dir="ltr" class="font-semibold" href={`tel:+965${business.phone}`}>{business.phone}</a></dd></div>
+      {business.openingHoursText && <div class="flex justify-between gap-4 p-4"><dt class="text-muted">ساعات العمل</dt><dd class="font-semibold">{business.openingHoursText}</dd></div>}
+    </dl>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn btn-wa" href={waGeneral()} target="_blank" rel="noopener">راسلنا على واتساب</a>
+      {business.mapUrl && <a class="btn btn-line" href={business.mapUrl} target="_blank" rel="noopener">الموقع على الخريطة</a>}
+    </div>
+  </section>
+  <div class="container-page"><FAQ faqs={faqs} /></div>
+</BaseLayout>

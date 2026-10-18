@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+/* خط Cairo مستضاف داخل الموقع (بدون طلبات خارجية) */
+@font-face { font-family: 'Cairo'; font-weight: 400; font-display: swap; src: url('/fonts/cairo-arabic-400-normal.woff2') format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: 'Cairo'; font-weight: 600; font-display: swap; src: url('/fonts/cairo-arabic-600-normal.woff2') format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: 'Cairo'; font-weight: 700; font-display: swap; src: url('/fonts/cairo-arabic-700-normal.woff2') format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: 'Cairo'; font-weight: 400; font-display: swap; src: url('/fonts/cairo-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Cairo'; font-weight: 600; font-display: swap; src: url('/fonts/cairo-latin-600-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Cairo'; font-weight: 700; font-display: swap; src: url('/fonts/cairo-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+
+@theme {
+  --font-sans: 'Cairo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-ink: #24211d;
+  --color-muted: #6b645b;
+  --color-ivory: #faf7f2;
+  --color-sand: #efe8dd;
+  --color-line: #ddd3c4;
+  --color-accent: #7a5a36;
+  --color-wa: #1f9d55;
+}
+
+html { background: var(--color-ivory); color: var(--color-ink); }
+body { font-family: var(--font-sans); line-height: 1.75; }
+
+.container-page { width: 100%; max-width: 72rem; margin-inline: auto; padding-inline: 1rem; }
+
+.prose-ar h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2rem; margin-bottom: .75rem; }
+.prose-ar p { margin-block: .75rem; }
+.prose-ar ol { list-style: decimal; padding-inline-start: 1.5rem; }
+.prose-ar ul { list-style: disc; padding-inline-start: 1.5rem; }
+.prose-ar li { margin-block: .35rem; }
+.prose-ar a { color: var(--color-accent); text-decoration: underline; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .6rem; padding: .7rem 1.2rem; font-weight: 600; }
+.btn-wa { background: var(--color-wa); color: #fff; }
+.btn-dark { background: var(--color-ink); color: #fff; }
+.btn-line { border: 1px solid var(--color-line); background: #fff; }

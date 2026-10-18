@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Schema from '../components/Schema.astro';
+import Cart from '../components/Cart.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
+import { business } from '../data/business';
+
+export interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+  ogImage?: string;
+  faqs?: { question: string; answer: string }[];
+  breadcrumbs?: { name: string; url: string }[];
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean };
+  service?: { name: string; url: string; description?: string };
+}
+const { title, description, noindex = false, ogImage, faqs, breadcrumbs, product, service } = Astro.props;
+const fullTitle = title.includes(business.name) ? title : `${title} | ${business.name}`;
+const metaDescription = description?.trim() ? description : business.description;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = ogImage ? new URL(ogImage, Astro.site) : undefined;
+---
+<!doctype html>
+<html lang="ar-KW" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#24211d" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/cairo-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/cairo-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonical} />
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow" />
+      : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />}
+    {!noindex && <link rel="alternate" hreflang="ar-KW" href={canonical} />}
+    <meta property="og:type" content={product ? 'product' : 'website'} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={business.locale} />
+    <meta property="og:site_name" content={business.name} />
+    {og && <meta property="og:image" content={og} />}
+    <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
+    <Schema faqs={faqs} breadcrumbs={breadcrumbs} product={product} service={service} />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <Cart />
+    <FloatingWhatsApp />
+  </body>
+</html>

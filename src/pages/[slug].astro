@@ -1,0 +1,71 @@
+---
+// صفحات الجذر: الخدمات (دائمًا) والأقسام (فقط إن كان فيها منتجات منشورة)
+import { render, getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ProductCard from '../components/ProductCard.astro';
+import FAQ from '../components/FAQ.astro';
+import { business, services as serviceList } from '../data/business';
+import { waService, waGeneral } from '../data/whatsapp';
+import { categoriesWithProducts, productsIn } from '../lib/catalog';
+
+type Entry = CollectionEntry<'services'> | CollectionEntry<'categories'>;
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  const cats = await categoriesWithProducts();
+  return [
+    ...services.map((entry) => ({ params: { slug: entry.id }, props: { entry, kind: 'service' as const } })),
+    ...cats.map((entry) => ({ params: { slug: entry.id }, props: { entry, kind: 'category' as const } })),
+  ];
+}
+
+const { entry, kind } = Astro.props as { entry: Entry; kind: 'service' | 'category' };
+const d = entry.data;
+const site = Astro.site!.toString().replace(/\/$/, '');
+const path = `/${entry.id}/`;
+const { Content } = await render(entry);
+const products = kind === 'category' ? await productsIn(entry.id) : [];
+const otherServices = serviceList.filter((s) => s.slug !== entry.id);
+const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: d.title, href: path }];
+---
+<BaseLayout
+  title={d.seoTitle || d.h1}
+  description={d.description}
+  faqs={d.faqs}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+  service={kind === 'service' ? { name: d.title, url: `${site}${path}`, description: d.description } : undefined}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-3 text-3xl font-bold leading-snug">{d.h1}</h1>
+    <div class="prose-ar mt-4 max-w-3xl text-lg"><Content /></div>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn btn-wa" href={kind === 'service' ? waService(d.title) : waGeneral()} target="_blank" rel="noopener">
+        {kind === 'service' ? `اطلب ${d.title} عبر واتساب` : 'اسأل عبر واتساب'}
+      </a>
+      <a class="btn btn-line" href="/maarad-dajeej/">موقع المعرض</a>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="container-page mt-12">
+      <h2 class="text-2xl font-bold">{d.title} المتوفر</h2>
+      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((p, i) => <ProductCard product={p} eager={i < 2} />)}
+      </div>
+    </section>
+  )}
+
+  <div class="container-page"><FAQ faqs={d.faqs} /></div>
+
+  {kind === 'service' && (
+    <section class="container-page mt-12">
+      <h2 class="text-xl font-bold">خدمات أخرى من {business.name}</h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        {otherServices.map((s) => <a class="btn btn-line" href={`/${s.slug}/`}>{s.title}</a>)}
+        <a class="btn btn-line" href="/shop/">كنب جاهز</a>
+      </div>
+    </section>
+  )}
+</BaseLayout>
