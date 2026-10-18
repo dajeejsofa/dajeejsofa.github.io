@@ -10,7 +10,9 @@ const path = Astro.url.pathname;
 ---
 <header class="border-b border-line bg-white">
   <div class="container-page flex items-center justify-between gap-4 py-3">
-    <a href="/" class="text-lg font-bold">{business.name}</a>
+    <a href="/" class="flex shrink-0 items-center" aria-label={`${business.name} — الرئيسية`}>
+      <img src="/logo.png" alt={business.name} width="182" height="40" decoding="async" class="h-10 w-auto" />
+    </a>
     <nav aria-label="القائمة الرئيسية" class="hidden gap-5 text-sm md:flex">
       {links.map((l) => (
         <a href={l.href} class:list={['hover:text-accent', path.startsWith(l.href) && 'font-bold text-accent']}>{l.label}</a>

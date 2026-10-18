@@ -18,7 +18,7 @@ export const SITE = 'https://dajeejsofa.com';
 export default defineConfig({
   site: SITE,
   trailingSlash: 'always',
-  build: { format: 'directory' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/admin/') && !page.includes('/404') && (hasProducts || !page.endsWith('/shop/')),
