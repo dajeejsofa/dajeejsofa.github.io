@@ -30,6 +30,7 @@ const products = defineCollection({
       gallery: z.array(image()).optional(),
       category: optStr(), // اسم ملف القسم في src/content/categories
       price: opt(z.number()), // بالدينار الكويتي
+      priceUnit: z.preprocess(blank, z.enum(['piece', 'meter']).default('piece')), // للقطعة أو للمتر الطولي
       priceNote: optStr(),
       seats: opt(z.number()),
       width: opt(z.number()), // سم
@@ -37,7 +38,7 @@ const products = defineCollection({
       height: opt(z.number()), // سم
       fabric: optStr(),
       colors: z.array(z.string()).default([]),
-      inStock: z.boolean().default(true),
+      inStock: z.boolean().default(false), // false = تفصيل حسب الطلب
       order: z.number().default(0),
       draft: z.boolean().default(false),
       ...seo,

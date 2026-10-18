@@ -1,8 +1,8 @@
 {
   "unit": "",
-  "openingHoursText": "",
-  "openingHours": [],
-  "mapUrl": "",
+  "openingHoursText": "يوميًا من 8 صباحًا حتى 9 مساءً",
+  "openingHours": ["Mo-Su 08:00-21:00"],
+  "mapUrl": "https://maps.app.goo.gl/sJ6EzcRdNqynEFJV9",
   "instagram": "",
   "tiktok": ""
 }

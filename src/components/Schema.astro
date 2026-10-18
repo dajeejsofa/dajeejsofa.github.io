@@ -4,7 +4,7 @@ import { business } from '../data/business';
 export interface Props {
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
-  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean };
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
   service?: { name: string; url: string; description?: string };
 }
 const { faqs = [], breadcrumbs = [], product, service } = Astro.props;
@@ -63,7 +63,10 @@ if (product) {
             url: product.url,
             price: product.price.toFixed(3),
             priceCurrency: 'KWD',
-            availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+            ...(product.perMeter
+              ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: product.price.toFixed(3), priceCurrency: 'KWD', unitCode: 'MTR', unitText: 'متر طولي' } }
+              : {}),
+            availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/MadeToOrder',
             seller: { '@id': storeId },
           },
         }

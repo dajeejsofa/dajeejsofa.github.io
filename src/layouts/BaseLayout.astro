@@ -14,7 +14,7 @@ export interface Props {
   ogImage?: string;
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
-  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean };
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
   service?: { name: string; url: string; description?: string };
 }
 const { title, description, noindex = false, ogImage, faqs, breadcrumbs, product, service } = Astro.props;

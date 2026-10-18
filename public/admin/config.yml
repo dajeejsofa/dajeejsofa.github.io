@@ -63,8 +63,9 @@ collections:
         display_fields: ["title"]
         required: false
       - {label: "السعر (د.ك)", name: "price", widget: "number", required: false, value_type: "float", min: 0, step: 0.5, hint: "اتركه فارغًا ليظهر «السعر عبر واتساب»"}
-      - {label: "ملاحظة السعر", name: "priceNote", widget: "string", required: false, hint: "مثل: السعر للطقم كامل"}
-      - {label: "متوفر في المعرض", name: "inStock", widget: "boolean", default: true}
+      - {label: "طريقة التسعير", name: "priceUnit", widget: "select", default: "meter", options: [{label: "للمتر الطولي", value: "meter"}, {label: "للقطعة", value: "piece"}]}
+      - {label: "ملاحظة السعر", name: "priceNote", widget: "string", required: false, hint: "مثل: شامل القماش"}
+      - {label: "متوفر جاهز في المعرض", name: "inStock", widget: "boolean", default: false, hint: "اتركه مطفأً إذا كان المنتج تفصيلًا حسب الطلب"}
       - {label: "صور إضافية", name: "gallery", widget: "list", required: false, field: {label: "صورة", name: "img", widget: "image", choose_url: false, required: false}}
       - {label: "عدد المقاعد", name: "seats", widget: "number", required: false, value_type: "int", min: 1}
       - {label: "الطول (سم)", name: "width", widget: "number", required: false, value_type: "int", min: 1}

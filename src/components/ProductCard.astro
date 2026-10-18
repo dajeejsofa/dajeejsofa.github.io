@@ -2,10 +2,10 @@
 import { Image } from 'astro:assets';
 import type { Product } from '../lib/catalog';
 import { productUrl } from '../lib/catalog';
-import { formatKWD } from '../lib/price';
+import { formatKWD, unitLabel } from '../lib/price';
 export interface Props { product: Product; eager?: boolean }
 const { product, eager = false } = Astro.props;
-const { title, image, imageAlt, price, priceNote } = product.data;
+const { title, image, imageAlt, price, priceNote, priceUnit } = product.data;
 ---
 <a href={productUrl(product)} class="group block overflow-hidden rounded-xl border border-line bg-white">
   <div class="aspect-[4/3] bg-sand">
@@ -24,7 +24,7 @@ const { title, image, imageAlt, price, priceNote } = product.data;
   <div class="p-4">
     <h3 class="font-semibold leading-snug group-hover:text-accent">{title}</h3>
     {typeof price === 'number' && price > 0
-      ? <p class="mt-1 font-bold">{formatKWD(price)}</p>
+      ? <p class="mt-1 font-bold">{formatKWD(price)}<span class="text-sm font-normal text-muted">{unitLabel(priceUnit)}</span></p>
       : <p class="mt-1 text-sm text-muted">{priceNote || 'السعر عبر واتساب'}</p>}
   </div>
 </a>

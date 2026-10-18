@@ -6,7 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { getEntry } from 'astro:content';
 import { publishedProducts, productUrl, type Product } from '../../lib/catalog';
-import { formatKWD } from '../../lib/price';
+import { formatKWD, unitLabel } from '../../lib/price';
 import { waProduct } from '../../data/whatsapp';
 
 export async function getStaticPaths() {
@@ -29,6 +29,7 @@ const related = (await publishedProducts())
   .slice(0, 4);
 
 const specs = [
+  d.priceUnit === 'meter' ? ['طريقة التسعير', 'بالمتر الطولي'] : null,
   d.seats ? ['عدد المقاعد', String(d.seats)] : null,
   d.width ? ['الطول', `${d.width} سم`] : null,
   d.depth ? ['العمق', `${d.depth} سم`] : null,
@@ -55,6 +56,7 @@ const crumbs = [
     description: d.description || undefined,
     price: d.price,
     inStock: d.inStock,
+    perMeter: d.priceUnit === 'meter',
   }}
 >
   <section class="container-page pt-8">
@@ -73,10 +75,11 @@ const crumbs = [
       <div>
         <h1 class="text-3xl font-bold leading-snug">{d.title}</h1>
         {typeof d.price === 'number' && d.price > 0
-          ? <p class="mt-3 text-2xl font-bold">{formatKWD(d.price)}</p>
+          ? <p class="mt-3 text-2xl font-bold">{formatKWD(d.price)}<span class="text-base font-normal text-muted">{unitLabel(d.priceUnit)}</span></p>
           : <p class="mt-3 text-muted">{d.priceNote || 'السعر عبر واتساب'}</p>}
         {typeof d.price === 'number' && d.price > 0 && d.priceNote && <p class="text-sm text-muted">{d.priceNote}</p>}
-        {!d.inStock && <p class="mt-2 text-sm font-semibold text-accent">غير متوفر حاليًا في المعرض — يمكن طلبه تفصيلًا.</p>}
+        {d.priceUnit === 'meter' && <p class="text-sm text-muted">السعر للمتر الطولي من الكنب، ويُحسب الإجمالي حسب مقاس مكانك.</p>}
+        <p class="mt-2 text-sm font-semibold text-accent">{d.inStock ? 'متوفر في المعرض' : 'تفصيل حسب الطلب في مشغلنا'}</p>
 
         <div class="mt-6 flex flex-wrap gap-3">
           <button
@@ -88,6 +91,7 @@ const crumbs = [
             data-price={typeof d.price === 'number' && d.price > 0 ? String(d.price) : ''}
             data-url={url}
             data-image={thumb?.src || ''}
+            data-unit={d.priceUnit}
           >أضف إلى السلة</button>
           <a class="btn btn-wa" href={waProduct(d.title, url)} target="_blank" rel="noopener">اسأل عن هذا المنتج عبر واتساب</a>
         </div>
