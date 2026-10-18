@@ -28,6 +28,18 @@ const rest = imgs.slice(1);
 const thumb = main ? await getImage({ src: main, width: 160, format: 'webp' }) : undefined;
 const ogImg = main ? await getImage({ src: main, width: 1200, format: 'jpeg' }) : undefined;
 
+// كلمات البحث الرئيسية لكل قسم (الأعلى بحثًا) — تُستعمل في فقرة الربط أسفل الوصف
+const headTerms: Record<string, [string, string]> = {
+  'kanab-zawiya': ['كنب زاوية', 'قنفات زاوية'],
+  'kanab-diwaniya': ['كنب ديوانية', 'قنفات ديوانية'],
+  'kanab-modern': ['كنب مودرن', 'قنفات مودرن'],
+  'atqam-kanab': ['أطقم كنب', 'أطقم قنفات'],
+  'majalis-arabiya': ['مجالس عربية', 'جلسات عربية'],
+  'kanab-classic': ['كنب كلاسيك', 'قنفات كلاسيك'],
+  'kanab-amriki': ['كنب امريكي', 'قنفات امريكي'],
+};
+const terms = category ? headTerms[category.id] : undefined;
+
 const related = (await publishedProducts())
   .filter((p) => p.id !== product.id && ((d.category && p.data.category === d.category) || (d.service && p.data.service === d.service)))
   .slice(0, 4);
@@ -110,13 +122,24 @@ const crumbs = [
           </dl>
         )}
         <div class="prose-ar mt-6"><Content /></div>
+        {service ? (
+          <p class="mt-6 rounded-xl bg-sand p-4 text-sm leading-7">
+            هذا العمل من خدمة <a class="font-semibold underline" href={`/${service.id}/`}>{service.data.title} في الكويت</a> من مشغل قنفات الضجيج بالضجيج.
+            شاهد أيضًا <a class="underline" href="/tafseel-kanab/">تفصيل كنب وقنفات حسب المقاس</a>.
+          </p>
+        ) : category && terms ? (
+          <p class="mt-6 rounded-xl bg-sand p-4 text-sm leading-7">
+            من قسم <a class="font-semibold underline" href={`/${category.id}/`}>{terms[0]} و{terms[1]}</a> في الكويت.
+            كل الكنب عندنا <a class="underline" href="/tafseel-kanab/">تفصيل حسب المقاس</a> في مشغلنا بالضجيج، والسعر بالمتر شامل القماش.
+          </p>
+        ) : null}
       </div>
     </div>
   </section>
 
   {related.length > 0 && (
     <section class="container-page mt-14">
-      <h2 class="text-2xl font-bold">منتجات مشابهة</h2>
+      <h2 class="text-2xl font-bold">{terms ? `${terms[0]} مشابه` : service ? `أعمال ${service.data.title} أخرى` : 'منتجات مشابهة'}</h2>
       <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {related.map((p) => <ProductCard product={p} />)}
       </div>
