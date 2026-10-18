@@ -1,7 +1,7 @@
 ---
 title: "كنب ديوانية مودرن بيج بمساند خشب"
-urlSlug: "kanab-diwaniya-modern-beige-doha"
-image: "./images/kanab-diwaniya-modern-beige-doha-1.jpg"
+images:
+  - "./images/kanab-diwaniya-modern-beige-doha-1.jpg"
 imageAlt: "كنب ديوانية مودرن بيج بمساند خشب منفذ في ديوانية بمنطقة الدوحة في الكويت"
 category: "kanab-diwaniya"
 price: 39

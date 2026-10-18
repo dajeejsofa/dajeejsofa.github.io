@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { getEntry } from 'astro:content';
-import { publishedProducts, productUrl, type Product } from '../../lib/catalog';
+import { publishedProducts, productUrl, productImages, productAlt, type Product } from '../../lib/catalog';
 import { formatKWD, unitLabel } from '../../lib/price';
 import { waProduct } from '../../data/whatsapp';
 
@@ -21,8 +21,11 @@ const url = `${site}${productUrl(product)}`;
 const category = d.category ? await getEntry('categories', d.category) : undefined;
 const { Content } = await render(product);
 
-const thumb = d.image ? await getImage({ src: d.image, width: 160, format: 'webp' }) : undefined;
-const ogImg = d.image ? await getImage({ src: d.image, width: 1200, format: 'jpeg' }) : undefined;
+const imgs = productImages(product);
+const main = imgs[0];
+const rest = imgs.slice(1);
+const thumb = main ? await getImage({ src: main, width: 160, format: 'webp' }) : undefined;
+const ogImg = main ? await getImage({ src: main, width: 1200, format: 'jpeg' }) : undefined;
 
 const related = (await publishedProducts())
   .filter((p) => p.id !== product.id && d.category && p.data.category === d.category)
@@ -63,12 +66,12 @@ const crumbs = [
     <Breadcrumbs items={crumbs} />
     <div class="mt-5 grid gap-8 lg:grid-cols-2">
       <div class="space-y-3">
-        {d.image && (
-          <Image src={d.image} alt={d.imageAlt || d.title} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 50vw, 100vw" class="w-full rounded-xl border border-line object-cover" loading="eager" fetchpriority="high" />
+        {main && (
+          <Image src={main} alt={productAlt(product)} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 50vw, 100vw" class="w-full rounded-xl border border-line object-cover" loading="eager" fetchpriority="high" />
         )}
-        {d.gallery && d.gallery.length > 0 && (
+        {rest.length > 0 && (
           <div class="grid grid-cols-3 gap-3">
-            {d.gallery.map((g, i) => <Image src={g} alt={`${d.title} — صورة ${i + 2}`} widths={[240, 480]} sizes="33vw" class="aspect-square w-full rounded-lg object-cover" />)}
+            {rest.map((g, i) => <Image src={g} alt={`${d.title} — صورة ${i + 2}`} widths={[240, 480]} sizes="33vw" class="aspect-square w-full rounded-lg object-cover" />)}
           </div>
         )}
       </div>

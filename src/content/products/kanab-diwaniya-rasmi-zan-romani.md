@@ -1,11 +1,10 @@
 ---
 title: "كنب ديوانية رسمي خشب زان أحمر روماني"
-urlSlug: "kanab-diwaniya-rasmi-zan-romani"
-image: "./images/kanab-diwaniya-rasmi-zan-romani-1.jpg"
-imageAlt: "كنب ديوانية رسمي بهيكل خشب زان وقماش مخمل رمادي مخضر في ديوانية"
-gallery:
+images:
+  - "./images/kanab-diwaniya-rasmi-zan-romani-1.jpg"
   - "./images/kanab-diwaniya-rasmi-zan-romani-2.jpg"
   - "./images/kanab-diwaniya-rasmi-zan-romani-3.jpg"
+imageAlt: "كنب ديوانية رسمي بهيكل خشب زان وقماش مخمل رمادي مخضر في ديوانية"
 category: "kanab-diwaniya"
 price: 65
 priceUnit: "meter"

@@ -1,11 +1,10 @@
 ---
 title: "كنب زاوية مودرن حرف U بيج بقاعدة خشب"
-urlSlug: "kanab-zawiya-modern-u-beige"
-image: "./images/kanab-zawiya-modern-u-beige-1.jpg"
-imageAlt: "كنب زاوية مودرن على شكل حرف U بقماش بيج فاتح وقاعدة خشب في صالة"
-gallery:
+images:
+  - "./images/kanab-zawiya-modern-u-beige-1.jpg"
   - "./images/kanab-zawiya-modern-u-beige-2.jpg"
   - "./images/kanab-zawiya-modern-u-beige-3.jpg"
+imageAlt: "كنب زاوية مودرن على شكل حرف U بقماش بيج فاتح وقاعدة خشب في صالة"
 category: "kanab-zawiya"
 price: 42
 priceUnit: "meter"

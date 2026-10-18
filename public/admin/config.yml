@@ -33,14 +33,15 @@ collections:
     label: "المنتجات"
     label_singular: "منتج"
     icon: "chair"
-    description: "كل منتج يظهر في صفحته وفي صفحة قسمه وفي «كل المنتجات». القسم يظهر في الموقع تلقائيًا عند إضافة أول منتج له."
+    description: "أضف الصور والسعر فقط، وباقي الحقول اختيارية. رابط الصفحة يُنشأ تلقائيًا ولا يتغير أبدًا."
     folder: "src/content/products"
     create: true
-    slug: "{{fields.urlSlug}}"
+    # رابط ثابت يُولَّد مرة واحدة عند الإنشاء (لا يتأثر بتغيير الاسم لاحقًا، فلا تنكسر الروابط)
+    slug: "kanab-{{uuid_short}}"
     preview_path: "/products/{{slug}}/"
     identifier_field: title
     summary: "{{title}} · {{price}} د.ك"
-    thumbnail: image
+    thumbnail: images
     sortable_fields: ["title", "order", "price"]
     view_filters:
       - {label: "المنشور", field: draft, pattern: false}
@@ -50,10 +51,18 @@ collections:
     media_folder: "images"
     public_folder: "./images"
     fields:
-      - {label: "اسم المنتج", name: "title", widget: "string", hint: "اسم رسمي حسب النوع، مثل: كنب زاوية مودرن رمادي"}
-      - {label: "رابط الصفحة (بالإنجليزي)", name: "urlSlug", widget: "string", pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "أحرف إنجليزية صغيرة وأرقام وشرطات فقط"], hint: "مثل: kanab-zawiya-modern-ramadi. لا تغيّره بعد النشر."}
-      - {label: "الصورة الرئيسية", name: "image", widget: "image", required: false, choose_url: false}
-      - {label: "وصف الصورة", name: "imageAlt", widget: "string", required: false, hint: "النوع واللون والمكان، مثل: كنب زاوية رمادي في صالة"}
+      # ───── الأساسي ─────
+      - label: "📷 الصور (حتى 8)"
+        name: "images"
+        widget: "image"
+        multiple: true
+        max: 8
+        required: false
+        choose_url: false
+        media_library: {config: {multiple: true}}
+        hint: "اضغط «رفع» واختر حتى 8 صور مرة واحدة من الجوال. الصورة الأولى هي الرئيسية."
+      - {label: "اسم المنتج", name: "title", widget: "string", hint: "اكتب أي اسم مؤقت مثل «كنب 10» — نحسّنه لاحقًا لجوجل."}
+      - {label: "السعر للمتر (د.ك)", name: "price", widget: "number", required: false, value_type: "float", min: 0, step: 0.5, hint: "اتركه فارغًا ليظهر «السعر عبر واتساب»."}
       - label: "القسم"
         name: "category"
         widget: "relation"
@@ -62,22 +71,19 @@ collections:
         value_field: "{{slug}}"
         display_fields: ["title"]
         required: false
-      - {label: "السعر (د.ك)", name: "price", widget: "number", required: false, value_type: "float", min: 0, step: 0.5, hint: "اتركه فارغًا ليظهر «السعر عبر واتساب»"}
-      - {label: "طريقة التسعير", name: "priceUnit", widget: "select", default: "meter", options: [{label: "للمتر الطولي", value: "meter"}, {label: "للقطعة", value: "piece"}]}
-      - {label: "ملاحظة السعر", name: "priceNote", widget: "string", required: false, hint: "مثل: شامل القماش"}
-      - {label: "متوفر جاهز في المعرض", name: "inStock", widget: "boolean", default: false, hint: "اتركه مطفأً إذا كان المنتج تفصيلًا حسب الطلب"}
-      - {label: "صور إضافية", name: "gallery", widget: "list", required: false, field: {label: "صورة", name: "img", widget: "image", choose_url: false, required: false}}
-      - {label: "عدد المقاعد", name: "seats", widget: "number", required: false, value_type: "int", min: 1}
-      - {label: "الطول (سم)", name: "width", widget: "number", required: false, value_type: "int", min: 1}
-      - {label: "العمق (سم)", name: "depth", widget: "number", required: false, value_type: "int", min: 1}
-      - {label: "الارتفاع (سم)", name: "height", widget: "number", required: false, value_type: "int", min: 1}
-      - {label: "القماش", name: "fabric", widget: "string", required: false, hint: "فقط إن كنت متأكدًا"}
-      - {label: "الألوان المتاحة", name: "colors", widget: "list", required: false, field: {label: "لون", name: "color", widget: "string"}}
+      - {label: "القماش", name: "fabric", widget: "string", required: false, hint: "مثل: شانيل تركي، مخمل. فقط إن كنت متأكدًا."}
       - {label: "الوصف", name: "body", widget: "markdown", required: false}
-      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false, hint: "110–160 حرفًا تظهر تحت العنوان في نتائج البحث"}
+      # ───── قيم ثابتة (لا تظهر في النموذج) ─────
+      - {name: "priceUnit", widget: "hidden", default: "meter"}
+      - {name: "inStock", widget: "hidden", default: false}
+      - {name: "order", widget: "hidden", default: 0}
+      # ───── جوجل (نعبّئها نحن) ─────
+      - {label: "🔎 ملاحظة السعر", name: "priceNote", widget: "string", required: false, default: "شامل القماش"}
+      - {label: "🔎 الألوان", name: "colors", widget: "list", required: false, field: {label: "لون", name: "color", widget: "string"}}
+      - {label: "🔎 وصف الصورة", name: "imageAlt", widget: "string", required: false}
       - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false}
       - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
-      - {label: "⚙️ الترتيب", name: "order", widget: "number", default: 0, value_type: "int"}
       - {label: "⚙️ مسودة (لا تظهر في الموقع)", name: "draft", widget: "boolean", default: false}
 
   - name: "categories"

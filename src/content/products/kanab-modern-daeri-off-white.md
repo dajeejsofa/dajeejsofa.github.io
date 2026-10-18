@@ -1,12 +1,11 @@
 ---
 title: "كنب مودرن دائري مقوّس أوف وايت"
-urlSlug: "kanab-modern-daeri-off-white"
-image: "./images/kanab-modern-daeri-off-white-1.jpg"
-imageAlt: "كنب مودرن دائري مقوس بلون أوف وايت مع كرسيين مفردين بنيين في صالة"
-gallery:
+images:
+  - "./images/kanab-modern-daeri-off-white-1.jpg"
   - "./images/kanab-modern-daeri-off-white-2.jpg"
   - "./images/kanab-modern-daeri-off-white-3.jpg"
   - "./images/kanab-modern-daeri-off-white-4.jpg"
+imageAlt: "كنب مودرن دائري مقوس بلون أوف وايت مع كرسيين مفردين بنيين في صالة"
 category: "kanab-modern"
 price: 39
 priceUnit: "meter"

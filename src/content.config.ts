@@ -8,6 +8,14 @@ const optStr = () => z.preprocess(blank, z.string().optional());
 const opt = <T extends z.ZodTypeAny>(t: T) => z.preprocess(blank, t.optional());
 const textOrEmpty = () => z.preprocess(blank, z.string().default(''));
 
+// الصور المختارة من مكتبة اللوحة العامة تُحفظ بمسار مطلق (/uploads/…)، وAstro يحسّن الصور
+// المرتبطة بمسار نسبي فقط — نحوّلها إلى مسارها الفعلي داخل المستودع فلا يفشل البناء أبدًا.
+const fixPath = (v: unknown) =>
+  typeof v === 'string' && v.startsWith('/uploads/') ? `../../../public${v}` : v;
+// حقل الصور يقبل صورة واحدة أو عدة صور (حتى 8)، ويُهمل الفارغ
+const toList = (v: unknown) =>
+  (Array.isArray(v) ? v : v ? [v] : []).map(fixPath).filter((x) => x !== '' && x != null);
+
 const faqs = z
   .array(z.object({ question: z.string(), answer: z.string() }))
   .default([]);
@@ -25,12 +33,15 @@ const products = defineCollection({
     z.object({
       title: z.string(),
       urlSlug: optStr(), // رابط الصفحة كما يُكتب في اللوحة
-      image: opt(image()),
+      // الصور: الأولى هي الرئيسية (حتى 8 صور)
+      images: z.preprocess(toList, z.array(image()).default([])),
+      // حقول قديمة مدعومة للتوافق
+      image: z.preprocess((v) => fixPath(blank(v)), image().optional()),
+      gallery: z.preprocess(toList, z.array(image()).default([])),
       imageAlt: optStr(),
-      gallery: z.array(image()).optional(),
       category: optStr(), // اسم ملف القسم في src/content/categories
       price: opt(z.number()), // بالدينار الكويتي
-      priceUnit: z.preprocess(blank, z.enum(['piece', 'meter']).default('piece')), // للقطعة أو للمتر الطولي
+      priceUnit: z.preprocess(blank, z.enum(['piece', 'meter']).default('meter')), // للقطعة أو للمتر الطولي
       priceNote: optStr(),
       seats: opt(z.number()),
       width: opt(z.number()), // سم

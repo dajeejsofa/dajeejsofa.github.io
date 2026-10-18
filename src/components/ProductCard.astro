@@ -1,18 +1,20 @@
 ---
 import { Image } from 'astro:assets';
 import type { Product } from '../lib/catalog';
-import { productUrl } from '../lib/catalog';
+import { productUrl, productImages, productAlt } from '../lib/catalog';
 import { formatKWD, unitLabel } from '../lib/price';
 export interface Props { product: Product; eager?: boolean }
 const { product, eager = false } = Astro.props;
-const { title, image, imageAlt, price, priceNote, priceUnit } = product.data;
+const { title, price, priceNote, priceUnit } = product.data;
+const image = productImages(product)[0];
+const imageAlt = productAlt(product);
 ---
 <a href={productUrl(product)} class="group block overflow-hidden rounded-xl border border-line bg-white">
   <div class="aspect-[4/3] bg-sand">
     {image && (
       <Image
         src={image}
-        alt={imageAlt || title}
+        alt={imageAlt}
         widths={[360, 560, 800]}
         sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
         class="h-full w-full object-cover"
