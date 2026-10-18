@@ -19,6 +19,7 @@ const d = product.data;
 const site = Astro.site!.toString().replace(/\/$/, '');
 const url = `${site}${productUrl(product)}`;
 const category = d.category ? await getEntry('categories', d.category) : undefined;
+const service = d.service ? await getEntry('services', d.service) : undefined;
 const { Content } = await render(product);
 
 const imgs = productImages(product);
@@ -28,7 +29,7 @@ const thumb = main ? await getImage({ src: main, width: 160, format: 'webp' }) :
 const ogImg = main ? await getImage({ src: main, width: 1200, format: 'jpeg' }) : undefined;
 
 const related = (await publishedProducts())
-  .filter((p) => p.id !== product.id && d.category && p.data.category === d.category)
+  .filter((p) => p.id !== product.id && ((d.category && p.data.category === d.category) || (d.service && p.data.service === d.service)))
   .slice(0, 4);
 
 const specs = [
@@ -43,7 +44,11 @@ const specs = [
 
 const crumbs = [
   { name: 'الرئيسية', href: '/' },
-  category ? { name: category.data.title, href: `/${category.id}/` } : { name: 'كل المنتجات', href: '/shop/' },
+  category
+    ? { name: category.data.title, href: `/${category.id}/` }
+    : service
+      ? { name: service.data.title, href: `/${service.id}/` }
+      : { name: 'كل المنتجات', href: '/shop/' },
   { name: d.title, href: productUrl(product) },
 ];
 ---

@@ -40,6 +40,8 @@ const products = defineCollection({
       gallery: z.preprocess(toList, z.array(image()).default([])),
       imageAlt: optStr(),
       category: optStr(), // اسم ملف القسم في src/content/categories
+      service: optStr(), // خدمة العمل إن كان عمل تنجيد أو تصليح (tanjeed-kanab / tasleeh-kanab)
+      area: optStr(), // المنطقة التي نُفّذ فيها العمل (مثال: الجهراء)
       price: opt(z.number()), // بالدينار الكويتي
       priceUnit: z.preprocess(blank, z.enum(['piece', 'meter']).default('meter')), // للقطعة أو للمتر الطولي
       priceNote: optStr(),

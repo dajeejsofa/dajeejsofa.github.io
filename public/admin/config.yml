@@ -71,6 +71,8 @@ collections:
         value_field: "{{slug}}"
         display_fields: ["title"]
         required: false
+      - {label: "نوع العمل", name: "service", widget: "select", required: false, options: [{label: "تفصيل (افتراضي)", value: ""}, {label: "تنجيد", value: "tanjeed-kanab"}], hint: "اختر «تنجيد» إن كانت الصور لكنب نجّدناه، ليظهر في صفحة التنجيد."}
+      - {label: "منطقة العمل", name: "area", widget: "string", required: false, hint: "مثل: الجهراء، حولي — إن كان العمل منفّذًا لعميل في منطقة معروفة."}
       - {label: "القماش", name: "fabric", widget: "string", required: false, hint: "مثل: شانيل تركي، مخمل. فقط إن كنت متأكدًا."}
       - {label: "الوصف", name: "body", widget: "markdown", required: false}
       # ───── قيم ثابتة (لا تظهر في النموذج) ─────
