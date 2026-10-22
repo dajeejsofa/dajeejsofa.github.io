@@ -4,7 +4,7 @@ import { business } from '../data/business';
 export interface Props {
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
-  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean; shipping?: boolean };
   service?: { name: string; url: string; description?: string };
 }
 const { faqs = [], breadcrumbs = [], product, service } = Astro.props;
@@ -68,7 +68,19 @@ if (product) {
             ...(product.perMeter
               ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: product.price.toFixed(3), priceCurrency: 'KWD', unitCode: 'MTR', unitText: 'متر طولي' } }
               : {}),
-            availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/MadeToOrder',
+            // التوفر: المنتج الجاهز فقط يُعلن InStock. المنتج المصنوع حسب الطلب لا توجد له قيمة
+            // مقبولة عند جوجل تمثله بدقة (PreOrder وBackOrder لا يناسبان)، فلا نُدرج الحقل بدل التضليل.
+            ...(product.inStock ? { availability: 'https://schema.org/InStock' } : {}),
+            // رسم التوصيل الثابت (يُنشر فقط للمنتجات لا لأعمال التنجيد والتصليح)
+            ...(product.shipping
+              ? {
+                  shippingDetails: {
+                    '@type': 'OfferShippingDetails',
+                    shippingRate: { '@type': 'MonetaryAmount', value: business.deliveryFeeKWD, currency: 'KWD' },
+                    shippingDestination: { '@type': 'DefinedRegion', addressCountry: business.countryCode },
+                  },
+                }
+              : {}),
             seller: { '@id': storeId },
           },
         }
