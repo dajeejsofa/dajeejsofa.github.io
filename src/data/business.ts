@@ -21,6 +21,8 @@ export const business = {
   country: 'الكويت',
   countryCode: 'KW',
   locale: 'ar_KW',
+  // رسم التوصيل الثابت بالدينار الكويتي لكل نقلة، لكل مناطق الكويت (أكّده المالك)
+  deliveryFeeKWD: 13,
   // من لوحة التحكم ← «بيانات المعرض» (src/data/settings.json)
   unit: settings.unit.trim(), // رقم المحل/الطابق داخل المجمع
   mapUrl: settings.mapUrl.trim(),
