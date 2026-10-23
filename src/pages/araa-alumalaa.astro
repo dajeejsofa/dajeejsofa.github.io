@@ -13,6 +13,7 @@ const titleOf = new Map(products.map((p) => [p.id, p.data.title]));
 const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'آراء العملاء', href: REVIEWS_PATH }];
 ---
 <BaseLayout
+  hideReviews
   title={`آراء العملاء ومراجعاتهم | ${business.name}`}
   description={`مراجعات عملاء ${business.name} الحقيقية عن تفصيل الكنب وتنجيده وتصليحه في مشغلنا بالضجيج، الكويت. اكتب مراجعتك وأرسلها عبر واتساب.`}
   breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
@@ -40,8 +41,9 @@ const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'آراء ال�
 
     <div id="form" class="mt-10 max-w-xl rounded-xl border border-line bg-white p-5">
       <h2 class="text-xl font-bold">اكتب مراجعتك</h2>
-      <p class="mt-1 text-sm text-muted">تُرسل مراجعتك إلينا عبر واتساب، ونراجعها ثم ننشرها في الموقع.</p>
-      <form id="review-form" class="mt-4 space-y-4" data-wa={business.whatsapp} data-site={site}>
+      <p class="mt-1 text-sm text-muted">تصلنا مراجعتك مباشرة، ونراجعها ثم ننشرها في الموقع.</p>
+      <form id="review-form" class="mt-4 space-y-4" data-wa={business.whatsapp} data-site={site} data-api="https://dajeejsofa-reviews.netlify.app/api/review">
+        <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
         <fieldset>
           <legend class="font-semibold">التقييم</legend>
           <div class="mt-2 flex flex-row-reverse justify-end gap-1 text-3xl" dir="ltr">
@@ -72,7 +74,8 @@ const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'آراء ال�
           <span class="font-semibold">رأيك</span>
           <textarea name="text" required minlength="10" maxlength="600" rows="4" class="mt-1 w-full rounded-lg border border-line p-2"></textarea>
         </label>
-        <button type="submit" class="btn btn-wa w-full">أرسل المراجعة عبر واتساب</button>
+        <button type="submit" class="btn btn-dark w-full">أرسل المراجعة</button>
+        <p id="review-status" class="text-sm" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
@@ -95,21 +98,45 @@ const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'آراء ال�
     };
     form.addEventListener('change', paint);
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const f = new FormData(form);
+    const status = document.getElementById('review-status')!;
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+    // احتياط: إن تعذّر الإرسال المباشر تُفتح رسالة واتساب جاهزة بنفس المراجعة
+    const viaWhatsApp = (f: FormData) => {
       const rating = Number(f.get('rating'));
       const productId = String(f.get('product') || '');
-      const productTitle = productId ? select.selectedOptions[0].text : '';
       const lines = [
         'مراجعة جديدة لموقع قنفات الضجيج',
-        `التقييم: ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)} (${rating} من 5)`,
+        `التقييم: ${rating} من 5`,
         `الاسم: ${String(f.get('name')).trim()}`,
         ...(String(f.get('area') || '').trim() ? [`المنطقة: ${String(f.get('area')).trim()}`] : []),
-        ...(productId ? [`المنتج: ${productTitle}`, `${form.dataset.site}/products/${productId}/`] : []),
+        ...(productId ? [`المنتج: ${select.selectedOptions[0].text}`, `${form.dataset.site}/products/${productId}/`] : []),
         `الرأي: ${String(f.get('text')).trim()}`,
       ];
       window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      button.disabled = true;
+      status.textContent = 'جارٍ الإرسال…';
+      try {
+        const res = await fetch(form.dataset.api!, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(f.entries())),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        paint();
+        status.textContent = 'شكرًا لك! وصلتنا مراجعتك، وستظهر في الموقع بعد مراجعتها.';
+      } catch {
+        status.textContent = 'تعذّر الإرسال المباشر، فتحنا لك واتساب لإرسال المراجعة.';
+        viaWhatsApp(f);
+      } finally {
+        button.disabled = false;
+      }
     });
   }
 </script>

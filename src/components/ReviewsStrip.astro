@@ -1,0 +1,31 @@
+---
+// شريط آراء العملاء في كل الصفحات العربية: متوسط التقييم وأحدث المراجعات المقبولة وزر كتابة مراجعة.
+// (النجوم في نتائج جوجل تُعلن فقط في صفحات المنتجات عن مراجعات ذلك المنتج، حسب سياسة جوجل.)
+import { approvedReviews, ratingSummary, stars, REVIEWS_PATH } from '../lib/reviews';
+const all = await approvedReviews();
+const summary = ratingSummary(all);
+const latest = all.slice(0, 3);
+---
+<section class="container-page mt-12">
+  <div class="rounded-xl border border-line bg-white p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-xl font-bold">آراء العملاء</h2>
+      {summary && <p><span class="text-accent" aria-hidden="true">{stars(summary.average)}</span> {summary.average} من 5 ({summary.count} {summary.count === 1 ? 'مراجعة' : 'مراجعات'})</p>}
+    </div>
+    {latest.length > 0 ? (
+      <ul class="mt-4 grid gap-3 md:grid-cols-3">
+        {latest.map((r) => (
+          <li class="rounded-lg bg-sand p-4">
+            <p class="text-accent" aria-label={`${r.data.rating} من 5`}>{stars(r.data.rating)}</p>
+            <p class="mt-2 text-sm leading-7">{r.data.text.length > 180 ? r.data.text.slice(0, 180) + '…' : r.data.text}</p>
+            <p class="mt-2 text-xs text-muted">{r.data.name}{r.data.area ? ` — ${r.data.area}` : ''}</p>
+          </li>
+        ))}
+      </ul>
+    ) : <p class="mt-2 text-muted">اشتريت أو نجّدت كنبك عندنا؟ شاركنا رأيك.</p>}
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a class="btn btn-dark" href={`${REVIEWS_PATH}#form`}>اكتب مراجعتك</a>
+      {all.length > 3 && <a class="btn btn-line" href={REVIEWS_PATH}>كل الآراء</a>}
+    </div>
+  </div>
+</section>

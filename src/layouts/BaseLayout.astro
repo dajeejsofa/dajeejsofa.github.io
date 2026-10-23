@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import Schema from '../components/Schema.astro';
 import Cart from '../components/Cart.astro';
 import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
+import ReviewsStrip from '../components/ReviewsStrip.astro';
 import { business } from '../data/business';
 
 export interface Props {
@@ -20,8 +21,10 @@ export interface Props {
   lang?: 'ar' | 'en';
   /** الصفحة المقابلة باللغة الأخرى (مسار يبدأ بـ /) — تُربط بـ hreflang في الاتجاهين */
   alternate?: string;
+  /** إخفاء شريط آراء العملاء (صفحة المنتج وصفحة الآراء لهما قسم خاص) */
+  hideReviews?: boolean;
 }
-const { title, description, noindex = false, ogImage, faqs, breadcrumbs, product, service, lang = 'ar', alternate } = Astro.props;
+const { title, description, noindex = false, ogImage, faqs, breadcrumbs, product, service, lang = 'ar', alternate, hideReviews = false } = Astro.props;
 const isEn = lang === 'en';
 const brand = isEn ? business.nameEn : business.name;
 const fullTitle = title.includes(brand) ? title : `${title} | ${brand}`;
@@ -67,6 +70,7 @@ const enUrl = isEn ? canonical : alt;
     <Header lang={lang} switchHref={alternate} />
     <main class="flex-1">
       <slot />
+      {!isEn && !hideReviews && !noindex && <ReviewsStrip />}
     </main>
     <Footer lang={lang} />
     {!isEn && <Cart />}
