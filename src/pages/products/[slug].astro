@@ -8,6 +8,7 @@ import { getEntry } from 'astro:content';
 import { publishedProducts, productUrl, productImages, productAlt, fillPrice, type Product } from '../../lib/catalog';
 import { formatKWD, unitLabel } from '../../lib/price';
 import { waProduct } from '../../data/whatsapp';
+import { returnPolicy } from '../../data/business';
 
 export async function getStaticPaths() {
   const products = await publishedProducts();
@@ -100,6 +101,7 @@ const crumbs = [
         {typeof d.price === 'number' && d.price > 0 && d.priceNote && <p class="text-sm text-muted">{d.priceNote}</p>}
         {d.priceUnit === 'meter' && <p class="text-sm text-muted">السعر للمتر الطولي من الكنب، ويُحسب الإجمالي حسب مقاس مكانك.</p>}
         <p class="mt-2 text-sm font-semibold text-accent">{d.inStock ? 'متوفر في المعرض' : 'تفصيل حسب الطلب في مشغلنا'}</p>
+        <p class="mt-1 text-sm text-muted">{returnPolicy.text}</p>
 
         <div class="mt-6 flex flex-wrap gap-3">
           <button

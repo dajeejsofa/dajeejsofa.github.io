@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { business, fullAddress } from '../data/business';
+import { business, fullAddress, returnPolicy } from '../data/business';
 import { categoriesWithProducts, publishedProducts, productsForService, productsIn, priceFrom, priceTextEn, areasOf, fillPrice } from '../lib/catalog';
 import { liveEnPages, productsOf } from '../lib/en';
 
@@ -37,6 +37,7 @@ export const GET: APIRoute = async ({ site }) => {
     '- التنجيد بالأقمشة فقط، ويتم في مشغلنا بالضجيج.',
     '- التصليح يشمل أرجل الكنب والإسفنج فقط، ويتم في مشغلنا بالضجيج.',
     '- شدّ القماش يكون ضمن التنجيد، وليس خدمة منفصلة.',
+    `- ${returnPolicy.text}`,
     '',
     '## الخدمات',
     ...(await Promise.all(services.map(async (s) => { const list = await productsForService(s.id); return `- [${fillPrice(s.data.h1, list)}](${u(`/${s.id}/`)}): ${fillPrice(s.data.description, list)}`; }))),

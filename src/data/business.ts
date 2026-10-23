@@ -30,6 +30,21 @@ export const business = {
   sameAs,
 };
 
+/**
+ * سياسة الإرجاع (كما أكّدها المالك): لا إرجاع ولا استرداد لأن الكنب تفصيل حسب الطلب،
+ * ويُعاد الكنب للمشغل لإصلاح عيوب التصنيع فقط خلال 3 أيام من الاستلام.
+ * مصدر واحد للنص الظاهر وللبيانات المنظمة التي يقرؤها جوجل.
+ */
+export const returnPolicy = {
+  text: 'لا يُقبل إرجاع أو استرداد لأن الكنب تفصيل حسب الطلب، ونُصلح عيوب التصنيع في مشغلنا خلال 3 أيام من الاستلام.',
+  textEn: 'Returns and refunds are not accepted because sofas are made to order; manufacturing defects are fixed in our workshop within 3 days of receipt.',
+  schema: {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: 'KW',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+  },
+};
+
 export const fullAddressEn = 'Katara Complex, Al Dajeej, Kuwait';
 
 export const fullAddress = `${business.unit ? business.unit + '، ' : ''}${business.street}، ${business.locality}، ${business.country}`;
