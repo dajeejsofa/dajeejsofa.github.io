@@ -80,4 +80,19 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { products, categories, services };
+// مراجعات العملاء الحقيقية: تصل من نموذج «آراء العملاء» عبر واتساب، ويضيفها المالك من اللوحة.
+// لا تُنشر إلا المراجعات المعتمدة (approved)، ولا تُكتب مراجعة بلا عميل حقيقي.
+const reviews = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/reviews' }),
+  schema: z.object({
+    name: z.string(), // اسم العميل كما كتبه
+    rating: z.number().int().min(1).max(5),
+    text: z.string(),
+    product: optStr(), // اسم ملف المنتج (رابطه) إن كانت المراجعة عن منتج محدد
+    area: optStr(), // منطقة العميل (اختياري)
+    date: z.coerce.date(),
+    approved: z.boolean().default(true),
+  }),
+});
+
+export const collections = { products, categories, services, reviews };

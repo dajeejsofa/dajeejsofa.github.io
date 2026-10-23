@@ -4,7 +4,7 @@ import { business, returnPolicy } from '../data/business';
 export interface Props {
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
-  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean; reviews?: { name: string; rating: number; text: string; date: string }[] };
   service?: { name: string; url: string; description?: string; price?: number };
   lang?: 'ar' | 'en';
 }
@@ -61,6 +61,25 @@ if (product) {
     ...(product.image ? { image: product.image } : {}),
     ...(product.description ? { description: product.description } : {}),
     brand: { '@type': 'Brand', name: business.name },
+    // التقييمات تُنشر فقط إن وُجدت مراجعات عملاء حقيقية معتمدة لهذا المنتج، وهي ظاهرة في الصفحة نفسها
+    ...(product.reviews && product.reviews.length
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: (product.reviews.reduce((a, r) => a + r.rating, 0) / product.reviews.length).toFixed(1),
+            reviewCount: product.reviews.length,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          review: product.reviews.map((r) => ({
+            '@type': 'Review',
+            author: { '@type': 'Person', name: r.name },
+            datePublished: r.date,
+            reviewBody: r.text,
+            reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+          })),
+        }
+      : {}),
     ...(typeof product.price === 'number' && product.price > 0
       ? {
           offers: {
