@@ -14,7 +14,7 @@ export interface Props {
   ogImage?: string;
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
-  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean; reviews?: { name: string; rating: number; text: string; date: string }[] };
   service?: { name: string; url: string; description?: string; price?: number };
   /** لغة الصفحة: العربية في الجذر والإنجليزية تحت /en/ */
   lang?: 'ar' | 'en';

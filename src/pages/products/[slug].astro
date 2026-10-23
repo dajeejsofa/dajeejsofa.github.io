@@ -9,6 +9,7 @@ import { publishedProducts, productUrl, productImages, productAlt, fillPrice, ty
 import { formatKWD, unitLabel } from '../../lib/price';
 import { waProduct } from '../../data/whatsapp';
 import { returnPolicy } from '../../data/business';
+import { reviewsFor, ratingSummary, stars, dateAr, REVIEWS_PATH } from '../../lib/reviews';
 
 export async function getStaticPaths() {
   const products = await publishedProducts();
@@ -22,6 +23,9 @@ const url = `${site}${productUrl(product)}`;
 const category = d.category ? await getEntry('categories', d.category) : undefined;
 const service = d.service ? await getEntry('services', d.service) : undefined;
 const { Content } = await render(product);
+const reviews = await reviewsFor(product.id);
+const rating = ratingSummary(reviews);
+const reviewLink = `${REVIEWS_PATH}?p=${product.id}#form`;
 
 const imgs = productImages(product);
 const main = imgs[0];
@@ -78,6 +82,7 @@ const crumbs = [
     price: d.price,
     inStock: d.inStock,
     perMeter: d.priceUnit === 'meter',
+    reviews: reviews.map((r) => ({ name: r.data.name, rating: r.data.rating, text: r.data.text, date: r.data.date.toISOString().slice(0, 10) })),
   }}
 >
   <section class="container-page pt-8">
@@ -101,6 +106,7 @@ const crumbs = [
         {typeof d.price === 'number' && d.price > 0 && d.priceNote && <p class="text-sm text-muted">{d.priceNote}</p>}
         {d.priceUnit === 'meter' && <p class="text-sm text-muted">السعر للمتر الطولي من الكنب، ويُحسب الإجمالي حسب مقاس مكانك.</p>}
         <p class="mt-2 text-sm font-semibold text-accent">{d.inStock ? 'متوفر في المعرض' : 'تفصيل حسب الطلب في مشغلنا'}</p>
+        {rating && <p class="mt-2 text-sm"><a href="#reviews" class="text-accent"><span aria-hidden="true">{stars(rating.average)}</span> {rating.average} من 5 ({rating.count} {rating.count === 1 ? 'مراجعة' : 'مراجعات'})</a></p>}
         <p class="mt-1 text-sm text-muted">{returnPolicy.text}</p>
 
         <div class="mt-6 flex flex-wrap gap-3">
@@ -136,6 +142,21 @@ const crumbs = [
           </p>
         ) : null}
       </div>
+    </div>
+    <div id="reviews" class="mt-10 max-w-3xl">
+      <h2 class="text-xl font-bold">آراء العملاء</h2>
+      {reviews.length ? (
+        <ul class="mt-4 space-y-3">
+          {reviews.map((r) => (
+            <li class="rounded-xl border border-line bg-white p-4">
+              <p class="text-accent" aria-label={`${r.data.rating} من 5`}>{stars(r.data.rating)}</p>
+              <p class="mt-2 leading-7">{r.data.text}</p>
+              <p class="mt-2 text-sm text-muted">{r.data.name}{r.data.area ? ` — ${r.data.area}` : ''} · {dateAr(r.data.date)}</p>
+            </li>
+          ))}
+        </ul>
+      ) : <p class="mt-2 text-muted">لا توجد مراجعات لهذا المنتج بعد.</p>}
+      <a class="btn btn-dark mt-4" href={reviewLink}>اكتب مراجعتك</a>
     </div>
   </section>
 
