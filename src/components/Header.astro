@@ -1,31 +1,66 @@
 ---
 import { business } from '../data/business';
-const links = [
-  { href: '/shop/', label: 'كل المنتجات' },
-  { href: '/tanjeed-kanab/', label: 'تنجيد' },
-  { href: '/tafseel-kanab/', label: 'تفصيل' },
-  { href: '/maarad-dajeej/', label: 'المعرض' },
-];
+import { categoriesWithProducts } from '../lib/catalog';
+import { liveEnPages } from '../lib/en';
+
+export interface Props {
+  lang?: 'ar' | 'en';
+  /** رابط الصفحة نفسها باللغة الأخرى؛ إن لم يوجد يذهب زر اللغة إلى رئيسية اللغة الأخرى */
+  switchHref?: string;
+}
+const { lang = 'ar', switchHref } = Astro.props;
+const isEn = lang === 'en';
+
+// روابط القائمة لكل الصفحات: الخدمات الثلاث وأقوى قسمين بحثًا (يظهر القسم فقط إن كانت له صفحة منشورة)
+const live = new Set((await categoriesWithProducts()).map((c) => c.id));
+const en = await liveEnPages();
+const enHref = (ar: string) => {
+  const p = en.find((x) => x.ar === ar);
+  return p ? `/en/${p.slug}/` : undefined;
+};
+const links = isEn
+  ? [
+      { href: enHref('tafseel-kanab'), label: 'Custom sofas' },
+      { href: enHref('tanjeed-kanab'), label: 'Upholstery' },
+      { href: enHref('tasleeh-kanab'), label: 'Repair' },
+      { href: enHref('kanab-zawiya'), label: 'Corner sofas' },
+      { href: enHref('majalis-arabiya'), label: 'Arabic majlis' },
+    ]
+  : [
+      { href: '/shop/', label: 'كل المنتجات' },
+      { href: '/tafseel-kanab/', label: 'تفصيل' },
+      { href: '/tanjeed-kanab/', label: 'تنجيد' },
+      { href: '/tasleeh-kanab/', label: 'تصليح' },
+      { href: live.has('kanab-zawiya') ? '/kanab-zawiya/' : undefined, label: 'كنب زاوية' },
+      { href: live.has('majalis-arabiya') ? '/majalis-arabiya/' : undefined, label: 'مجالس عربية' },
+      { href: '/maarad-dajeej/', label: 'المعرض' },
+    ];
+const nav = links.filter((l): l is { href: string; label: string } => Boolean(l.href));
+const home = isEn ? '/en/' : '/';
+const other = switchHref ?? (isEn ? '/' : '/en/');
 const path = Astro.url.pathname;
 ---
 <header class="border-b border-line bg-white">
   <div class="container-page flex items-center justify-between gap-4 py-3">
-    <a href="/" class="flex shrink-0 items-center" aria-label={`${business.name} — الرئيسية`}>
-      <img src="/logo.png" alt={business.name} width="182" height="40" decoding="async" class="h-10 w-auto" />
+    <a href={home} class="flex shrink-0 items-center" aria-label={isEn ? `${business.nameEn} — Home` : `${business.name} — الرئيسية`}>
+      <img src="/logo.png" alt={isEn ? business.nameEn : business.name} width="182" height="40" decoding="async" class="h-10 w-auto" />
     </a>
-    <nav aria-label="القائمة الرئيسية" class="hidden gap-5 text-sm md:flex">
-      {links.map((l) => (
+    <nav aria-label={isEn ? 'Main menu' : 'القائمة الرئيسية'} class="hidden gap-5 text-sm lg:flex">
+      {nav.map((l) => (
         <a href={l.href} class:list={['hover:text-accent', path.startsWith(l.href) && 'font-bold text-accent']}>{l.label}</a>
       ))}
     </nav>
     <div class="flex items-center gap-2">
-      <button type="button" data-cart-open class="btn btn-line px-3 py-2 text-sm" aria-label="فتح السلة">
-        السلة <span data-cart-count class="min-w-5 rounded-full bg-ink px-1.5 text-xs text-white" hidden>0</span>
-      </button>
-      <details class="relative md:hidden">
-        <summary class="btn btn-line cursor-pointer list-none px-3 py-2 text-sm" aria-label="القائمة">☰</summary>
-        <nav class="absolute left-0 z-40 mt-2 w-48 rounded-lg border border-line bg-white p-2 shadow-lg">
-          {links.map((l) => <a href={l.href} class="block rounded px-3 py-2 hover:bg-sand">{l.label}</a>)}
+      <a href={other} hreflang={isEn ? 'ar' : 'en'} lang={isEn ? 'ar' : 'en'} class="btn btn-line px-3 py-2 text-sm">{isEn ? 'العربية' : 'English'}</a>
+      {!isEn && (
+        <button type="button" data-cart-open class="btn btn-line px-3 py-2 text-sm" aria-label="فتح السلة">
+          السلة <span data-cart-count class="min-w-5 rounded-full bg-ink px-1.5 text-xs text-white" hidden>0</span>
+        </button>
+      )}
+      <details class="relative lg:hidden">
+        <summary class="btn btn-line cursor-pointer list-none px-3 py-2 text-sm" aria-label={isEn ? 'Menu' : 'القائمة'}>☰</summary>
+        <nav class:list={['absolute z-40 mt-2 w-48 rounded-lg border border-line bg-white p-2 shadow-lg', isEn ? 'right-0' : 'left-0']}>
+          {nav.map((l) => <a href={l.href} class="block rounded px-3 py-2 hover:bg-sand">{l.label}</a>)}
         </nav>
       </details>
     </div>

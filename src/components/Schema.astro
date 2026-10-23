@@ -4,10 +4,12 @@ import { business } from '../data/business';
 export interface Props {
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
-  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean; shipping?: boolean };
-  service?: { name: string; url: string; description?: string };
+  product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
+  service?: { name: string; url: string; description?: string; price?: number };
+  lang?: 'ar' | 'en';
 }
-const { faqs = [], breadcrumbs = [], product, service } = Astro.props;
+const { faqs = [], breadcrumbs = [], product, service, lang = 'ar' } = Astro.props;
+const isEn = lang === 'en';
 const site = Astro.site!.toString().replace(/\/$/, '');
 const storeId = `${site}/#store`;
 
@@ -17,7 +19,7 @@ const graph: Record<string, unknown>[] = [
     '@id': storeId,
     name: business.name,
     alternateName: business.nameEn,
-    description: business.description,
+    description: isEn ? business.descriptionEn : business.description,
     url: `${site}/`,
     logo: `${site}/icon-512.png`,
     image: `${site}/og-image.jpg`,
@@ -35,7 +37,7 @@ const graph: Record<string, unknown>[] = [
     ...(business.openingHours.length ? { openingHours: business.openingHours } : {}),
     ...(business.sameAs.length ? { sameAs: business.sameAs } : {}),
   },
-  { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: business.name, inLanguage: 'ar-KW', publisher: { '@id': storeId } },
+  { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: business.name, inLanguage: ['ar-KW', 'en'], publisher: { '@id': storeId } },
 ];
 
 if (breadcrumbs.length > 1) {
@@ -68,19 +70,8 @@ if (product) {
             ...(product.perMeter
               ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: product.price.toFixed(3), priceCurrency: 'KWD', unitCode: 'MTR', unitText: 'متر طولي' } }
               : {}),
-            // التوفر: المنتج الجاهز فقط يُعلن InStock. المنتج المصنوع حسب الطلب لا توجد له قيمة
-            // مقبولة عند جوجل تمثله بدقة (PreOrder وBackOrder لا يناسبان)، فلا نُدرج الحقل بدل التضليل.
-            ...(product.inStock ? { availability: 'https://schema.org/InStock' } : {}),
-            // رسم التوصيل الثابت (يُنشر فقط للمنتجات لا لأعمال التنجيد والتصليح)
-            ...(product.shipping
-              ? {
-                  shippingDetails: {
-                    '@type': 'OfferShippingDetails',
-                    shippingRate: { '@type': 'MonetaryAmount', value: business.deliveryFeeKWD, currency: 'KWD' },
-                    shippingDestination: { '@type': 'DefinedRegion', addressCountry: business.countryCode },
-                  },
-                }
-              : {}),
+            // التوفر: الجاهز في المعرض InStock، والتفصيل حسب الطلب MadeToOrder (قيمة يقبلها جوجل وتطابق الواقع)
+            availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/MadeToOrder',
             seller: { '@id': storeId },
           },
         }
@@ -95,6 +86,17 @@ if (service) {
     ...(service.description ? { description: service.description } : {}),
     provider: { '@id': storeId },
     areaServed: { '@type': 'Country', name: 'Kuwait' },
+    // سعر الخدمة بالمتر الطولي شامل القماش — رقم صريح تقتبسه محركات الذكاء الاصطناعي
+    ...(typeof service.price === 'number' && service.price > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'KWD',
+            priceSpecification: { '@type': 'UnitPriceSpecification', minPrice: service.price.toFixed(3), priceCurrency: 'KWD', unitCode: 'MTR', unitText: isEn ? 'linear metre, fabric included' : 'متر طولي شامل القماش' },
+            seller: { '@id': storeId },
+          },
+        }
+      : {}),
   });
 }
 const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });

@@ -1,13 +1,14 @@
 ---
-export interface Props { items: { name: string; href: string }[] }
-const { items } = Astro.props;
+export interface Props { items: { name: string; href: string }[]; lang?: 'ar' | 'en' }
+const { items, lang = 'ar' } = Astro.props;
+const isEn = lang === 'en';
 ---
-<nav aria-label="مسار الصفحة" class="text-sm text-muted">
+<nav aria-label={isEn ? 'Breadcrumb' : 'مسار الصفحة'} class="text-sm text-muted">
   <ol class="flex flex-wrap gap-1">
     {items.map((item, i) => (
       <li class="flex gap-1">
         {i < items.length - 1 ? <a class="hover:text-accent" href={item.href}>{item.name}</a> : <span aria-current="page">{item.name}</span>}
-        {i < items.length - 1 && <span aria-hidden="true">‹</span>}
+        {i < items.length - 1 && <span aria-hidden="true">{isEn ? '›' : '‹'}</span>}
       </li>
     ))}
   </ol>

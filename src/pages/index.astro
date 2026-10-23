@@ -4,23 +4,37 @@ import ProductCard from '../components/ProductCard.astro';
 import FAQ from '../components/FAQ.astro';
 import { business, fullAddress, services } from '../data/business';
 import { waGeneral } from '../data/whatsapp';
-import { publishedProducts, categoriesWithProducts } from '../lib/catalog';
+import { publishedProducts, categoriesWithProducts, productsForService, priceFrom, priceTextAr } from '../lib/catalog';
 
 const products = (await publishedProducts()).slice(0, 8);
 const cats = await categoriesWithProducts();
+const tafseelList = await productsForService('tafseel-kanab');
+const tanjeedList = await productsForService('tanjeed-kanab');
+const tafseelFrom = priceFrom(tafseelList);
+const tanjeedFrom = priceFrom(tanjeedList);
 
 // إجابات من معلومات مؤكدة فقط
 const faqs = [
   { question: `أين يقع معرض ${business.name}؟`, answer: `في ${fullAddress}.` },
-  { question: 'ما الخدمات التي تقدمونها؟', answer: 'بيع كنب وقنفات جاهزة من المعرض، وتفصيل الكنب حسب المقاس، وتنجيد وتلبيس الكنب القديم، وتصليح الكنب.' },
+  { question: 'ما الخدمات التي تقدمونها؟', answer: 'بيع كنب وقنفات جاهزة من المعرض، وتفصيل الكنب حسب المقاس، وتنجيد وتلبيس الكنب القديم بالقماش، وتصليح أرجل الكنب وتغيير الإسفنج. كل الأعمال في مشغلنا بالضجيج.' },
   { question: 'كيف أطلب من الموقع؟', answer: `أضف المنتجات إلى السلة ثم اضغط «أرسل الطلب عبر واتساب»، أو راسلنا مباشرة على واتساب ${business.phone}.` },
   { question: 'هل الأسعار بالدينار الكويتي؟', answer: 'نعم، كل الأسعار في الموقع بالدينار الكويتي.' },
+  ...(tafseelFrom || tanjeedFrom
+    ? [{
+        question: 'كم سعر تفصيل وتنجيد الكنب؟',
+        answer: [
+          tafseelFrom && `تفصيل الكنب حسب المقاس ${priceTextAr(tafseelList)} الطولي شامل القماش`,
+          tanjeedFrom && `وتنجيد الكنب بالقماش ${priceTextAr(tanjeedList)} الطولي شامل القماش`,
+        ].filter(Boolean).join('، ') + '. الكراسي المفردة سعرها بالاتفاق.',
+      }]
+    : []),
 ];
 ---
 <BaseLayout
   title={`كنب وقنفات في الكويت — ${business.name}، معرض ومشغل`}
-  description={`معرض ومشغل كنب وقنفات في مجمع كتارا بالضجيج، الكويت: تفصيل كنب حسب المقاس من 24 د.ك للمتر وتنجيد 22 د.ك للمتر شامل القماش، وكنب جاهز. اطلب عبر واتساب ${business.phone}.`}
+  description={`معرض ومشغل كنب وقنفات في مجمع كتارا بالضجيج، الكويت: تفصيل كنب حسب المقاس ${priceTextAr(tafseelList)} وتنجيد ${priceTextAr(tanjeedList)} شامل القماش، وكنب جاهز. اطلب عبر واتساب ${business.phone}.`}
   faqs={faqs}
+  alternate="/en/"
 >
   <section class="container-page pt-10">
     <h1 class="max-w-3xl text-3xl font-bold leading-snug md:text-4xl">قنفات وكنب في الكويت من معرضنا ومشغلنا بالضجيج</h1>
@@ -35,8 +49,8 @@ const faqs = [
     <h2 class="text-2xl font-bold">خدماتنا</h2>
     <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <li class="rounded-xl border border-line bg-white p-5">
-        <a href="/shop/" class="font-bold hover:text-accent">كنب جاهز من المعرض</a>
-        <p class="mt-1 text-sm text-muted">كنب وقنفات جاهزة بأسعار بالدينار الكويتي.</p>
+        <a href="/maarad-dajeej/" class="font-bold hover:text-accent">كنب جاهز في المعرض</a>
+        <p class="mt-1 text-sm text-muted">كنب وقنفات جاهزة تشاهدها في معرضنا بمجمع كتارا.</p>
       </li>
       {services.map((s) => (
         <li class="rounded-xl border border-line bg-white p-5">

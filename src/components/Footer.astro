@@ -1,33 +1,51 @@
 ---
-import { business, fullAddress, services } from '../data/business';
-import { waGeneral } from '../data/whatsapp';
+import { business, fullAddress, fullAddressEn, services } from '../data/business';
+import { waGeneral, waLink } from '../data/whatsapp';
 import { categoriesWithProducts } from '../lib/catalog';
+import { liveEnPages } from '../lib/en';
+import { hoursEn } from '../data/en';
+
+export interface Props { lang?: 'ar' | 'en' }
+const { lang = 'ar' } = Astro.props;
+const isEn = lang === 'en';
 const cats = await categoriesWithProducts();
+const en = await liveEnPages();
 const year = new Date().getFullYear();
+const hours = isEn ? hoursEn(business.openingHours) : business.openingHoursText;
 ---
 <footer class="mt-16 border-t border-line bg-white text-sm">
   <div class="container-page grid gap-8 py-10 md:grid-cols-3">
     <div>
-      <a href="/" class="text-base font-bold">{business.name}</a>
-      <p class="mt-2 text-muted">{business.description}</p>
+      <a href={isEn ? '/en/' : '/'} class="text-base font-bold">{isEn ? business.nameEn : business.name}</a>
+      <p class="mt-2 text-muted">{isEn ? business.descriptionEn : business.description}</p>
     </div>
     <div>
-      <p class="font-bold">الخدمات والأقسام</p>
-      <ul class="mt-2 space-y-1">
-        {services.map((s) => <li><a class="hover:text-accent" href={`/${s.slug}/`}>{s.title}</a></li>)}
-        {cats.map((c) => <li><a class="hover:text-accent" href={`/${c.id}/`}>{c.data.title}</a></li>)}
-        <li><a class="hover:text-accent" href="/shop/">كل المنتجات</a></li>
-      </ul>
+      <p class="font-bold">{isEn ? 'Services and sofa types' : 'الخدمات والأقسام'}</p>
+      {isEn ? (
+        <ul class="mt-2 space-y-1">
+          {en.map((p) => <li><a class="hover:text-accent" href={`/en/${p.slug}/`}>{p.name}</a></li>)}
+        </ul>
+      ) : (
+        <ul class="mt-2 space-y-1">
+          {services.map((s) => <li><a class="hover:text-accent" href={`/${s.slug}/`}>{s.title}</a></li>)}
+          {cats.map((c) => <li><a class="hover:text-accent" href={`/${c.id}/`}>{c.data.title}</a></li>)}
+          <li><a class="hover:text-accent" href="/shop/">كل المنتجات</a></li>
+        </ul>
+      )}
     </div>
     <address class="not-italic">
-      <p class="font-bold">العنوان والتواصل</p>
-      <p class="mt-2"><a class="hover:text-accent" href="/maarad-dajeej/">{fullAddress}</a></p>
-      {business.openingHoursText && <p class="mt-1">{business.openingHoursText}</p>}
-      <p class="mt-1">
-        الهاتف وواتساب: <a dir="ltr" class="font-semibold" href={`tel:+965${business.phone}`}>{business.phone}</a>
+      <p class="font-bold">{isEn ? 'Address and contact' : 'العنوان والتواصل'}</p>
+      <p class="mt-2">
+        {isEn
+          ? (business.mapUrl ? <a class="hover:text-accent" href={business.mapUrl} target="_blank" rel="noopener">{fullAddressEn}</a> : fullAddressEn)
+          : <a class="hover:text-accent" href="/maarad-dajeej/">{fullAddress}</a>}
       </p>
-      <a class="btn btn-wa mt-3 px-4 py-2" href={waGeneral()} target="_blank" rel="noopener">راسلنا على واتساب</a>
+      {hours && <p class="mt-1">{hours}</p>}
+      <p class="mt-1">
+        {isEn ? 'Phone & WhatsApp: ' : 'الهاتف وواتساب: '}<a dir="ltr" class="font-semibold" href={`tel:+965${business.phone}`}>{business.phone}</a>
+      </p>
+      <a class="btn btn-wa mt-3 px-4 py-2" href={isEn ? waLink(`Hello ${business.nameEn}, I have a question about sofas.`) : waGeneral()} target="_blank" rel="noopener">{isEn ? 'Message us on WhatsApp' : 'راسلنا على واتساب'}</a>
     </address>
   </div>
-  <div class="border-t border-line py-4 text-center text-muted">© {year} {business.name}</div>
+  <div class="border-t border-line py-4 text-center text-muted">© {year} {isEn ? business.nameEn : business.name}</div>
 </footer>

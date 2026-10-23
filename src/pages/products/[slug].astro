@@ -5,10 +5,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { getEntry } from 'astro:content';
-import { publishedProducts, productUrl, productImages, productAlt, type Product } from '../../lib/catalog';
+import { publishedProducts, productUrl, productImages, productAlt, fillPrice, type Product } from '../../lib/catalog';
 import { formatKWD, unitLabel } from '../../lib/price';
 import { waProduct } from '../../data/whatsapp';
-import { business } from '../../data/business';
 
 export async function getStaticPaths() {
   const products = await publishedProducts();
@@ -66,19 +65,18 @@ const crumbs = [
 ];
 ---
 <BaseLayout
-  title={d.seoTitle || d.title}
-  description={d.description || `${d.title}${typeof d.price === 'number' && d.price > 0 ? ` بسعر ${formatKWD(d.price)}` : ''} من معرض قنفات الضجيج في مجمع كتارا، الكويت. اطلب عبر واتساب.`}
+  title={fillPrice(d.seoTitle || d.title, [product])}
+  description={fillPrice(d.description, [product]) || `${d.title}${typeof d.price === 'number' && d.price > 0 ? ` بسعر ${formatKWD(d.price)}` : ''} من معرض قنفات الضجيج في مجمع كتارا، الكويت. اطلب عبر واتساب.`}
   ogImage={ogImg?.src}
   breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
   product={{
     name: d.title,
     url,
     image: ogImg ? new URL(ogImg.src, site).toString() : undefined,
-    description: d.description || undefined,
+    description: fillPrice(d.description, [product]) || undefined,
     price: d.price,
     inStock: d.inStock,
     perMeter: d.priceUnit === 'meter',
-    shipping: !d.service,
   }}
 >
   <section class="container-page pt-8">
@@ -102,7 +100,6 @@ const crumbs = [
         {typeof d.price === 'number' && d.price > 0 && d.priceNote && <p class="text-sm text-muted">{d.priceNote}</p>}
         {d.priceUnit === 'meter' && <p class="text-sm text-muted">السعر للمتر الطولي من الكنب، ويُحسب الإجمالي حسب مقاس مكانك.</p>}
         <p class="mt-2 text-sm font-semibold text-accent">{d.inStock ? 'متوفر في المعرض' : 'تفصيل حسب الطلب في مشغلنا'}</p>
-        {!d.service && <p class="text-sm text-muted">التوصيل متوفر لكل مناطق الكويت برسم ثابت {business.deliveryFeeKWD} د.ك للنقلة الواحدة.</p>}
 
         <div class="mt-6 flex flex-wrap gap-3">
           <button

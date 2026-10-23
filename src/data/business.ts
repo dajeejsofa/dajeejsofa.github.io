@@ -11,9 +11,9 @@ export const business = {
   name: 'قنفات الضجيج',
   nameEn: 'Dajeej Sofa',
   description:
-    'قنفات الضجيج معرض ومشغل كنب وقنفات في مجمع كتارا بالضجيج، الكويت. نبيع كنبًا جاهزًا من المعرض، ونفصّل الكنب حسب المقاس، وننجّد ونلبّس ونصلّح القنفات.',
+    'قنفات الضجيج معرض ومشغل كنب وقنفات في مجمع كتارا بالضجيج، الكويت. نبيع كنبًا جاهزًا من المعرض، ونفصّل الكنب حسب المقاس، وننجّد ونلبّس الكنب بالقماش، ونصلّح أرجل الكنب ونغيّر إسفنجه في المشغل.',
   descriptionEn:
-    'Dajeej Sofa is a sofa showroom and workshop in Katara Complex, Al Dajeej, Kuwait. We sell ready-made sofas, make custom sofas to measure, and reupholster and repair sofas.',
+    'Dajeej Sofa is a sofa showroom and workshop in Katara Complex, Al Dajeej, Kuwait. We sell ready-made sofas, make custom sofas to measure, reupholster sofas in fabric, and repair sofa legs and replace sofa foam in our workshop.',
   phone: '65061072',
   whatsapp: '96565061072',
   street: 'مجمع كتارا',
@@ -21,8 +21,6 @@ export const business = {
   country: 'الكويت',
   countryCode: 'KW',
   locale: 'ar_KW',
-  // رسم التوصيل الثابت بالدينار الكويتي لكل نقلة، لكل مناطق الكويت (أكّده المالك)
-  deliveryFeeKWD: 13,
   // من لوحة التحكم ← «بيانات المعرض» (src/data/settings.json)
   unit: settings.unit.trim(), // رقم المحل/الطابق داخل المجمع
   mapUrl: settings.mapUrl.trim(),
@@ -32,10 +30,12 @@ export const business = {
   sameAs,
 };
 
+export const fullAddressEn = 'Katara Complex, Al Dajeej, Kuwait';
+
 export const fullAddress = `${business.unit ? business.unit + '، ' : ''}${business.street}، ${business.locality}، ${business.country}`;
 
 export const services = [
-  { slug: 'tanjeed-kanab', title: 'تنجيد كنب', short: 'تنجيد وتلبيس الكنب والقنفات القديمة.' },
-  { slug: 'tafseel-kanab', title: 'تفصيل كنب', short: 'تفصيل قنفات حسب مقاس المكان في المشغل.' },
-  { slug: 'tasleeh-kanab', title: 'تصليح كنب', short: 'تصليح الكنب والقنفات في المشغل.' },
+  { slug: 'tanjeed-kanab', title: 'تنجيد كنب', titleEn: 'Sofa upholstery', short: 'تنجيد وتلبيس الكنب والقنفات القديمة.' },
+  { slug: 'tafseel-kanab', title: 'تفصيل كنب', titleEn: 'Custom sofas', short: 'تفصيل قنفات حسب مقاس المكان في المشغل.' },
+  { slug: 'tasleeh-kanab', title: 'تصليح كنب', titleEn: 'Sofa repair', short: 'تصليح أرجل الكنب وتغيير الإسفنج في المشغل.' },
 ];

@@ -32,6 +32,34 @@ export const priceFrom = (list: Product[]) => {
   return prices.length ? Math.min(...prices) : undefined;
 };
 
+/** أقل وأعلى سعر للمتر بين مجموعة منتجات */
+export const priceRange = (list: Product[]) => {
+  const prices = list.map((p) => p.data.price).filter((n): n is number => typeof n === 'number' && n > 0);
+  return prices.length ? { min: Math.min(...prices), max: Math.max(...prices) } : undefined;
+};
+
+/**
+ * عبارة السعر تُحسب من المنتجات المنشورة، فلا يختلف رقم في العنوان أو الوصف عن الصفحة أبدًا:
+ * «من 24 د.ك للمتر»، أو «22 د.ك للمتر» إن كان كل المنتجات بسعر واحد.
+ */
+export const priceTextAr = (list: Product[]) => {
+  const r = priceRange(list);
+  if (!r) return 'بسعر حسب المقاس';
+  return r.min === r.max ? `${r.min} د.ك للمتر` : `من ${r.min} د.ك للمتر`;
+};
+
+export const priceTextEn = (list: Product[], short = false) => {
+  const r = priceRange(list);
+  const unit = short ? 'KWD/m' : 'KWD per metre';
+  if (!r) return 'priced to your measurements';
+  return r.min === r.max ? `${r.min} ${unit}` : `from ${r.min} ${unit}`;
+};
+
+/** الرمز الذي يُكتب في لوحة التحكم (العنوان، الوصف، H1، الأسئلة) ويُستبدل عند البناء بعبارة السعر */
+export const PRICE_TOKEN = '{من_السعر}';
+export const fillPrice = (text: string, list: Product[]) =>
+  text.includes(PRICE_TOKEN) ? text.split(PRICE_TOKEN).join(priceTextAr(list)) : text;
+
 /** المناطق التي نُفّذت فيها أعمال من مجموعة منتجات، مع رابط أول عمل في كل منطقة */
 export const areasOf = (list: Product[]) => {
   const map = new Map<string, Product>();
