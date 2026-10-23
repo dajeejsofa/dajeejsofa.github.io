@@ -1,5 +1,5 @@
 ---
-import { business } from '../data/business';
+import { business, returnPolicy } from '../data/business';
 
 export interface Props {
   faqs?: { question: string; answer: string }[];
@@ -25,6 +25,7 @@ const graph: Record<string, unknown>[] = [
     image: `${site}/og-image.jpg`,
     telephone: `+965${business.phone}`,
     currenciesAccepted: 'KWD',
+    hasMerchantReturnPolicy: returnPolicy.schema,
     address: {
       '@type': 'PostalAddress',
       streetAddress: business.unit ? `${business.unit}، ${business.street}` : business.street,
@@ -72,6 +73,7 @@ if (product) {
               : {}),
             // التوفر: الجاهز في المعرض InStock، والتفصيل حسب الطلب MadeToOrder (قيمة يقبلها جوجل وتطابق الواقع)
             availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/MadeToOrder',
+            hasMerchantReturnPolicy: returnPolicy.schema,
             seller: { '@id': storeId },
           },
         }
