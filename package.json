@@ -18,5 +18,9 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.5",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@netlify/blobs": "^10.7.13",
+    "@netlify/functions": "^4.3.0"
   }
 }

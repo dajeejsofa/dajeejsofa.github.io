@@ -70,6 +70,7 @@ const crumbs = [
 ];
 ---
 <BaseLayout
+  hideReviews
   title={fillPrice(d.seoTitle || d.title, [product])}
   description={fillPrice(d.description, [product]) || `${d.title}${typeof d.price === 'number' && d.price > 0 ? ` بسعر ${formatKWD(d.price)}` : ''} من معرض قنفات الضجيج في مجمع كتارا، الكويت. اطلب عبر واتساب.`}
   ogImage={ogImg?.src}

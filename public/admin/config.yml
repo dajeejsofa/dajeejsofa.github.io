@@ -141,12 +141,15 @@ collections:
     label: "مراجعات العملاء"
     label_singular: "مراجعة"
     icon: "star"
-    description: "انسخ هنا المراجعة التي وصلتك من العميل عبر واتساب كما كتبها. لا تضف مراجعة بلا عميل حقيقي (مخالف لسياسة جوجل)."
+    description: "مراجعات العملاء تصل هنا تلقائيًا بانتظار موافقتك. للقبول: افتح المراجعة وفعّل «مقبولة» ثم احفظ. للرفض: احذفها. لا تضف مراجعة بلا عميل حقيقي."
     folder: "src/content/reviews"
     create: true
     slug: "review-{{year}}{{month}}{{day}}-{{uuid_short}}"
     identifier_field: name
-    summary: "{{name}} · {{rating}}/5"
+    summary: "{{name}} · {{rating}}/5 · {{approved}}"
+    view_filters:
+      - {label: "بانتظار الموافقة", field: approved, pattern: false}
+      - {label: "المقبولة", field: approved, pattern: true}
     sortable_fields: ["date", "rating", "name"]
     fields:
       - {label: "اسم العميل", name: "name", widget: "string"}
@@ -155,7 +158,7 @@ collections:
       - {label: "المنتج", name: "product", widget: "relation", collection: "products", value_field: "{{slug}}", search_fields: ["title"], display_fields: ["title"], required: false, hint: "اختر المنتج المذكور في رسالة العميل. بدون منتج تظهر المراجعة في صفحة آراء العملاء فقط."}
       - {label: "المنطقة", name: "area", widget: "string", required: false}
       - {label: "تاريخ المراجعة", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD"}
-      - {label: "منشورة", name: "approved", widget: "boolean", default: true}
+      - {label: "✅ مقبولة (تظهر في الموقع)", name: "approved", widget: "boolean", default: false}
 
   - name: "settings"
     label: "بيانات المعرض"
