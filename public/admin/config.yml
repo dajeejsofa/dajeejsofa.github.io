@@ -83,8 +83,8 @@ collections:
       - {label: "🔎 ملاحظة السعر", name: "priceNote", widget: "string", required: false, default: "شامل القماش"}
       - {label: "🔎 الألوان", name: "colors", widget: "list", required: false, field: {label: "لون", name: "color", widget: "string"}}
       - {label: "🔎 وصف الصورة", name: "imageAlt", widget: "string", required: false}
-      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
-      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false}
+      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
       - {label: "⚙️ مسودة (لا تظهر في الموقع)", name: "draft", widget: "boolean", default: false}
 
@@ -99,7 +99,7 @@ collections:
     identifier_field: title
     fields:
       - {label: "اسم القسم", name: "title", widget: "string"}
-      - {label: "العنوان الرئيسي (H1)", name: "h1", widget: "string"}
+      - {label: "العنوان الرئيسي (H1)", name: "h1", widget: "string", hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "المقدمة", name: "body", widget: "markdown", required: false}
       - label: "أسئلة شائعة"
         name: "faqs"
@@ -108,8 +108,8 @@ collections:
         fields:
           - {label: "السؤال", name: "question", widget: "string"}
           - {label: "الجواب", name: "answer", widget: "text"}
-      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false}
-      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
+      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
       - {label: "⚙️ الترتيب", name: "order", widget: "number", default: 0, value_type: "int"}
 
@@ -123,7 +123,7 @@ collections:
     identifier_field: title
     fields:
       - {label: "اسم الخدمة", name: "title", widget: "string"}
-      - {label: "العنوان الرئيسي (H1)", name: "h1", widget: "string"}
+      - {label: "العنوان الرئيسي (H1)", name: "h1", widget: "string", hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "المحتوى", name: "body", widget: "markdown", required: false}
       - label: "أسئلة شائعة"
         name: "faqs"
@@ -132,8 +132,8 @@ collections:
         fields:
           - {label: "السؤال", name: "question", widget: "string"}
           - {label: "الجواب", name: "answer", widget: "text"}
-      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false}
-      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false}
+      - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
+      - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
       - {label: "⚙️ الترتيب", name: "order", widget: "number", default: 0, value_type: "int"}
 

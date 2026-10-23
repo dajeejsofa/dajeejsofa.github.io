@@ -1,0 +1,82 @@
+---
+// صفحات الخدمات والأقسام الإنجليزية: كل صفحة تقابل صفحة عربية منشورة وتُربط بها بـ hreflang في الاتجاهين
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FAQ from '../../components/FAQ.astro';
+import { business, fullAddressEn } from '../../data/business';
+import type { EnPage } from '../../data/en';
+import { hoursEn } from '../../data/en';
+import { waLink } from '../../data/whatsapp';
+import { priceFrom, priceTextEn } from '../../lib/catalog';
+import { liveEnPages, productsOf } from '../../lib/en';
+
+export async function getStaticPaths() {
+  const pages = await liveEnPages();
+  return pages.map((page) => ({ params: { slug: page.slug }, props: { page, all: pages } }));
+}
+
+const { page, all } = Astro.props as { page: EnPage; all: EnPage[] };
+const site = Astro.site!.toString().replace(/\/$/, '');
+const path = `/en/${page.slug}/`;
+const products = await productsOf(page);
+const minPrice = priceFrom(products);
+const isRepair = page.ar === 'tasleeh-kanab';
+const price = priceTextEn(products);
+const priceShort = priceTextEn(products, true);
+const hours = hoursEn(business.openingHours);
+const wa = waLink(`Hello ${business.nameEn}, I would like to ask about ${page.name.toLowerCase()}.`);
+const title = isRepair || !minPrice ? `${page.title} | ${business.nameEn}` : `${page.title} — ${priceShort} | ${business.nameEn}`;
+const lead = page.intro.split('. ')[0].replace(/\.$/, '');
+const description = `${lead}.${!isRepair && minPrice ? ` ${price.charAt(0).toUpperCase()}${price.slice(1)}, fabric included.` : ''} ${business.nameEn}, Katara Complex, Al Dajeej, Kuwait. WhatsApp ${business.phone}.`;
+const faqs = [
+  ...(!isRepair && minPrice
+    ? [{ question: `What are your prices for ${page.name.toLowerCase()} in Kuwait?`, answer: `Prices are per linear metre with the fabric included, ${price} depending on the design. Single armchairs are priced on agreement.` }]
+    : []),
+  ...(isRepair ? [{ question: 'What does sofa repair cover?', answer: 'Sofa leg repair or replacement, and foam repair or replacement, done in our workshop in Al Dajeej.' }] : []),
+  { question: 'How do I order?', answer: `Send photos or the design and your measurements on WhatsApp ${business.phone}. We calculate the length in metres and the total price. Orders are by WhatsApp only.` },
+  { question: 'Where is the workshop?', answer: `In ${fullAddressEn}.${hours ? ` ${hours}.` : ''}` },
+];
+const crumbs = [{ name: 'Home', href: '/en/' }, { name: page.name, href: path }];
+const others = all.filter((p) => p.slug !== page.slug);
+---
+<BaseLayout
+  lang="en"
+  alternate={`/${page.ar}/`}
+  title={title}
+  description={description}
+  faqs={faqs}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+  service={page.kind === 'service' ? { name: page.name, url: `${site}${path}`, description, price: isRepair ? undefined : minPrice } : undefined}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={crumbs} lang="en" />
+    <h1 class="mt-3 text-3xl font-bold leading-snug">{page.h1}</h1>
+    {!isRepair && minPrice && <p class="mt-3 text-lg font-semibold">Prices: {price} (linear metre), fabric included.</p>}
+    <p class="mt-4 max-w-3xl text-lg">{page.intro}</p>
+    {page.points.length > 0 && (
+      <ul class="mt-4 max-w-3xl list-disc space-y-1 ps-6">
+        {page.points.map((t) => <li>{t}</li>)}
+      </ul>
+    )}
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn btn-wa" href={wa} target="_blank" rel="noopener">Ask on WhatsApp</a>
+      {business.mapUrl && <a class="btn btn-line" href={business.mapUrl} target="_blank" rel="noopener">Showroom location</a>}
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="container-page mt-12">
+      <h2 class="text-2xl font-bold">Photos of our work</h2>
+      <p class="mt-2">We have published {products.length} {products.length === 1 ? 'example' : 'examples'} of this work with photos and prices in Kuwaiti dinars. <a class="underline" href={`/${page.ar}/`} hreflang="ar" lang="ar">عرض الصور (بالعربية)</a></p>
+    </section>
+  )}
+
+  <div class="container-page"><FAQ faqs={faqs} title="Frequently asked questions" /></div>
+
+  <section class="container-page mt-12">
+    <h2 class="text-xl font-bold">More from {business.nameEn}</h2>
+    <div class="mt-3 flex flex-wrap gap-2">
+      {others.map((p) => <a class="btn btn-line" href={`/en/${p.slug}/`}>{p.name}</a>)}
+    </div>
+  </section>
+</BaseLayout>

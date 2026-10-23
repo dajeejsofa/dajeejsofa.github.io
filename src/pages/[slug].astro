@@ -7,7 +7,8 @@ import ProductCard from '../components/ProductCard.astro';
 import FAQ from '../components/FAQ.astro';
 import { business, services as serviceList } from '../data/business';
 import { waService, waGeneral } from '../data/whatsapp';
-import { categoriesWithProducts, productsIn, productsForService, priceFrom, areasOf, productUrl } from '../lib/catalog';
+import { categoriesWithProducts, productsIn, productsForService, priceFrom, areasOf, productUrl, fillPrice } from '../lib/catalog';
+import { enHrefFor } from '../lib/en';
 import { formatKWD } from '../lib/price';
 
 type Entry = CollectionEntry<'services'> | CollectionEntry<'categories'>;
@@ -34,17 +35,25 @@ const listTitle =
 const shown = kind === 'service' && entry.id === 'tafseel-kanab' ? products.slice(0, 12) : products;
 const otherServices = serviceList.filter((s) => s.slug !== entry.id);
 const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: d.title, href: path }];
+// الرمز {من_السعر} في العنوان والوصف والأسئلة يُستبدل بأقل سعر منشور، فلا يتعارض رقم مع الصفحة
+const fill = (t: string) => fillPrice(t, products);
+const seoTitle = fill(d.seoTitle || d.h1);
+const seoDescription = fill(d.description);
+const h1 = fill(d.h1);
+const faqs = d.faqs.map((f) => ({ question: fill(f.question), answer: fill(f.answer) }));
+const enHref = await enHrefFor(entry.id);
 ---
 <BaseLayout
-  title={d.seoTitle || d.h1}
-  description={d.description}
-  faqs={d.faqs}
+  title={seoTitle}
+  description={seoDescription}
+  faqs={faqs}
+  alternate={enHref}
   breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
-  service={kind === 'service' ? { name: d.title, url: `${site}${path}`, description: d.description } : undefined}
+  service={kind === 'service' ? { name: d.title, url: `${site}${path}`, description: seoDescription, price: minPrice } : undefined}
 >
   <section class="container-page pt-8">
     <Breadcrumbs items={crumbs} />
-    <h1 class="mt-3 text-3xl font-bold leading-snug">{d.h1}</h1>
+    <h1 class="mt-3 text-3xl font-bold leading-snug">{h1}</h1>
     {minPrice && (
       <p class="mt-3 text-lg font-semibold">الأسعار تبدأ من {formatKWD(minPrice)} للمتر الطولي، شامل القماش.</p>
     )}
@@ -79,14 +88,14 @@ const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: d.title, href: 
     </section>
   )}
 
-  <div class="container-page"><FAQ faqs={d.faqs} /></div>
+  <div class="container-page"><FAQ faqs={faqs} /></div>
 
   {kind === 'service' && (
     <section class="container-page mt-12">
       <h2 class="text-xl font-bold">خدمات أخرى من {business.name}</h2>
       <div class="mt-3 flex flex-wrap gap-2">
         {otherServices.map((s) => <a class="btn btn-line" href={`/${s.slug}/`}>{s.title}</a>)}
-        <a class="btn btn-line" href="/shop/">كنب جاهز</a>
+        <a class="btn btn-line" href="/maarad-dajeej/">كنب جاهز في المعرض</a>
       </div>
     </section>
   )}

@@ -15,16 +15,25 @@ export interface Props {
   faqs?: { question: string; answer: string }[];
   breadcrumbs?: { name: string; url: string }[];
   product?: { name: string; url: string; image?: string; description?: string; price?: number; inStock: boolean; perMeter?: boolean };
-  service?: { name: string; url: string; description?: string };
+  service?: { name: string; url: string; description?: string; price?: number };
+  /** لغة الصفحة: العربية في الجذر والإنجليزية تحت /en/ */
+  lang?: 'ar' | 'en';
+  /** الصفحة المقابلة باللغة الأخرى (مسار يبدأ بـ /) — تُربط بـ hreflang في الاتجاهين */
+  alternate?: string;
 }
-const { title, description, noindex = false, ogImage, faqs, breadcrumbs, product, service } = Astro.props;
-const fullTitle = title.includes(business.name) ? title : `${title} | ${business.name}`;
-const metaDescription = description?.trim() ? description : business.description;
+const { title, description, noindex = false, ogImage, faqs, breadcrumbs, product, service, lang = 'ar', alternate } = Astro.props;
+const isEn = lang === 'en';
+const brand = isEn ? business.nameEn : business.name;
+const fullTitle = title.includes(brand) ? title : `${title} | ${brand}`;
+const metaDescription = description?.trim() ? description : isEn ? business.descriptionEn : business.description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = new URL(ogImage ?? '/og-image.jpg', Astro.site);
+const alt = alternate ? new URL(alternate, Astro.site) : undefined;
+const arUrl = isEn ? alt : canonical;
+const enUrl = isEn ? canonical : alt;
 ---
 <!doctype html>
-<html lang="ar-KW" dir="rtl">
+<html lang={isEn ? 'en' : 'ar-KW'} dir={isEn ? 'ltr' : 'rtl'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,32 +42,34 @@ const og = new URL(ogImage ?? '/og-image.jpg', Astro.site);
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="preload" href="/fonts/cairo-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/cairo-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`/fonts/cairo-${isEn ? 'latin' : 'arabic'}-700-normal.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`/fonts/cairo-${isEn ? 'latin' : 'arabic'}-400-normal.woff2`} as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonical} />
     {noindex
       ? <meta name="robots" content="noindex, nofollow" />
       : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />}
-    {!noindex && <link rel="alternate" hreflang="ar-KW" href={canonical} />}
+    {!noindex && arUrl && <link rel="alternate" hreflang="ar-KW" href={arUrl} />}
+    {!noindex && enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
+    {!noindex && arUrl && <link rel="alternate" hreflang="x-default" href={arUrl} />}
     <meta property="og:type" content={product ? 'product' : 'website'} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={business.locale} />
-    <meta property="og:site_name" content={business.name} />
+    <meta property="og:locale" content={isEn ? 'en_US' : business.locale} />
+    <meta property="og:site_name" content={brand} />
     {og && <meta property="og:image" content={og} />}
     <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
-    <Schema faqs={faqs} breadcrumbs={breadcrumbs} product={product} service={service} />
+    <Schema faqs={faqs} breadcrumbs={breadcrumbs} product={product} service={service} lang={lang} />
   </head>
   <body class="flex min-h-screen flex-col">
-    <Header />
+    <Header lang={lang} switchHref={alternate} />
     <main class="flex-1">
       <slot />
     </main>
-    <Footer />
-    <Cart />
-    <FloatingWhatsApp />
+    <Footer lang={lang} />
+    {!isEn && <Cart />}
+    <FloatingWhatsApp lang={lang} />
   </body>
 </html>

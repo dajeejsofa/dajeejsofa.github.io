@@ -1,0 +1,74 @@
+---
+// الرئيسية الإنجليزية: تقابل الرئيسية العربية وتُربط بها بـ hreflang في الاتجاهين
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FAQ from '../../components/FAQ.astro';
+import { business, fullAddressEn } from '../../data/business';
+import { hoursEn } from '../../data/en';
+import { waLink } from '../../data/whatsapp';
+import { productsForService, priceTextEn } from '../../lib/catalog';
+import { liveEnPages, productsOf } from '../../lib/en';
+
+const tafseel = await productsForService('tafseel-kanab');
+const tanjeed = await productsForService('tanjeed-kanab');
+const pages = await liveEnPages();
+const services = pages.filter((p) => p.kind === 'service');
+const cats = pages.filter((p) => p.kind === 'category');
+const svcPrice = await Promise.all(services.map(async (p) => (p.ar === 'tasleeh-kanab' ? '' : priceTextEn(await productsOf(p)))));
+const hours = hoursEn(business.openingHours);
+const wa = waLink(`Hello ${business.nameEn}, I have a question about sofas.`);
+const faqs = [
+  { question: `Where is ${business.nameEn} located?`, answer: `Our showroom and workshop are in ${fullAddressEn}.${hours ? ` ${hours}.` : ''}` },
+  { question: 'How much does a custom sofa cost in Kuwait?', answer: `Custom sofas are priced per linear metre with the fabric included, ${priceTextEn(tafseel)} depending on the design. Single armchairs are priced on agreement.` },
+  { question: 'How much does sofa upholstery cost?', answer: `Fabric sofa upholstery is ${priceTextEn(tanjeed)} per linear metre of sofa, fabric included, done in our workshop.` },
+  { question: 'What does your sofa repair cover?', answer: 'We repair or replace sofa legs, and repair or replace the foam, in our workshop.' },
+  { question: 'How do I order?', answer: `Send the design and your wall measurements on WhatsApp ${business.phone}. Orders are by WhatsApp only, and prices are in Kuwaiti dinars.` },
+];
+---
+<BaseLayout
+  lang="en"
+  alternate="/"
+  title={`Sofas in Kuwait — Custom Sofas, Upholstery & Repair | ${business.nameEn}`}
+  description={`Sofa showroom and workshop in Katara Complex, Al Dajeej, Kuwait: custom sofas made to measure ${priceTextEn(tafseel, true)} and fabric upholstery ${priceTextEn(tanjeed, true)}, fabric included, plus sofa leg and foam repair. WhatsApp ${business.phone}.`}
+  faqs={faqs}
+>
+  <section class="container-page pt-10">
+    <h1 class="max-w-3xl text-3xl font-bold leading-snug md:text-4xl">Sofas in Kuwait: custom sofas, upholstery and repair from our Al Dajeej workshop</h1>
+    <p class="mt-4 max-w-3xl text-lg text-muted">{business.descriptionEn}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn btn-wa" href={wa} target="_blank" rel="noopener">Order on WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="container-page mt-14">
+    <h2 class="text-2xl font-bold">Our services</h2>
+    <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((p, i) => (
+        <li class="rounded-xl border border-line bg-white p-5">
+          <a href={`/en/${p.slug}/`} class="font-bold hover:text-accent">{p.name}</a>
+          <p class="mt-1 text-sm text-muted">{svcPrice[i] ? `${svcPrice[i]}, fabric included. ` : ''}{p.intro.split('. ')[0].replace(/\.$/, '')}.</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {cats.length > 0 && (
+    <section class="container-page mt-14">
+      <h2 class="text-2xl font-bold">Sofa types we make</h2>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {cats.map((p) => <a class="btn btn-line" href={`/en/${p.slug}/`}>{p.name}</a>)}
+      </div>
+    </section>
+  )}
+
+  <section class="container-page mt-14">
+    <div class="rounded-xl border border-line bg-white p-6">
+      <h2 class="text-2xl font-bold">Visit the showroom</h2>
+      <p class="mt-2">{fullAddressEn}</p>
+      {hours && <p class="mt-1">{hours}</p>}
+      <p class="mt-1">Phone & WhatsApp: <a class="font-semibold" href={`tel:+965${business.phone}`}>{business.phone}</a></p>
+      {business.mapUrl && <a class="mt-3 inline-block underline" href={business.mapUrl} target="_blank" rel="noopener">Open in Google Maps</a>}
+    </div>
+  </section>
+
+  <div class="container-page"><FAQ faqs={faqs} title="Frequently asked questions" /></div>
+</BaseLayout>
