@@ -41,20 +41,26 @@ const other = switchHref ?? (isEn ? '/' : '/en/');
 const path = Astro.url.pathname;
 ---
 <header class="border-b border-line bg-white">
-  <div class="container-page flex items-center justify-between gap-4 py-3">
-    <a href={home} class="flex shrink-0 items-center" aria-label={isEn ? `${business.nameEn} — Home` : `${business.name} — الرئيسية`}>
-      <img src="/logo.png" alt={isEn ? business.nameEn : business.name} width="182" height="40" decoding="async" class="h-10 w-auto" />
+  <!-- على الجوال: الشعار يصغر ويتقلص قبل الأزرار، ولا يدفع أي عنصر عرض الصفحة خارج الشاشة -->
+  <div class="container-page flex items-center justify-between gap-3 py-3 sm:gap-4">
+    <a href={home} class="flex min-w-0 shrink items-center" aria-label={isEn ? `${business.nameEn} — Home` : `${business.name} — الرئيسية`}>
+      <img src="/logo.png" alt={isEn ? business.nameEn : business.name} width="182" height="40" decoding="async" class="h-8 w-auto max-w-full object-contain sm:h-10" />
     </a>
     <nav aria-label={isEn ? 'Main menu' : 'القائمة الرئيسية'} class="hidden gap-5 text-sm lg:flex">
       {nav.map((l) => (
         <a href={l.href} class:list={['hover:text-accent', path.startsWith(l.href) && 'font-bold text-accent']}>{l.label}</a>
       ))}
     </nav>
-    <div class="flex items-center gap-2">
-      <a href={other} hreflang={isEn ? 'ar' : 'en'} lang={isEn ? 'ar' : 'en'} class="btn btn-line px-3 py-2 text-sm">{isEn ? 'العربية' : 'English'}</a>
+    <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <a href={other} hreflang={isEn ? 'ar' : 'en'} lang={isEn ? 'ar' : 'en'} class="btn btn-line px-2.5 py-2 text-sm sm:px-3" aria-label={isEn ? 'العربية' : 'English'}>
+        <span class="sm:hidden" aria-hidden="true">{isEn ? 'ع' : 'EN'}</span>
+        <span class="hidden sm:inline">{isEn ? 'العربية' : 'English'}</span>
+      </a>
       {!isEn && (
-        <button type="button" data-cart-open class="btn btn-line px-3 py-2 text-sm" aria-label="فتح السلة">
-          السلة <span data-cart-count class="min-w-5 rounded-full bg-ink px-1.5 text-xs text-white" hidden>0</span>
+        <button type="button" data-cart-open class="btn btn-line gap-1.5 px-2.5 py-2 text-sm sm:px-3" aria-label="فتح السلة">
+          <svg aria-hidden="true" class="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="hidden sm:inline">السلة</span>
+          <span data-cart-count class="min-w-5 rounded-full bg-ink px-1.5 text-xs text-white" hidden>0</span>
         </button>
       )}
       <details class="relative lg:hidden">

@@ -35,6 +35,11 @@ jobs:
           restore-keys: astro-assets-
       - name: Build
         run: npm run build
+      # فحص الجوال: يمنع النشر إذا صارت أي صفحة أعرض من الشاشة أو خرج زر واتساب العائم عنها
+      - name: تثبيت متصفح فحص الجوال
+        run: npx playwright install --with-deps --only-shell chromium
+      - name: فحص الجوال
+        run: npm run check:mobile
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
