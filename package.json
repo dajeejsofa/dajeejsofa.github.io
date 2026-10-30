@@ -11,7 +11,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:mobile": "node scripts/check-mobile.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@netlify/blobs": "^10.7.13",
-    "@netlify/functions": "^4.3.0"
+    "@netlify/functions": "^4.3.0",
+    "playwright": "^1.63.0"
   }
 }
