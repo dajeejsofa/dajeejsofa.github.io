@@ -70,7 +70,7 @@ const crumbs = [
 ];
 ---
 <BaseLayout
-  hideReviews
+  hideReviews={reviews.length > 0}
   title={fillPrice(d.seoTitle || d.title, [product])}
   description={fillPrice(d.description, [product]) || `${d.title}${typeof d.price === 'number' && d.price > 0 ? ` بسعر ${formatKWD(d.price)}` : ''} من معرض قنفات الضجيج في مجمع كتارا، الكويت. اطلب عبر واتساب.`}
   ogImage={ogImg?.src}
@@ -108,12 +108,12 @@ const crumbs = [
         {d.priceUnit === 'meter' && <p class="text-sm text-muted">السعر للمتر الطولي من الكنب، ويُحسب الإجمالي حسب مقاس مكانك.</p>}
         <p class="mt-2 text-sm font-semibold text-accent">{d.inStock ? 'متوفر في المعرض' : 'تفصيل حسب الطلب في مشغلنا'}</p>
         {rating && <p class="mt-2 text-sm"><a href="#reviews" class="text-accent"><span aria-hidden="true">{stars(rating.average)}</span> {rating.average} من 5 ({rating.count} {rating.count === 1 ? 'مراجعة' : 'مراجعات'})</a></p>}
-        <p class="mt-1 text-sm text-muted">{returnPolicy.text}</p>
 
         <div class="mt-6 flex flex-wrap gap-3">
+          <a class="btn btn-wa" href={waProduct(d.title, url)} target="_blank" rel="noopener">اطلب هذا المنتج عبر واتساب</a>
           <button
             type="button"
-            class="btn btn-dark"
+            class="btn btn-line"
             data-add-to-cart
             data-id={product.id}
             data-title={d.title}
@@ -122,7 +122,6 @@ const crumbs = [
             data-image={thumb?.src || ''}
             data-unit={d.priceUnit}
           >أضف إلى السلة</button>
-          <a class="btn btn-wa" href={waProduct(d.title, url)} target="_blank" rel="noopener">اسأل عن هذا المنتج عبر واتساب</a>
         </div>
 
         {specs.length > 0 && (
@@ -131,6 +130,7 @@ const crumbs = [
           </dl>
         )}
         <div class="prose-ar mt-6"><Content /></div>
+        <p class="mt-4 rounded-xl border border-line bg-white p-4 text-sm leading-7 text-muted"><span class="font-semibold text-ink">سياسة الإرجاع: </span>{returnPolicy.text}</p>
         {service ? (
           <p class="mt-6 rounded-xl bg-sand p-4 text-sm leading-7">
             هذا العمل من خدمة <a class="font-semibold underline" href={`/${service.id}/`}>{service.data.title} في الكويت</a> من مشغل قنفات الضجيج بالضجيج.
@@ -144,27 +144,27 @@ const crumbs = [
         ) : null}
       </div>
     </div>
+    {reviews.length > 0 && (
     <div id="reviews" class="mt-10 max-w-3xl">
       <h2 class="text-xl font-bold">آراء العملاء</h2>
-      {reviews.length ? (
-        <ul class="mt-4 space-y-3">
-          {reviews.map((r) => (
-            <li class="rounded-xl border border-line bg-white p-4">
-              <p class="text-accent" aria-label={`${r.data.rating} من 5`}>{stars(r.data.rating)}</p>
-              <p class="mt-2 leading-7">{r.data.text}</p>
-              <p class="mt-2 text-sm text-muted">{r.data.name}{r.data.area ? ` — ${r.data.area}` : ''} · {dateAr(r.data.date)}</p>
-            </li>
-          ))}
-        </ul>
-      ) : <p class="mt-2 text-muted">لا توجد مراجعات لهذا المنتج بعد.</p>}
+      <ul class="mt-4 space-y-3">
+        {reviews.map((r) => (
+          <li class="rounded-xl border border-line bg-white p-4">
+            <p class="text-accent" aria-label={`${r.data.rating} من 5`}>{stars(r.data.rating)}</p>
+            <p class="mt-2 leading-7">{r.data.text}</p>
+            <p class="mt-2 text-sm text-muted">{r.data.name}{r.data.area ? ` — ${r.data.area}` : ''} · {dateAr(r.data.date)}</p>
+          </li>
+        ))}
+      </ul>
       <a class="btn btn-dark mt-4" href={reviewLink}>اكتب مراجعتك</a>
     </div>
+    )}
   </section>
 
   {related.length > 0 && (
     <section class="container-page mt-14">
       <h2 class="text-2xl font-bold">{terms ? `${terms[0]} مشابه` : service ? `أعمال ${service.data.title} أخرى` : 'منتجات مشابهة'}</h2>
-      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
         {related.map((p) => <ProductCard product={p} />)}
       </div>
     </section>
