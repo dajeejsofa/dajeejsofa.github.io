@@ -4,9 +4,14 @@ import ProductCard from '../components/ProductCard.astro';
 import FAQ from '../components/FAQ.astro';
 import { business, fullAddress, services } from '../data/business';
 import { waGeneral } from '../data/whatsapp';
-import { publishedProducts, categoriesWithProducts, productsForService, priceFrom, priceTextAr } from '../lib/catalog';
+import { Image } from 'astro:assets';
+import { publishedProducts, categoriesWithProducts, productsForService, priceFrom, priceTextAr, productImages, productAlt } from '../lib/catalog';
 
 const products = (await publishedProducts()).slice(0, 8);
+// صورة الواجهة: أول صورة لأحدث منتج — صورة شغل حقيقي من المعرض/المشغل
+const heroProduct = products.find((p) => productImages(p).length > 0);
+const heroImage = heroProduct ? productImages(heroProduct)[0] : undefined;
+const heroAlt = heroProduct ? productAlt(heroProduct) : '';
 const cats = await categoriesWithProducts();
 const tafseelList = await productsForService('tafseel-kanab');
 const tanjeedList = await productsForService('tanjeed-kanab');
@@ -36,51 +41,68 @@ const faqs = [
   faqs={faqs}
   alternate="/en/"
 >
-  <section class="container-page pt-10">
-    <h1 class="max-w-3xl text-3xl font-bold leading-snug md:text-4xl">قنفات وكنب في الكويت من معرضنا ومشغلنا بالضجيج</h1>
-    <p class="mt-4 max-w-3xl text-lg text-muted">{business.description}</p>
-    <div class="mt-6 flex flex-wrap gap-3">
-      <a class="btn btn-dark" href="/shop/">تصفح الكنب والقنفات</a>
-      <a class="btn btn-wa" href={waGeneral()} target="_blank" rel="noopener">اطلب عبر واتساب</a>
+  <section class="container-page pt-4 md:pt-8">
+    <div class="hero relative overflow-hidden rounded-2xl bg-ink">
+      {heroImage && (
+        <Image
+          src={heroImage}
+          alt={heroAlt}
+          widths={[480, 800, 1200, 1600]}
+          sizes="(min-width: 1152px) 1120px, 100vw"
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+      )}
+      <div class="hero-shade absolute inset-0" aria-hidden="true"></div>
+      <div class="relative flex h-full flex-col justify-end p-5 md:p-10">
+        <h1 class="max-w-2xl text-3xl font-bold leading-snug text-white text-balance md:text-5xl md:leading-tight">قنفات وكنب في الكويت من معرضنا ومشغلنا بالضجيج</h1>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a class="btn btn-wa" href={waGeneral()} target="_blank" rel="noopener">اطلب عبر واتساب</a>
+          <a class="btn btn-light" href="/shop/">تصفح الكنب والقنفات</a>
+        </div>
+      </div>
     </div>
-  </section>
-
-  <section class="container-page mt-14">
-    <h2 class="text-2xl font-bold">خدماتنا</h2>
-    <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <li class="rounded-xl border border-line bg-white p-5">
-        <a href="/maarad-dajeej/" class="font-bold hover:text-accent">كنب جاهز في المعرض</a>
-        <p class="mt-1 text-sm text-muted">كنب وقنفات جاهزة تشاهدها في معرضنا بمجمع كتارا.</p>
-      </li>
-      {services.map((s) => (
-        <li class="rounded-xl border border-line bg-white p-5">
-          <a href={`/${s.slug}/`} class="font-bold hover:text-accent">{s.title}</a>
-          <p class="mt-1 text-sm text-muted">{s.short}</p>
-        </li>
-      ))}
-    </ul>
+    <p class="mt-5 max-w-3xl text-muted">{business.description}</p>
   </section>
 
   {cats.length > 0 && (
-    <section class="container-page mt-14">
-      <h2 class="text-2xl font-bold">الأقسام</h2>
-      <div class="mt-4 flex flex-wrap gap-2">
-        {cats.map((c) => <a class="btn btn-line" href={`/${c.id}/`}>{c.data.title}</a>)}
+    <section class="container-page mt-8">
+      <h2 class="sr-only">الأقسام</h2>
+      <div class="chips -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:px-0">
+        {cats.map((c) => <a class="btn btn-line shrink-0 px-4 py-1.5 text-sm" href={`/${c.id}/`}>{c.data.title}</a>)}
       </div>
     </section>
   )}
 
   {products.length > 0 && (
-    <section class="container-page mt-14">
+    <section class="container-page mt-8">
       <div class="flex items-end justify-between">
         <h2 class="text-2xl font-bold">أحدث الكنب والقنفات</h2>
-        <a class="text-sm underline" href="/shop/">كل المنتجات</a>
+        <a class="text-sm underline underline-offset-4" href="/shop/">كل المنتجات</a>
       </div>
-      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((p, i) => <ProductCard product={p} eager={i < 2} />)}
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {products.map((p) => <ProductCard product={p} />)}
       </div>
     </section>
   )}
+
+  <section class="container-page mt-14">
+    <h2 class="text-2xl font-bold">خدماتنا</h2>
+    <ul class="mt-4 divide-y divide-line border-y border-line md:grid md:grid-cols-4 md:divide-y-0 md:divide-x md:divide-x-reverse">
+      {[{ slug: 'maarad-dajeej', title: 'كنب جاهز في المعرض', short: 'كنب وقنفات جاهزة تشاهدها في معرضنا بمجمع كتارا.' }, ...services].map((s) => (
+        <li>
+          <a href={`/${s.slug}/`} class="group flex items-center justify-between gap-4 py-4 md:h-full md:flex-col md:items-start md:px-5">
+            <span>
+              <span class="block font-bold group-hover:text-accent">{s.title}</span>
+              <span class="mt-0.5 block text-sm text-muted">{s.short}</span>
+            </span>
+            <svg class="h-5 w-5 shrink-0 text-accent md:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 
   <section class="container-page mt-14">
     <div class="rounded-xl border border-line bg-white p-6">
