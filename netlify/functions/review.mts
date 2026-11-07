@@ -50,23 +50,33 @@ export default async (req: Request, context: Context) => {
     if (spam.test(name) || spam.test(text) || spam.test(area)) return json({ ok: false, error: "invalid" }, 400, h);
     const prefix = SITES[req.headers.get("origin") || ""] || "pending/";
     const id = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
-    await store().setJSON(`${prefix}${id}`, { id, name, rating, text, area, product, date: new Date().toISOString().slice(0, 10), country: context.geo?.country?.code || "" });
-    return json({ ok: true }, 200, h);
+    const date = new Date().toISOString().slice(0, 10);
+    await store().setJSON(`${prefix}${id}`, { id, name, rating, text, area, product, date, country: context.geo?.country?.code || "" });
+    // تُعاد المراجعة للصفحة فتظهر للزائر فورًا
+    return json({ ok: true, item: { id, name, rating, text, area, product, date } }, 200, h);
   }
 
   // الاستيراد: GitHub Actions يقرأ المراجعات الواردة آخر 14 يومًا (وهي مكتوبة أصلًا للنشر)،
   // ويتجاهل ما سبق استيراده. الأقدم من 14 يومًا يُحذف تلقائيًا.
   if (req.method === "GET") {
     const s = store();
-    const prefix = new URL(req.url).searchParams.get("site") === "alam" ? "alam/" : "pending/";
+    const q = new URL(req.url).searchParams;
+    const prefix = q.get("site") === "alam" ? "alam/" : "pending/";
+    // live=1: عرض فوري في صفحات الموقع للمراجعات التي لم تدخل الموقع المبني بعد — الحقول العامة فقط
+    const live = q.get("live") === "1";
     const { blobs } = await s.list({ prefix });
     const cutoff = Date.now() - 14 * 24 * 3600 * 1000;
     const items = [];
     for (const bl of blobs) {
       const ts = Number(bl.key.slice(prefix.length).split("-")[0]);
       if (!ts || ts < cutoff) { await s.delete(bl.key); continue; }
-      const v = await s.get(bl.key, { type: "json" });
-      if (v) items.push(v);
+      const v = (await s.get(bl.key, { type: "json" })) as Record<string, unknown> | null;
+      if (!v) continue;
+      items.push(live ? { id: v.id, name: v.name, rating: v.rating, text: v.text, area: v.area, product: v.product, date: v.date } : v);
+    }
+    if (live) {
+      const o = req.headers.get("origin") || "";
+      return json({ ok: true, items }, 200, { "cache-control": "public, max-age=30", "Access-Control-Allow-Origin": ORIGINS.includes(o) ? o : ORIGINS[0], Vary: "Origin" });
     }
     return json({ ok: true, items }, 200, { "cache-control": "no-store" });
   }

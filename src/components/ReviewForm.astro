@@ -1,0 +1,101 @@
+---
+// نموذج مراجعة بسيط: النجوم + الاسم + الملاحظة. بلا صور ولا خطوط إضافية، ويُوضع أسفل الصفحة،
+// والسكربت صغير ومؤجَّل (module) فلا يؤثر على LCP. المراجعة تظهر فوراً للجميع بلا موافقة، ويحفظها البناء التالي.
+import { REVIEWS_API } from '../lib/reviews';
+export interface Props { product?: string }
+const { product } = Astro.props;
+---
+<form class="review-form mt-4 space-y-3" data-api={REVIEWS_API}>
+  <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+  {product && <input type="hidden" name="product" value={product} />}
+  <fieldset>
+    <legend class="text-sm font-semibold">تقييمك</legend>
+    <div class="stars mt-1 flex flex-row-reverse justify-end gap-1 text-3xl leading-none" dir="ltr">
+      {[5, 4, 3, 2, 1].map((n) => (
+        <label class="cursor-pointer"><input class="sr-only" type="radio" name="rating" value={n} required /><span aria-label={`${n} من 5`}>★</span></label>
+      ))}
+    </div>
+  </fieldset>
+  <input name="name" required minlength="2" maxlength="40" placeholder="اسمك" aria-label="اسمك" class="w-full rounded-lg border border-line p-2" />
+  <textarea name="text" required minlength="10" maxlength="600" rows="3" placeholder="اكتب رأيك" aria-label="ملاحظتك" class="w-full rounded-lg border border-line p-2"></textarea>
+  <button type="submit" class="btn btn-dark w-full">أرسل</button>
+  <p class="review-status text-sm" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  /* النجوم بـ CSS فقط: النجمة المختارة وما قبلها تتلون بلا سكربت */
+  .stars span { color: #d9d2c7; }
+  .stars label:has(input:checked) span,
+  .stars label:has(input:checked) ~ label span,
+  .stars label:hover span,
+  .stars label:hover ~ label span { color: #b07d16; }
+</style>
+
+<script>
+  // يملأ قوائم المراجعات فوراً: المراجعة المرسلة تظهر في الحال، والمراجعات الجديدة من الخادم
+  // (التي لم يدخلها البناء بعد) تُجلب بعد اكتمال تحميل الصفحة فلا تنافس LCP.
+  type Item = { id: string; name: string; rating: number; text: string; area?: string; product?: string; date: string };
+  const api = document.querySelector<HTMLFormElement>(".review-form")?.dataset.api;
+  const lists = [...document.querySelectorAll<HTMLUListElement>(".review-list")];
+  const shown = new Set<string>();
+  const starsOf = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
+  const dateAr = (d: string) => new Date(d).toLocaleDateString("ar-KW", { year: "numeric", month: "long", day: "numeric" });
+
+  const add = (it: Item) => {
+    if (shown.has(it.id)) return;
+    for (const ul of lists) {
+      const known = (ul.dataset.known || "").split(",");
+      if (known.includes(it.id)) continue;
+      if (ul.dataset.product && ul.dataset.product !== it.product) continue;
+      const tpl = ul.nextElementSibling as HTMLTemplateElement | null;
+      if (!tpl?.content) continue;
+      const li = tpl.content.firstElementChild!.cloneNode(true) as HTMLElement;
+      li.querySelector("[data-stars]")!.textContent = starsOf(Math.max(1, Math.min(5, Number(it.rating) || 5)));
+      li.querySelector("[data-text]")!.textContent = it.text;
+      li.querySelector("[data-meta]")!.textContent = `${it.name}${it.area ? ` — ${it.area}` : ""} · ${dateAr(it.date)}`;
+      ul.prepend(li);
+      shown.add(it.id);
+    }
+  };
+
+  if (api && lists.length) {
+    const load = () => {
+      const site = location.hostname.includes("alamcurtainskw") ? "alam" : "";
+      fetch(`${api}?live=1${site ? `&site=${site}` : ""}`)
+        .then((r) => (r.ok ? r.json() : { items: [] }))
+        .then((d) => (d.items as Item[]).sort((a, b) => (a.id < b.id ? -1 : 1)).forEach(add))
+        .catch(() => {});
+    };
+    if (document.readyState === "complete") setTimeout(load, 300);
+    else addEventListener("load", () => setTimeout(load, 300), { once: true });
+  }
+
+  document.querySelectorAll<HTMLFormElement>(".review-form").forEach((form) => {
+    const status = form.querySelector(".review-status")!;
+    const button = form.querySelector("button")!;
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      button.disabled = true;
+      status.textContent = "جارٍ الإرسال…";
+      try {
+        const res = await fetch(form.dataset.api!, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
+        });
+        if (res.status === 400) throw new Error("invalid");
+        if (!res.ok) throw new Error("net");
+        const d = await res.json().catch(() => ({}));
+        if (d.item) add(d.item);
+        form.reset();
+        status.textContent = "شكراً لك! نُشرت ملاحظتك.";
+      } catch (err) {
+        status.textContent = (err as Error).message === "invalid"
+          ? "تأكد من اختيار النجوم وكتابة اسمك وملاحظتك (بدون روابط أو أرقام هواتف)."
+          : "تعذّر الإرسال، حاول مرة أخرى.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

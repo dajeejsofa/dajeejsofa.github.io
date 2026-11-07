@@ -27,6 +27,6 @@ jobs:
             git config user.name "dajeejsofa-reviews"
             git config user.email "reviews@users.noreply.github.com"
             git add src/content/reviews src/data/reviews-imported.json
-            git commit -m "مراجعات عملاء جديدة بانتظار الموافقة"
+            git commit -m "مراجعات عملاء جديدة (منشورة مباشرة)"
             git push
           fi
