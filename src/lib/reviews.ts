@@ -19,3 +19,12 @@ export const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5
 export const dateAr = (d: Date) => d.toLocaleDateString('ar-KW', { year: 'numeric', month: 'long', day: 'numeric' });
 
 export const REVIEWS_PATH = '/araa-alumalaa/';
+
+// معرّفات المراجعات المستوردة حديثًا (آخر 15 يومًا) — الصفحة تعرض فورًا فقط ما لم يدخل الموقع المبني بعد،
+// فلا تتكرر مراجعة، ولا تعود مراجعة حذفها المالك من اللوحة.
+import imported from '../data/reviews-imported.json';
+export const recentImportedIds = () => {
+  const cutoff = Date.now() - 15 * 24 * 3600 * 1000;
+  return (imported as string[]).filter((id) => Number(id.split('-')[0]) >= cutoff);
+};
+export const REVIEWS_API = 'https://dajeejsofa-reviews.netlify.app/api/review';

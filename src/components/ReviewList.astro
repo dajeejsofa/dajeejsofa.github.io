@@ -1,0 +1,23 @@
+---
+// قائمة المراجعات: المنشورة وقت البناء + قالب تملؤه الصفحة فورًا بالمراجعات الجديدة قبل إعادة بناء الموقع.
+import { stars, dateAr, recentImportedIds, type Review } from '../lib/reviews';
+export interface Props { reviews: Review[]; product?: string; titles?: Map<string, string> }
+const { reviews, product = '', titles } = Astro.props;
+---
+<ul class="review-list mt-4 grid gap-3 empty:hidden" data-product={product} data-known={recentImportedIds().join(',')}>{reviews.map((r) => (
+  <li class="rounded-xl border border-line bg-white p-4">
+    <p class="text-accent" aria-label={`${r.data.rating} من 5`}>{stars(r.data.rating)}</p>
+    <p class="mt-2 leading-7">{r.data.text}</p>
+    {!product && r.data.product && titles?.has(r.data.product) && (
+      <p class="mt-2 text-sm"><a class="underline" href={`/products/${r.data.product}/`}>{titles.get(r.data.product)}</a></p>
+    )}
+    <p class="mt-1 text-sm text-muted">{r.data.name}{r.data.area ? ` — ${r.data.area}` : ''} · {dateAr(r.data.date)}</p>
+  </li>
+))}</ul>
+<template class="review-tpl">
+  <li class="rounded-xl border border-line bg-white p-4">
+    <p class="text-accent" data-stars></p>
+    <p class="mt-2 leading-7" data-text></p>
+    <p class="mt-1 text-sm text-muted" data-meta></p>
+  </li>
+</template>

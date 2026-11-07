@@ -93,7 +93,7 @@ const reviews = defineCollection({
     product: optStr(), // اسم ملف المنتج (رابطه) إن كانت المراجعة عن منتج محدد
     area: optStr(), // منطقة العميل (اختياري)
     date: z.coerce.date(),
-    approved: z.boolean().default(false),
+    approved: z.boolean().default(true), // تُنشر مباشرة؛ المالك يخفي أو يحذف من اللوحة
   }),
 });
 
