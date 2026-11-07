@@ -1,0 +1,33 @@
+---
+// كل المنتجات بالإنجليزية — تقابل /shop/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProductCardEn from '../../components/ProductCardEn.astro';
+import { business } from '../../data/business';
+import { enProducts, liveEnPages } from '../../lib/en';
+const products = await enProducts();
+const cats = (await liveEnPages()).filter((p) => p.kind === 'category');
+const site = Astro.site!.toString().replace(/\/$/, '');
+const crumbs = [{ name: 'Home', href: '/en/' }, { name: 'All sofas', href: '/en/sofas/' }];
+const prices = products.map((p) => p.data.price).filter((n): n is number => typeof n === 'number' && n > 0);
+const from = prices.length ? Math.min(...prices) : undefined;
+---
+<BaseLayout
+  lang="en"
+  alternate="/shop/"
+  title={`All Sofas in Kuwait — ${products.length} Designs${from ? ` from ${from} KWD/m` : ''} | ${business.nameEn}`}
+  description={`Browse ${products.length} sofa designs from ${business.nameEn} in Al Dajeej, Kuwait: corner sofas, modern sofas, diwaniya sofas, sofa sets and Arabic majlis, made to measure and priced per metre with fabric included.`}
+  noindex={products.length === 0}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={crumbs} lang="en" />
+    <h1 class="mt-3 text-3xl font-bold">All sofas and upholstery work</h1>
+    <div class="mt-4 flex flex-wrap gap-2">
+      {cats.map((c) => <a class="btn btn-line px-3 py-1.5 text-sm" href={`/en/${c.slug}/`}>{c.name}</a>)}
+    </div>
+    <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+      {products.map((p, i) => <ProductCardEn product={p} eager={i < 2} />)}
+    </div>
+  </section>
+</BaseLayout>

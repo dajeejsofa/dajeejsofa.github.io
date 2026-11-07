@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية فضي بظهر كابتونيه وقاعدة خشب في السالمية"
+titleEn: "Silver Diwaniya Sofa with Capitonné Back and Wooden Base in Salmiya"
 images:
   - "./images/kanab-diwaniya-fiddi-capitone-qaeda-khashab-salmiya-1.webp"
   - "./images/kanab-diwaniya-fiddi-capitone-qaeda-khashab-salmiya-2.webp"

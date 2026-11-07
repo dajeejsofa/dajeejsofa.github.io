@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أخضر غامق بخياطة بيضاء بارزة"
+titleEn: "Modern Dark Green Sofa with White Contrast Stitching"
 images:
   - "./images/kanab-modern-akhdar-ghamiq-khiyata-bayda-1.webp"
   - "./images/kanab-modern-akhdar-ghamiq-khiyata-bayda-2.webp"

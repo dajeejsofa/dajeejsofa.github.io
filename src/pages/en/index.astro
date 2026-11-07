@@ -5,8 +5,10 @@ import FAQ from '../../components/FAQ.astro';
 import { business, fullAddressEn } from '../../data/business';
 import { hoursEn } from '../../data/en';
 import { waLink } from '../../data/whatsapp';
-import { productsForService, priceTextEn } from '../../lib/catalog';
-import { liveEnPages, productsOf } from '../../lib/en';
+import { Image } from 'astro:assets';
+import ProductCardEn from '../../components/ProductCardEn.astro';
+import { productsForService, priceTextEn, priceFrom, productImages } from '../../lib/catalog';
+import { liveEnPages, productsOf, enProducts, enProductsOf } from '../../lib/en';
 
 const tafseel = await productsForService('tafseel-kanab');
 const tanjeed = await productsForService('tanjeed-kanab');
@@ -15,8 +17,19 @@ const services = pages.filter((p) => p.kind === 'service');
 const cats = pages.filter((p) => p.kind === 'category');
 const svcPrice = await Promise.all(services.map(async (p) => (p.ar === 'tasleeh-kanab' ? '' : priceTextEn(await productsOf(p)))));
 const hours = hoursEn(business.openingHours);
+const all = await enProducts();
+const latest = all.slice(0, 8);
+const hero = all.find((p) => productImages(p).length > 0);
+const catCards = await Promise.all(
+  cats.map(async (p) => {
+    const list = await enProductsOf(p);
+    const withImg = list.find((x) => productImages(x).length > 0);
+    return { ...p, count: list.length, from: priceFrom(list), image: withImg ? productImages(withImg)[0] : undefined, alt: withImg?.data.titleEn ?? p.name };
+  }),
+);
 const wa = waLink(`Hello ${business.nameEn}, I have a question about sofas.`);
 const faqs = [
+  { question: 'What types of sofas do you make?', answer: `${cats.map((p) => p.name).join(', ')}. All are made to measure and priced per linear metre with the fabric included.` },
   { question: `Where is ${business.nameEn} located?`, answer: `Our showroom and workshop are in ${fullAddressEn}.${hours ? ` ${hours}.` : ''}` },
   { question: 'How much does a custom sofa cost in Kuwait?', answer: `Custom sofas are priced per linear metre with the fabric included, ${priceTextEn(tafseel)} depending on the design. Single armchairs are priced on agreement.` },
   { question: 'How much does sofa upholstery cost?', answer: `Fabric sofa upholstery is ${priceTextEn(tanjeed)} per linear metre of sofa, fabric included, done in our workshop.` },
@@ -31,13 +44,53 @@ const faqs = [
   description={`Sofa showroom and workshop in Katara Complex, Al Dajeej, Kuwait: custom sofas made to measure ${priceTextEn(tafseel, true)} and fabric upholstery ${priceTextEn(tanjeed, true)}, fabric included, plus sofa leg and foam repair. WhatsApp ${business.phone}.`}
   faqs={faqs}
 >
-  <section class="container-page pt-10">
-    <h1 class="max-w-3xl text-3xl font-bold leading-snug md:text-4xl">Sofas in Kuwait: custom sofas, upholstery and repair from our Al Dajeej workshop</h1>
-    <p class="mt-4 max-w-3xl text-lg text-muted">{business.descriptionEn}</p>
-    <div class="mt-6 flex flex-wrap gap-3">
-      <a class="btn btn-wa" href={wa} target="_blank" rel="noopener">Order on WhatsApp</a>
+  <section class="container-page pt-4 md:pt-8">
+    <div class="hero relative overflow-hidden rounded-2xl bg-ink">
+      {hero && (
+        <Image src={productImages(hero)[0]} alt={hero.data.titleEn!} widths={[480, 800, 1200, 1600]} sizes="(min-width: 1152px) 1120px, 100vw" class="absolute inset-0 h-full w-full object-cover" loading="eager" fetchpriority="high" />
+      )}
+      <div class="hero-shade absolute inset-0" aria-hidden="true"></div>
+      <div class="relative flex h-full flex-col justify-end p-5 md:p-10">
+        <h1 class="max-w-3xl text-3xl font-bold leading-snug text-white text-balance md:text-4xl">Sofas in Kuwait: custom sofas, upholstery and repair from our Al Dajeej workshop</h1>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a class="btn btn-wa" href={wa} target="_blank" rel="noopener">Order on WhatsApp</a>
+          <a class="btn btn-light" href="/en/sofas/">Browse all sofas</a>
+        </div>
+      </div>
     </div>
+    <p class="mt-5 max-w-3xl text-muted">{business.descriptionEn}</p>
   </section>
+
+  {catCards.length > 0 && (
+    <section class="container-page mt-10">
+      <h2 class="text-2xl font-bold">Sofa types we make</h2>
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {catCards.map((c) => (
+          <a href={`/en/${c.slug}/`} class="group block overflow-hidden rounded-xl border border-line bg-white">
+            <div class="aspect-[4/3] bg-sand">
+              {c.image && <Image src={c.image} alt={c.alt} widths={[360, 560, 800]} sizes="(min-width: 1024px) 25vw, 50vw" class="h-full w-full object-cover" loading="lazy" />}
+            </div>
+            <div class="p-3 sm:p-4">
+              <h3 class="text-sm font-semibold group-hover:text-accent sm:text-base">{c.name}</h3>
+              <p class="mt-1 text-xs text-muted sm:text-sm">{c.count} {c.count === 1 ? 'design' : 'designs'}{c.from ? ` · from ${c.from} KWD/m` : ''}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {latest.length > 0 && (
+    <section class="container-page mt-12">
+      <div class="flex items-end justify-between">
+        <h2 class="text-2xl font-bold">Latest sofas from our workshop</h2>
+        <a class="text-sm underline underline-offset-4" href="/en/sofas/">All sofas</a>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {latest.map((p) => <ProductCardEn product={p} />)}
+      </div>
+    </section>
+  )}
 
   <section class="container-page mt-14">
     <h2 class="text-2xl font-bold">Our services</h2>
@@ -50,15 +103,6 @@ const faqs = [
       ))}
     </ul>
   </section>
-
-  {cats.length > 0 && (
-    <section class="container-page mt-14">
-      <h2 class="text-2xl font-bold">Sofa types we make</h2>
-      <div class="mt-4 flex flex-wrap gap-2">
-        {cats.map((p) => <a class="btn btn-line" href={`/en/${p.slug}/`}>{p.name}</a>)}
-      </div>
-    </section>
-  )}
 
   <section class="container-page mt-14">
     <div class="rounded-xl border border-line bg-white p-6">

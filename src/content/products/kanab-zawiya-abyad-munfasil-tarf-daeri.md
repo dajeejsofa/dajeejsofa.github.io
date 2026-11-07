@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية أبيض منفصل بطرف دائري"
+titleEn: "White Modular Corner Sofa with Round End"
 images:
   - "./images/kanab-zawiya-abyad-munfasil-tarf-daeri-1.webp"
   - "./images/kanab-zawiya-abyad-munfasil-tarf-daeri-2.webp"

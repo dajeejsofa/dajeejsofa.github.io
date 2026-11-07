@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب مودرن منحني بيج — قماش شانيل وأرجل خشب"
+titleEn: "Modern Curved Beige Sofa Set in Chenille with Wooden Legs"
 images:
   - "./images/1000574788.webp"
   - "./images/1000574792.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب مجالس مودرن بيج بمساند مستديرة"
+titleEn: "Modern Beige Majlis Sofa with Rounded Arms"
 images:
   - "./images/kanab-majalis-modern-beige-masaned-mustadeera-1.webp"
   - "./images/kanab-majalis-modern-beige-masaned-mustadeera-2.webp"

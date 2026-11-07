@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن دائري مقوّس أوف وايت"
+titleEn: "Modern Round Curved Off-White Sofa"
 images:
   - "./images/kanab-modern-daeri-off-white-1.jpg"
   - "./images/kanab-modern-daeri-off-white-2.jpg"

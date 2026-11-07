@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن منفصل حرف L بيج بحواف خياطة"
+titleEn: "Modern Beige L-Shape Modular Corner Sofa with Piped Edges"
 images:
   - "./images/kanab-zawiya-modern-munfasil-beige-1.webp"
   - "./images/kanab-zawiya-modern-munfasil-beige-2.webp"

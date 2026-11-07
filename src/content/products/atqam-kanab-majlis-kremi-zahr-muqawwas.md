@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب مجلس كريمي بظهر مقوّس وأرجل خشب"
+titleEn: "Cream Majlis Sofa Set with Curved Back and Wooden Legs"
 images:
   - "./images/atqam-kanab-majlis-kremi-zahr-muqawwas-1.webp"
 imageAlt: "طقم كنب مجلس كريمي من كنبات بظهر مقوّس ملتف وأرجل خشب مخروطة موزعة حول طاولة في صالة"

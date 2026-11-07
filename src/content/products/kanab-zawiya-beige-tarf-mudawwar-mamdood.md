@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية بيج بطرف ممدود مدوّر"
+titleEn: "Beige Corner Sofa with Rounded Chaise End"
 images:
   - "./images/kanab-zawiya-beige-tarf-mudawwar-mamdood-1.webp"
 imageAlt: "كنب زاوية بيج بقماش منسوج بطرف ممدود مدوّر من الأمام ومخدات ظهر منفصلة في غرفة جلوس"

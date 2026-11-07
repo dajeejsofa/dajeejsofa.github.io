@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن حرف U بيج بقاعدة خشب"
+titleEn: "Modern Beige U-Shape Corner Sofa with Wooden Base"
 images:
   - "./images/kanab-zawiya-modern-u-beige-1.jpg"
   - "./images/kanab-zawiya-modern-u-beige-2.jpg"

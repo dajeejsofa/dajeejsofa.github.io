@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب مودرن دائري رمادي فاتح — قماش شانيل تركي"
+titleEn: "Modern Round Light Grey Sofa Set in Turkish Chenille"
 images:
   - "./images/1000574796.webp"
 imageAlt: "طقم كنب مودرن دائري رمادي فاتح مع كنبتين منحنيتين وكرسيين دائريين في صالة"

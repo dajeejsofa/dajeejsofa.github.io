@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب مودرن بيج بخشب غامق"
+titleEn: "Modern Beige Sofa Set with Dark Wood"
 images:
   - "./images/1000574762.webp"
   - "./images/1000574767.webp"

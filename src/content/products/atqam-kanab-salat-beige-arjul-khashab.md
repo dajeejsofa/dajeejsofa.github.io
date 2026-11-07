@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب صالة بيج ثلاثي بأرجل خشب"
+titleEn: "Beige Three-Seater Living Room Sofa Set with Wooden Legs"
 images:
   - "./images/atqam-kanab-salat-beige-arjul-khashab-1.webp"
   - "./images/atqam-kanab-salat-beige-arjul-khashab-2.webp"

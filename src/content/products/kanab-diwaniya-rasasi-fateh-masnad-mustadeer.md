@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية رصاصي فاتح متصل بمسند طرفي مستدير"
+titleEn: "Light Grey Continuous Diwaniya Sofa with Round End Arm"
 images:
   - "./images/kanab-diwaniya-rasasi-fateh-masnad-mustadeer-1.webp"
   - "./images/kanab-diwaniya-rasasi-fateh-masnad-mustadeer-2.webp"

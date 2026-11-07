@@ -1,5 +1,6 @@
 ---
 title: "تنجيد كنب بقماش تويد رمادي"
+titleEn: "Sofa Reupholstery in Grey Tweed Fabric"
 images:
   - "./images/tanjeed-kanab-qumash-tweed-rasasi-1.webp"
   - "./images/tanjeed-kanab-qumash-tweed-rasasi-2.webp"

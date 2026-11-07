@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أبيض منحني بظهر ملتف"
+titleEn: "Modern White Curved Sofa with Wraparound Back"
 images:
   - "./images/kanab-modern-abyad-munhani-kursi-akhdar-1.webp"
   - "./images/kanab-modern-abyad-munhani-kursi-akhdar-2.webp"

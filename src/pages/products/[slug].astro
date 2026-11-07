@@ -71,6 +71,7 @@ const crumbs = [
 ---
 <BaseLayout
   hideReviews={reviews.length > 0}
+  alternate={d.titleEn ? `/en/products/${product.id}/` : undefined}
   title={fillPrice(d.seoTitle || d.title, [product])}
   description={fillPrice(d.description, [product]) || `${d.title}${typeof d.price === 'number' && d.price > 0 ? ` بسعر ${formatKWD(d.price)}` : ''} من معرض قنفات الضجيج في مجمع كتارا، الكويت. اطلب عبر واتساب.`}
   ogImage={ogImg?.src}

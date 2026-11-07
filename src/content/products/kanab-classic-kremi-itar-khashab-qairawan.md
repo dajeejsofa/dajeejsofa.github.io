@@ -1,5 +1,6 @@
 ---
 title: "كنب كلاسيك كريمي بإطار خشب في القيروان"
+titleEn: "Cream Classic Sofa with Wooden Frame in Al Qairawan"
 images:
   - "./images/kanab-classic-kremi-itar-khashab-qairawan-1.webp"
   - "./images/kanab-classic-kremi-itar-khashab-qairawan-2.webp"

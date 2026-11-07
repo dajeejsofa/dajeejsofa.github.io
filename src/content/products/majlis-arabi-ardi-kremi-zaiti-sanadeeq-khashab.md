@@ -1,5 +1,6 @@
 ---
 title: "مجلس عربي أرضي كريمي وزيتي بفواصل خشب"
+titleEn: "Cream and Olive Arabic Floor Majlis with Wooden Dividers"
 images:
   - "./images/majlis-arabi-ardi-kremi-zaiti-sanadeeq-khashab-1.webp"
   - "./images/majlis-arabi-ardi-kremi-zaiti-sanadeeq-khashab-2.webp"

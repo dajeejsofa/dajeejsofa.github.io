@@ -1,5 +1,6 @@
 ---
 title: "مجلس عربي أزرق سماوي بمساند أسطوانية وقاعدة خشب"
+titleEn: "Sky Blue Arabic Majlis with Cylinder Cushions and Wooden Base"
 images:
   - "./images/majlis-arabi-azraq-samawi-masaned-uswaniya-1.webp"
   - "./images/majlis-arabi-azraq-samawi-masaned-uswaniya-2.webp"

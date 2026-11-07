@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن بيج بظهر ملتف"
+titleEn: "Modern Beige Sofa with Wraparound Back"
 images:
   - "./images/kanab-modern-beige-zahr-multaf-khaitan-1.webp"
   - "./images/kanab-modern-beige-zahr-multaf-khaitan-2.webp"

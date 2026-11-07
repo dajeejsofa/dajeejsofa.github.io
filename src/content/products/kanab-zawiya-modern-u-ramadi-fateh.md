@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن حرف U رمادي فاتح بظهر منخفض"
+titleEn: "Modern Light Grey U-Shape Corner Sofa with Low Back"
 images:
   - "./images/kanab-zawiya-modern-u-ramadi-fateh-1.webp"
   - "./images/kanab-zawiya-modern-u-ramadi-fateh-2.webp"

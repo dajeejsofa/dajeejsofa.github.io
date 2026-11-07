@@ -1,0 +1,32 @@
+---
+// بطاقة منتج للنسخة الإنجليزية: الاسم الإنجليزي والسعر، وتفتح صفحة المنتج الإنجليزية
+import { Image } from 'astro:assets';
+import type { Product } from '../lib/catalog';
+import { productImages } from '../lib/catalog';
+import { enProductUrl } from '../lib/en';
+export interface Props { product: Product; eager?: boolean }
+const { product, eager = false } = Astro.props;
+const { titleEn, price, priceUnit } = product.data;
+const image = productImages(product)[0];
+---
+<a href={enProductUrl(product)} class="group block overflow-hidden rounded-xl border border-line bg-white">
+  <div class="aspect-[4/3] bg-sand">
+    {image && (
+      <Image
+        src={image}
+        alt={titleEn!}
+        widths={[360, 560, 800]}
+        sizes="(min-width: 1024px) 25vw, 50vw"
+        class="h-full w-full object-cover"
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+      />
+    )}
+  </div>
+  <div class="p-3 sm:p-4">
+    <h3 class="line-clamp-2 text-sm font-semibold leading-snug group-hover:text-accent sm:text-base">{titleEn}</h3>
+    {typeof price === 'number' && price > 0
+      ? <p class="mt-1 text-sm font-bold sm:text-base">{price} KWD<span class="text-xs font-normal text-muted sm:text-sm">{priceUnit === 'meter' ? ' / metre' : ''}</span></p>
+      : <p class="mt-1 text-sm text-muted">Price on WhatsApp</p>}
+  </div>
+</a>

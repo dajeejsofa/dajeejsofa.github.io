@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن كريمي بأطراف مدوّرة وطاولة خشب"
+titleEn: "Modern Cream Corner Sofa with Rounded Ends and Wooden Table"
 images:
   - "./images/kanab-zawiya-modern-kremi-atraf-mudawwara-tawilat-khashab-1.webp"
 imageAlt: "كنب زاوية مودرن كريمي بقطع منفصلة وأطراف مدوّرة مع طاولة خشب جانبية بين القطع ومساند ديكور"

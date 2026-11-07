@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية حرف L رصاصي فاتح بطرف ممدود في السالمية"
+titleEn: "Light Grey L-Shape Corner Sofa with Chaise End in Salmiya"
 images:
   - "./images/kanab-zawiya-l-rasasi-faateh-tarf-mamdood-salmiya-1.webp"
   - "./images/kanab-zawiya-l-rasasi-faateh-tarf-mamdood-salmiya-2.webp"

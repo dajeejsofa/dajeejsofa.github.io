@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن منحني رصاصي بقاعدة ذهبية"
+titleEn: "Modern Curved Grey Sofa with Gold Base"
 images:
   - "./images/kanab-modern-munhani-rasasi-qaeda-dhahabiya-1.webp"
   - "./images/kanab-modern-munhani-rasasi-qaeda-dhahabiya-2.webp"

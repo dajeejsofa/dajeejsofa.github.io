@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية رسمي خشب زان أحمر روماني"
+titleEn: "Formal Diwaniya Sofa in Beech Wood, Roman Red"
 images:
   - "./images/kanab-diwaniya-rasmi-zan-romani-1.jpg"
   - "./images/kanab-diwaniya-rasmi-zan-romani-2.jpg"

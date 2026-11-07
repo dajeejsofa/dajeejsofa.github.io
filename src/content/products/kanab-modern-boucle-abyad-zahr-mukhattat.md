@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أبيض بوكليه بظهر مخطط وأرجل معدن"
+titleEn: "Modern White Bouclé Sofa with Channelled Back and Metal Legs"
 images:
   - "./images/kanab-modern-boucle-abyad-zahr-mukhattat-1.webp"
   - "./images/kanab-modern-boucle-abyad-zahr-mukhattat-2.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن حرف L بيج بطرف ممدود"
+titleEn: "Modern Beige L-Shape Sofa with Chaise End"
 images:
   - "./images/kanab-modern-l-beige-jahra-1.webp"
   - "./images/kanab-modern-l-beige-jahra-2.webp"

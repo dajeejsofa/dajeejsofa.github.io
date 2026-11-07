@@ -1,5 +1,6 @@
 ---
 title: "تنجيد كنب بيج بأرجل معدن في صباح السالم"
+titleEn: "Beige Sofa Reupholstery with Metal Legs in Sabah Al Salem"
 images:
   - "./images/tanjeed-kanab-beige-arjul-maadan-sabah-alsalem-1.webp"
   - "./images/tanjeed-kanab-beige-arjul-maadan-sabah-alsalem-2.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن رصاصي حرف L بطرف ممدود"
+titleEn: "Modern Grey L-Shape Corner Sofa with Chaise End"
 images:
   - "./images/kanab-zawiya-modern-rasasi-l-1.webp"
   - "./images/kanab-zawiya-modern-rasasi-l-2.webp"

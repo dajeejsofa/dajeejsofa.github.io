@@ -1,0 +1,134 @@
+---
+// صفحة المنتج الإنجليزية: تُنشأ لكل منتج له اسم إنجليزي، وتُربط بالصفحة العربية بـ hreflang في الاتجاهين
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ProductCardEn from '../../../components/ProductCardEn.astro';
+import { business, fullAddressEn, returnPolicy } from '../../../data/business';
+import { enPages, hoursEn } from '../../../data/en';
+import { waLink } from '../../../data/whatsapp';
+import { productUrl, productImages, type Product } from '../../../lib/catalog';
+import { enProducts, enProductUrl, enProductDescription, areaEn, liveEnPages } from '../../../lib/en';
+
+export async function getStaticPaths() {
+  const products = await enProducts();
+  return products.map((product) => ({ params: { slug: product.id }, props: { product, all: products } }));
+}
+
+const { product, all } = Astro.props as { product: Product; all: Product[] };
+const d = product.data;
+const name = d.titleEn!;
+const site = Astro.site!.toString().replace(/\/$/, '');
+const url = `${site}${enProductUrl(product)}`;
+const live = await liveEnPages();
+const section = live.find((p) => p.ar === (d.service || d.category)) ?? (d.service ? undefined : live.find((p) => p.ar === 'tafseel-kanab'));
+const isUpholstery = d.service === 'tanjeed-kanab';
+const description = enProductDescription(product);
+const hours = hoursEn(business.openingHours);
+const hasPrice = typeof d.price === 'number' && d.price > 0;
+
+const imgs = productImages(product);
+const main = imgs[0];
+const rest = imgs.slice(1);
+const ogImg = main ? await getImage({ src: main, width: 1200, format: 'jpeg' }) : undefined;
+
+const specs = [
+  hasPrice ? ['Price', `${d.price} KWD per linear metre${d.priceUnit === 'meter' ? ', fabric included' : ''}`] : null,
+  ['Availability', d.inStock ? 'Ready in the showroom' : isUpholstery ? 'Upholstery service in our workshop' : 'Made to order to your measurements'],
+  d.seats ? ['Seats', String(d.seats)] : null,
+  d.width ? ['Length', `${d.width} cm`] : null,
+  d.depth ? ['Depth', `${d.depth} cm`] : null,
+  d.height ? ['Height', `${d.height} cm`] : null,
+  areaEn(d.area) ? ['Area of this work', `${areaEn(d.area)}, Kuwait`] : null,
+  ['Workshop', fullAddressEn],
+].filter(Boolean) as [string, string][];
+
+const related = all
+  .filter((p) => p.id !== product.id && ((d.category && p.data.category === d.category) || (d.service && p.data.service === d.service)))
+  .slice(0, 4);
+const wa = waLink(`Hello ${business.nameEn}, I would like to ask about:\n${name}\n${url}`);
+const crumbs = [
+  { name: 'Home', href: '/en/' },
+  ...(section ? [{ name: section.name, href: `/en/${section.slug}/` }] : [{ name: 'All sofas', href: '/en/sofas/' }]),
+  { name, href: enProductUrl(product) },
+];
+const sectionName = section ? enPages.find((p) => p.slug === section.slug)?.name : undefined;
+---
+<BaseLayout
+  lang="en"
+  alternate={productUrl(product)}
+  title={hasPrice ? `${name} — ${d.price} KWD/m | ${business.nameEn}` : `${name} | ${business.nameEn}`}
+  description={`${description} ${business.nameEn}, Al Dajeej, Kuwait. WhatsApp ${business.phone}.`}
+  ogImage={ogImg?.src}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+  product={{
+    name,
+    url,
+    image: ogImg ? new URL(ogImg.src, site).toString() : undefined,
+    description,
+    price: d.price,
+    inStock: d.inStock,
+    perMeter: d.priceUnit === 'meter',
+  }}
+>
+  <section class="container-page pt-8">
+    <Breadcrumbs items={crumbs} lang="en" />
+    <div class="mt-5 grid gap-8 lg:grid-cols-2">
+      <div class="space-y-3">
+        {main && (
+          <Image src={main} alt={name} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 50vw, 100vw" class="w-full rounded-xl border border-line object-cover" loading="eager" fetchpriority="high" />
+        )}
+        {rest.length > 0 && (
+          <div class="grid grid-cols-3 gap-3">
+            {rest.map((g, i) => <Image src={g} alt={`${name} — photo ${i + 2}`} widths={[240, 480]} sizes="33vw" class="aspect-square w-full rounded-lg object-cover" />)}
+          </div>
+        )}
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold leading-snug">{name}</h1>
+        {hasPrice
+          ? <p class="mt-3 text-2xl font-bold">{d.price} KWD<span class="text-base font-normal text-muted">{d.priceUnit === 'meter' ? ' / linear metre' : ''}</span></p>
+          : <p class="mt-3 text-muted">Price on WhatsApp</p>}
+        {d.priceUnit === 'meter' && <p class="text-sm text-muted">Fabric included. The total is calculated from the length of your walls.</p>}
+        <p class="mt-2 text-sm font-semibold text-accent">{d.inStock ? 'Ready in the showroom' : isUpholstery ? 'Upholstery done in our workshop' : 'Made to order in our workshop'}</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a class="btn btn-wa" href={wa} target="_blank" rel="noopener">Order on WhatsApp</a>
+          {business.mapUrl && <a class="btn btn-line" href={business.mapUrl} target="_blank" rel="noopener">Showroom location</a>}
+        </div>
+        <p class="mt-6 text-lg leading-8">{description}</p>
+        <dl class="mt-6 divide-y divide-line rounded-xl border border-line bg-white">
+          {specs.map(([k, v]) => <div class="flex justify-between gap-4 p-3"><dt class="text-muted">{k}</dt><dd class="text-end font-semibold">{v}</dd></div>)}
+        </dl>
+        <h2 class="mt-8 text-xl font-bold">How to order</h2>
+        <ol class="mt-3 list-decimal space-y-1 ps-6">
+          {isUpholstery
+            ? <>
+                <li>Send photos of your sofa and its length on WhatsApp {business.phone}.</li>
+                <li>We calculate the cost per metre and agree the fabric with you.</li>
+                <li>The sofa is reupholstered in our workshop in Al Dajeej.</li>
+              </>
+            : <>
+                <li>Send this design and your wall measurements on WhatsApp {business.phone}.</li>
+                <li>We calculate the length in metres and the total price.</li>
+                <li>The sofa is made in our workshop in Al Dajeej{hours ? ` — ${hours.toLowerCase()}` : ''}.</li>
+              </>}
+        </ol>
+        <p class="mt-4 rounded-xl border border-line bg-white p-4 text-sm leading-7 text-muted"><span class="font-semibold text-ink">Returns: </span>{returnPolicy.textEn}</p>
+        {section && sectionName && (
+          <p class="mt-6 rounded-xl bg-sand p-4 text-sm leading-7">
+            From our <a class="font-semibold underline" href={`/en/${section.slug}/`}>{sectionName.toLowerCase()} in Kuwait</a>. See also <a class="underline" href="/en/custom-sofas/">custom sofas made to measure</a>.
+          </p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="container-page mt-14">
+      <h2 class="text-2xl font-bold">{sectionName ? `More ${sectionName.toLowerCase()}` : 'Similar designs'}</h2>
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {related.map((p) => <ProductCardEn product={p} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>

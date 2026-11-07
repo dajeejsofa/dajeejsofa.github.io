@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية رصاصي بظهر كابتونيه ومساند مستقيمة"
+titleEn: "Grey Corner Sofa with Capitonné Back and Straight Arms"
 images:
   - "./images/kanab-zawiya-rasasi-zahr-capitone-masaned-mustaqeema-1.webp"
   - "./images/kanab-zawiya-rasasi-zahr-capitone-masaned-mustaqeema-2.webp"

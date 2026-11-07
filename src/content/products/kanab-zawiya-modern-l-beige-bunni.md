@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن حرف L بيج بقاعدة خشب ولمسات بني"
+titleEn: "Modern Beige L-Shape Corner Sofa with Wooden Base and Brown Accents"
 images:
   - "./images/kanab-zawiya-modern-l-beige-bunni-1.webp"
   - "./images/kanab-zawiya-modern-l-beige-bunni-2.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن بيج بمسند رأس وأرجل معدن"
+titleEn: "Modern Beige Corner Sofa with Headrests and Metal Legs"
 images:
   - "./images/kanab-zawiya-modern-beige-masnad-raas-1.webp"
   - "./images/kanab-zawiya-modern-beige-masnad-raas-2.webp"

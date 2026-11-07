@@ -1,5 +1,6 @@
 ---
 title: "تنجيد كنب ديوانية كريمي بقاعدة خشب في الجهراء"
+titleEn: "Cream Diwaniya Sofa Reupholstery with Wooden Base in Jahra"
 images:
   - "./images/tanjeed-kanab-diwaniya-kremi-jahra-1.webp"
   - "./images/tanjeed-kanab-diwaniya-kremi-jahra-2.webp"

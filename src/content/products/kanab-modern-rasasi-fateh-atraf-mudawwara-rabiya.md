@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن رصاصي فاتح بأطراف مدوّرة في الرابية"
+titleEn: "Modern Light Grey Sofa with Rounded Ends in Al Rabiya"
 images:
   - "./images/kanab-modern-rasasi-fateh-atraf-mudawwara-rabiya-1.webp"
   - "./images/kanab-modern-rasasi-fateh-atraf-mudawwara-rabiya-2.webp"

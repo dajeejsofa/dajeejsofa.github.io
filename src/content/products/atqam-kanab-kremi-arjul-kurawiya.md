@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب كريمي بأرجل كروية"
+titleEn: "Cream Sofa Set with Ball Legs"
 images:
   - "./images/atqam-kanab-kremi-arjul-kurawiya-1.webp"
   - "./images/atqam-kanab-kremi-arjul-kurawiya-2.webp"

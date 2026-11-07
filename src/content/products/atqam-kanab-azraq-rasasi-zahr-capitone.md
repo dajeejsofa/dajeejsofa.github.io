@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب أزرق رصاصي بظهر كابتونيه"
+titleEn: "Blue-Grey Sofa Set with Capitonné Back"
 images:
   - "./images/atqam-kanab-azraq-rasasi-zahr-capitone-1.webp"
 imageAlt: "طقم كنب أزرق رصاصي بظهر كابتونيه منجّد بالأزرار ومساند مائلة، مع كرسيين مفردين بقماش منقوش"

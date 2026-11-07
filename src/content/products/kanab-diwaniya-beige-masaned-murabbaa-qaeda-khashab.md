@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية بيج بمساند مربعة وقاعدة خشب"
+titleEn: "Beige Diwaniya Sofa with Square Arms and Wooden Base"
 images:
   - "./images/kanab-diwaniya-beige-masaned-murabbaa-qaeda-khashab-1.webp"
 imageAlt: "كنب ديوانية بيج بمساند مربعة عريضة وقاعدة خشب غامق موزّع على جدران مجلس بأرضية خشبية"

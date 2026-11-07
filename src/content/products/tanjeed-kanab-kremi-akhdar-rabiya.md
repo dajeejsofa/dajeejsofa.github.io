@@ -1,5 +1,6 @@
 ---
 title: "تنجيد قنفات كريمي مع كراسي خضراء في الرابية"
+titleEn: "Cream Sofa Reupholstery with Green Chairs in Al Rabiya"
 images:
   - "./images/tanjeed-kanab-kremi-akhdar-rabiya-1.webp"
   - "./images/tanjeed-kanab-kremi-akhdar-rabiya-2.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب امريكي رصاصي فاتح بجلسة عريضة"
+titleEn: "Light Grey American Sofa with Wide Seat"
 images:
   - "./images/kanab-amriki-rasasi-fateh-jalsa-areeda-1.webp"
 imageAlt: "كنبتان امريكي بقماش رصاصي فاتح منسوج بجلسة عريضة ومساند مائلة ومخدات ظهر منفصلة"

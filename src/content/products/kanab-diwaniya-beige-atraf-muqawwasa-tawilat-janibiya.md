@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية بيج بأطراف مقوّسة وطاولات جانبية"
+titleEn: "Beige Diwaniya Sofa with Curved Ends and Side Tables"
 images:
   - "./images/kanab-diwaniya-beige-atraf-muqawwasa-tawilat-janibiya-1.webp"
   - "./images/kanab-diwaniya-beige-atraf-muqawwasa-tawilat-janibiya-2.webp"
