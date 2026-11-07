@@ -5,7 +5,8 @@ import FAQ from '../components/FAQ.astro';
 import { business, fullAddress, services } from '../data/business';
 import { waGeneral } from '../data/whatsapp';
 import { Image } from 'astro:assets';
-import { publishedProducts, categoriesWithProducts, productsForService, priceFrom, priceTextAr, productImages, productAlt } from '../lib/catalog';
+import { formatKWD } from '../lib/price';
+import { publishedProducts, categoriesWithProducts, productsIn, productsForService, priceFrom, priceTextAr, productImages, productAlt } from '../lib/catalog';
 
 const products = (await publishedProducts()).slice(0, 8);
 // صورة الواجهة: أول صورة لأحدث منتج — صورة شغل حقيقي من المعرض/المشغل
@@ -13,6 +14,15 @@ const heroProduct = products.find((p) => productImages(p).length > 0);
 const heroImage = heroProduct ? productImages(heroProduct)[0] : undefined;
 const heroAlt = heroProduct ? productAlt(heroProduct) : '';
 const cats = await categoriesWithProducts();
+// بطاقة لكل قسم: صورة من أحدث أعماله + أقل سعر منشور — حتى تغطي الرئيسية كل أنواع الكنب لا قسمًا واحدًا
+const catCards = await Promise.all(
+  cats.map(async (c) => {
+    const list = await productsIn(c.id);
+    const withImg = list.find((p) => productImages(p).length > 0);
+    return { id: c.id, title: c.data.title, list, from: priceFrom(list), image: withImg ? productImages(withImg)[0] : undefined, alt: withImg ? productAlt(withImg) : c.data.title };
+  }),
+);
+const catNames = cats.map((c) => c.data.title);
 const tafseelList = await productsForService('tafseel-kanab');
 const tanjeedList = await productsForService('tanjeed-kanab');
 const tafseelFrom = priceFrom(tafseelList);
@@ -20,7 +30,10 @@ const tanjeedFrom = priceFrom(tanjeedList);
 
 // إجابات من معلومات مؤكدة فقط
 const faqs = [
-  { question: `أين يقع معرض ${business.name}؟`, answer: `في ${fullAddress}.` },
+  { question: 'أين أجد محل كنب في الضجيج؟', answer: `${business.name} معرض ومشغل كنب وقنفات في ${fullAddress}، مفتوح يوميًا من 8 صباحًا حتى 9 مساءً. هاتف وواتساب ${business.phone}.` },
+  ...(catNames.length
+    ? [{ question: 'ما أنواع الكنب المتوفرة في معرضكم بالضجيج؟', answer: `${catNames.join('، ')}. كلها تفصيل حسب المقاس بالمتر الطولي شامل القماش، ولدينا كنب جاهز في المعرض.` }]
+    : []),
   { question: 'ما الخدمات التي تقدمونها؟', answer: 'بيع كنب وقنفات جاهزة من المعرض، وتفصيل الكنب حسب المقاس، وتنجيد وتلبيس الكنب القديم بالقماش، وتصليح أرجل الكنب وتغيير الإسفنج. كل الأعمال في مشغلنا بالضجيج.' },
   { question: 'كيف أطلب من الموقع؟', answer: `أضف المنتجات إلى السلة ثم اضغط «أرسل الطلب عبر واتساب»، أو راسلنا مباشرة على واتساب ${business.phone}.` },
   { question: 'هل الأسعار بالدينار الكويتي؟', answer: 'نعم، كل الأسعار في الموقع بالدينار الكويتي.' },
@@ -36,8 +49,8 @@ const faqs = [
 ];
 ---
 <BaseLayout
-  title={`كنب وقنفات في الكويت — ${business.name}، معرض ومشغل`}
-  description={`معرض ومشغل كنب وقنفات في مجمع كتارا بالضجيج، الكويت: تفصيل كنب حسب المقاس ${priceTextAr(tafseelList)} وتنجيد ${priceTextAr(tanjeedList)} شامل القماش، وكنب جاهز. اطلب عبر واتساب ${business.phone}.`}
+  title={`كنب الضجيج — معرض ومشغل كنب وقنفات في الكويت | ${business.name}`}
+  description={`كنب الضجيج من معرض ومشغل ${business.name} بمجمع كتارا: كنب زاوية ومودرن وديوانية وامريكي وأطقم كنب ومجالس عربية، تفصيل ${priceTextAr(tafseelList)} وتنجيد ${priceTextAr(tanjeedList)} شامل القماش. واتساب ${business.phone}.`}
   faqs={faqs}
   alternate="/en/"
 >
@@ -56,7 +69,7 @@ const faqs = [
       )}
       <div class="hero-shade absolute inset-0" aria-hidden="true"></div>
       <div class="relative flex h-full flex-col justify-end p-5 md:p-10">
-        <h1 class="max-w-2xl text-3xl font-bold leading-snug text-white text-balance md:text-5xl md:leading-tight">قنفات وكنب في الكويت من معرضنا ومشغلنا بالضجيج</h1>
+        <h1 class="max-w-2xl text-3xl font-bold leading-snug text-white text-balance md:text-5xl md:leading-tight">كنب الضجيج: قنفات جاهزة وتفصيل حسب المقاس من معرضنا ومشغلنا</h1>
         <div class="mt-5 flex flex-wrap gap-3">
           <a class="btn btn-wa" href={waGeneral()} target="_blank" rel="noopener">اطلب عبر واتساب</a>
           <a class="btn btn-light" href="/shop/">تصفح الكنب والقنفات</a>
@@ -64,13 +77,34 @@ const faqs = [
       </div>
     </div>
     <p class="mt-5 max-w-3xl text-muted">{business.description}</p>
+    <p class="mt-3 max-w-3xl">
+      في معرضنا بالضجيج تجد كل أنواع الكنب والقنفات:
+      {catCards.map((c, i) => <>{i > 0 && '، '}<a class="underline underline-offset-4" href={`/${c.id}/`}>{c.title}</a></>)}.
+      ونقدّم في المشغل <a class="underline underline-offset-4" href="/tafseel-kanab/">تفصيل كنب</a> حسب المقاس،
+      و<a class="underline underline-offset-4" href="/tanjeed-kanab/">تنجيد كنب</a> بالقماش،
+      و<a class="underline underline-offset-4" href="/tasleeh-kanab/">تصليح أرجل الكنب والإسفنج</a>.
+    </p>
   </section>
 
-  {cats.length > 0 && (
-    <section class="container-page mt-8">
-      <h2 class="sr-only">الأقسام</h2>
-      <div class="chips -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:px-0">
-        {cats.map((c) => <a class="btn btn-line shrink-0 px-4 py-1.5 text-sm" href={`/${c.id}/`}>{c.data.title}</a>)}
+  {catCards.length > 0 && (
+    <section class="container-page mt-10">
+      <h2 class="text-2xl font-bold">أنواع الكنب في معرضنا بالضجيج</h2>
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {catCards.map((c) => (
+          <a href={`/${c.id}/`} class="group block overflow-hidden rounded-xl border border-line bg-white">
+            <div class="aspect-[4/3] bg-sand">
+              {c.image && (
+                <Image src={c.image} alt={c.alt} widths={[360, 560, 800]} sizes="(min-width: 1024px) 25vw, 50vw" class="h-full w-full object-cover" loading="lazy" />
+              )}
+            </div>
+            <div class="p-3 sm:p-4">
+              <h3 class="text-sm font-semibold group-hover:text-accent sm:text-base">{c.title}</h3>
+              <p class="mt-1 text-xs text-muted sm:text-sm">
+                {c.list.length} {c.list.length > 10 ? 'نموذجًا' : 'نماذج'}{c.from ? ` · من ${formatKWD(c.from)} للمتر` : ''}
+              </p>
+            </div>
+          </a>
+        ))}
       </div>
     </section>
   )}

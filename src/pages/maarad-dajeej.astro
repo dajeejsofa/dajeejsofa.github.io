@@ -4,24 +4,33 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FAQ from '../components/FAQ.astro';
 import { business, fullAddress } from '../data/business';
 import { waGeneral } from '../data/whatsapp';
+import { categoriesWithProducts } from '../lib/catalog';
+const cats = await categoriesWithProducts();
 const site = Astro.site!.toString().replace(/\/$/, '');
 const faqs = [
   { question: `أين معرض ${business.name}؟`, answer: `في ${fullAddress}.` },
+  { question: 'هل عندكم كنب جاهز في الضجيج؟', answer: 'نعم، في المعرض كنب وقنفات جاهزة تشاهدها وتطلبها مباشرة، إلى جانب نماذج التفصيل حسب المقاس.' },
   { question: 'هل يوجد مشغل مع المعرض؟', answer: 'نعم، لدينا معرض ومشغل كنب وقنفات.' },
   { question: 'كيف أتواصل معكم؟', answer: `بالهاتف أو واتساب على ${business.phone}.` },
 ];
 const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'المعرض', href: '/maarad-dajeej/' }];
 ---
 <BaseLayout
-  title={`معرض كنب في الضجيج — مجمع كتارا | ${business.name}`}
-  description={`معرض ومشغل ${business.name} في ${fullAddress}: كنب وقنفات جاهزة، تفصيل، تنجيد وتصليح. واتساب ${business.phone}.`}
+  title={`محل كنب في الضجيج — معرض قنفات بمجمع كتارا | ${business.name}`}
+  description={`محل ومعرض ${business.name} في ${fullAddress}: كنب جاهز وقنفات تفصيل، كنب زاوية ومودرن وديوانية وأطقم كنب، وتنجيد وتصليح في المشغل. يوميًا 8 ص – 9 م. واتساب ${business.phone}.`}
   faqs={faqs}
   breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
 >
   <section class="container-page pt-8">
     <Breadcrumbs items={crumbs} />
-    <h1 class="mt-3 text-3xl font-bold">معرض قنفات الضجيج في مجمع كتارا</h1>
+    <h1 class="mt-3 text-3xl font-bold">محل ومعرض كنب في الضجيج — مجمع كتارا</h1>
     <p class="mt-4 max-w-3xl text-lg text-muted">{business.description}</p>
+    {cats.length > 0 && (
+      <p class="mt-3 max-w-3xl">
+        في المعرض تشاهد كنبًا جاهزًا ونماذج من كل الأقسام:
+        {cats.map((c, i) => <>{i > 0 && '، '}<a class="underline underline-offset-4" href={`/${c.id}/`}>{c.data.title}</a></>)}.
+      </p>
+    )}
     <dl class="mt-6 max-w-xl divide-y divide-line rounded-xl border border-line bg-white">
       <div class="flex justify-between gap-4 p-4"><dt class="text-muted">العنوان</dt><dd class="font-semibold">{fullAddress}</dd></div>
       <div class="flex justify-between gap-4 p-4"><dt class="text-muted">الهاتف وواتساب</dt><dd><a dir="ltr" class="font-semibold" href={`tel:+965${business.phone}`}>{business.phone}</a></dd></div>

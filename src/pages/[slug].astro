@@ -42,6 +42,8 @@ const seoDescription = fill(d.description);
 const h1 = fill(d.h1);
 const faqs = d.faqs.map((f) => ({ question: fill(f.question), answer: fill(f.answer) }));
 const enHref = await enHrefFor(entry.id);
+// كل أقسام الكنب الأخرى — ربط داخلي يوضّح لجوجل أن الموقع يغطي كل أنواع الكنب في الضجيج
+const otherCats = (await categoriesWithProducts()).filter((c) => c.id !== entry.id);
 ---
 <BaseLayout
   title={seoTitle}
@@ -89,6 +91,16 @@ const enHref = await enHrefFor(entry.id);
   )}
 
   <div class="container-page"><FAQ faqs={faqs} /></div>
+
+  {otherCats.length > 0 && (
+    <section class="container-page mt-12">
+      <h2 class="text-xl font-bold">أنواع كنب أخرى في معرضنا بالضجيج</h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        {otherCats.map((c) => <a class="btn btn-line" href={`/${c.id}/`}>{c.data.title}</a>)}
+        <a class="btn btn-line" href="/">كل كنب الضجيج</a>
+      </div>
+    </section>
+  )}
 
   {kind === 'service' && (
     <section class="container-page mt-12">

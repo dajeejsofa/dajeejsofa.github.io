@@ -38,7 +38,7 @@ const graph: Record<string, unknown>[] = [
     ...(business.openingHours.length ? { openingHours: business.openingHours } : {}),
     ...(business.sameAs.length ? { sameAs: business.sameAs } : {}),
   },
-  { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: business.name, inLanguage: ['ar-KW', 'en'], publisher: { '@id': storeId } },
+  { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: business.name, alternateName: ['كنب الضجيج', business.nameEn], inLanguage: ['ar-KW', 'en'], publisher: { '@id': storeId } },
 ];
 
 if (breadcrumbs.length > 1) {
