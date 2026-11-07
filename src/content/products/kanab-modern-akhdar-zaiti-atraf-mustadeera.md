@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أخضر زيتي حرف L بأطراف مستديرة"
+titleEn: "Modern Olive Green L-Shape Sofa with Rounded Ends"
 images:
   - "./images/kanab-modern-akhdar-zaiti-atraf-mustadeera-1.webp"
   - "./images/kanab-modern-akhdar-zaiti-atraf-mustadeera-2.webp"

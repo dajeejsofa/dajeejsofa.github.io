@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن بوكليه رمادي فاتح منحني"
+titleEn: "Modern Light Grey Bouclé Curved Sofa"
 images:
   - "./images/kanab-modern-boucle-ramadi-munhani-1.webp"
   - "./images/kanab-modern-boucle-ramadi-munhani-2.webp"

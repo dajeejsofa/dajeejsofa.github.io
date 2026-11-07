@@ -1,5 +1,6 @@
 ---
 title: "تنجيد طقم كنب كحلي في حولي"
+titleEn: "Navy Sofa Set Reupholstery in Hawalli"
 images:
   - "./images/tanjeed-taqm-kanab-kohli-hawalli-1.webp"
   - "./images/tanjeed-taqm-kanab-kohli-hawalli-2.webp"

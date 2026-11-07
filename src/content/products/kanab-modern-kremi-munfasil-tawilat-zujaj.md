@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن كريمي منفصل بطاولات زجاج سوداء"
+titleEn: "Modern Cream Modular Sofa with Black Glass Tables"
 images:
   - "./images/kanab-modern-kremi-munfasil-tawilat-zujaj-1.webp"
   - "./images/kanab-modern-kremi-munfasil-tawilat-zujaj-2.webp"

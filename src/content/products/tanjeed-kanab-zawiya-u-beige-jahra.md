@@ -1,5 +1,6 @@
 ---
 title: "تنجيد كنب زاوية U بيج في الجهراء"
+titleEn: "Beige U-Shape Corner Sofa Reupholstery in Jahra"
 images:
   - "./images/tanjeed-kanab-zawiya-u-beige-jahra-1.webp"
   - "./images/tanjeed-kanab-zawiya-u-beige-jahra-2.webp"

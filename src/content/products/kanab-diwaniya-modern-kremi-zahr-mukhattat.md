@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية مودرن كريمي بظهر مخطط ومخدات رول"
+titleEn: "Modern Cream Diwaniya Sofa with Channelled Back and Bolster Cushions"
 images:
   - "./images/kanab-diwaniya-modern-kremi-zahr-mukhattat-1.webp"
   - "./images/kanab-diwaniya-modern-kremi-zahr-mukhattat-2.webp"

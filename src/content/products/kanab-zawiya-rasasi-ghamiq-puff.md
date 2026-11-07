@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية رصاصي غامق حرف L مع بوف"
+titleEn: "Dark Grey L-Shape Corner Sofa with Pouf"
 images:
   - "./images/kanab-zawiya-rasasi-ghamiq-puff-1.webp"
   - "./images/kanab-zawiya-rasasi-ghamiq-puff-2.webp"

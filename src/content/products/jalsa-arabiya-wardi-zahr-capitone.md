@@ -1,5 +1,6 @@
 ---
 title: "جلسة عربية وردي فاتح بظهر كابتونيه"
+titleEn: "Light Pink Arabic Seating with Capitonné Back"
 images:
   - "./images/jalsa-arabiya-wardi-zahr-capitone-1.webp"
   - "./images/jalsa-arabiya-wardi-zahr-capitone-2.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية بني فاتح حرف L بخياطة طولية وأرجل ذهبية"
+titleEn: "Light Brown L-Shape Corner Sofa with Vertical Stitching and Gold Legs"
 images:
   - "./images/kanab-zawiya-bunni-fateh-khiyata-tuliya-arjul-dhahabi-1.webp"
 imageAlt: "كنب زاوية بني فاتح حرف L بظهر وخياطة طولية بارزة وأرجل معدن ذهبية في صالة"

@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أبيض بقاعدة خشب وجوانب منقوشة"
+titleEn: "Modern White Sofa with Wooden Base and Carved Sides"
 images:
   - "./images/kanab-modern-abyad-qaeda-khashab-janb-manqoosh-1.webp"
 imageAlt: "كنب مودرن أبيض بمساند مدوّرة وقاعدة خشب داكنة وقماش منقوش على ظهر المساند، مع كرسيين مفردين"

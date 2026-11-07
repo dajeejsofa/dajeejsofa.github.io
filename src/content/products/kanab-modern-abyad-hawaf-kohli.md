@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أبيض بحواف كحلية"
+titleEn: "Modern White Sofa with Navy Piping"
 images:
   - "./images/kanab-modern-abyad-hawaf-kohli-1.webp"
   - "./images/kanab-modern-abyad-hawaf-kohli-2.webp"

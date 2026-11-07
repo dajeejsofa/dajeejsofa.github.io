@@ -32,6 +32,8 @@ const products = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      titleEn: optStr(), // الاسم بالإنجليزية — إن وُجد تُنشأ للمنتج صفحة إنجليزية تحت /en/products/
+      descriptionEn: optStr(), // وصف إنجليزي اختياري (وإلا يُكتب تلقائيًا من الاسم والسعر)
       urlSlug: optStr(), // رابط الصفحة كما يُكتب في اللوحة
       // الصور: الأولى هي الرئيسية (حتى 8 صور)
       images: z.preprocess(toList, z.array(image()).default([])),

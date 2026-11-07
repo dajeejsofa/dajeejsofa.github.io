@@ -12,6 +12,7 @@ const site = Astro.site!.toString().replace(/\/$/, '');
 <BaseLayout
   title="كل المنتجات — كنب وقنفات في الكويت"
   noindex={products.length === 0}
+  alternate="/en/sofas/"
   description={`تصفح كنب وقنفات ${business.name} بأسعار بالدينار الكويتي، واطلب عبر واتساب ${business.phone}.`}
   breadcrumbs={[{ name: 'الرئيسية', url: `${site}/` }, { name: 'كل المنتجات', url: `${site}/shop/` }]}
 >

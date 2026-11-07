@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية أبيض حرف L بمساند عريضة وطرف ممدود"
+titleEn: "White L-Shape Corner Sofa with Wide Arms and Chaise End"
 images:
   - "./images/kanab-zawiya-abyad-l-masaned-areeda-1.webp"
 imageAlt: "كنب زاوية أبيض حرف L بمساند جانبية عريضة ومخدات ظهر منفصلة وطرف ممدود في غرفة جلوس"

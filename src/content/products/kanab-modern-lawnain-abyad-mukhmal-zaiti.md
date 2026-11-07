@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن بلونين أبيض وبيج مخملي بإطار ملتف"
+titleEn: "Modern Two-Tone White and Beige Velvet Sofa with Wraparound Frame"
 images:
   - "./images/kanab-modern-lawnain-abyad-mukhmal-zaiti-1.webp"
   - "./images/kanab-modern-lawnain-abyad-mukhmal-zaiti-2.webp"

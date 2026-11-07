@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية أزرق بترولي بخياطة طولية وجلسة أرضية"
+titleEn: "Petrol Blue Diwaniya Sofa with Vertical Stitching and Low Seat"
 images:
   - "./images/kanab-diwaniya-petroli-khiyata-tuliya-jalsa-ardiya-1.webp"
   - "./images/kanab-diwaniya-petroli-khiyata-tuliya-jalsa-ardiya-2.webp"

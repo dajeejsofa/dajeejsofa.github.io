@@ -86,6 +86,8 @@ collections:
       - {label: "🔎 عنوان جوجل", name: "seoTitle", widget: "string", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "🔎 وصف جوجل", name: "description", widget: "text", required: false, hint: "اكتب {من_السعر} بدل كتابة الرقم، فيظهر أقل سعر منشور تلقائيًا (مثل: من 24 د.ك للمتر)."}
       - {label: "🔎 الكلمة المستهدفة", name: "focusKeyword", widget: "string", required: false}
+      - {label: "🌐 الاسم بالإنجليزية", name: "titleEn", widget: "string", required: false, hint: "إن كُتب تظهر للمنتج صفحة في النسخة الإنجليزية من الموقع."}
+      - {label: "🌐 الوصف بالإنجليزية", name: "descriptionEn", widget: "text", required: false, hint: "اختياري — إن تُرك فارغًا يُكتب تلقائيًا من الاسم والسعر."}
       - {label: "⚙️ مسودة (لا تظهر في الموقع)", name: "draft", widget: "boolean", default: false}
 
   - name: "categories"

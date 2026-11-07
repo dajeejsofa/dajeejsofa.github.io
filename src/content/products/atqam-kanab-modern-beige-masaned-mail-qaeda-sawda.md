@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب مودرن بيج بمساند مائلة وقاعدة سوداء"
+titleEn: "Modern Beige Sofa Set with Sloped Arms and Black Base"
 images:
   - "./images/atqam-kanab-modern-beige-masaned-mail-qaeda-sawda-1.webp"
   - "./images/atqam-kanab-modern-beige-masaned-mail-qaeda-sawda-2.webp"

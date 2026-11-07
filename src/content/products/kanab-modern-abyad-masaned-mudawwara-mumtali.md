@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن أبيض بمساند مدوّرة ممتلئة"
+titleEn: "Modern White Sofa with Full Rounded Arms"
 images:
   - "./images/kanab-modern-abyad-masaned-mudawwara-mumtali-1.webp"
   - "./images/kanab-modern-abyad-masaned-mudawwara-mumtali-2.webp"

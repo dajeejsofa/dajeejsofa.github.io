@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية رصاصي منفصل بطرف مدوّر"
+titleEn: "Grey Modular Corner Sofa with Rounded End"
 images:
   - "./images/kanab-zawiya-rasasi-tarf-mudawwar-munfasil-1.webp"
   - "./images/kanab-zawiya-rasasi-tarf-mudawwar-munfasil-2.webp"

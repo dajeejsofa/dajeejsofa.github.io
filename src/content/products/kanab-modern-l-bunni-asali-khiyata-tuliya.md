@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن حرف L بني عسلي بخياطة طولية"
+titleEn: "Modern Honey Brown L-Shape Sofa with Vertical Stitching"
 images:
   - "./images/kanab-modern-l-bunni-asali-khiyata-tuliya-1.webp"
   - "./images/kanab-modern-l-bunni-asali-khiyata-tuliya-2.webp"

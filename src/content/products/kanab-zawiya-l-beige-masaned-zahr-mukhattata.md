@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية حرف L بيج بمساند ظهر مخيطة"
+titleEn: "Beige L-Shape Corner Sofa with Stitched Back Cushions"
 images:
   - "./images/kanab-zawiya-l-beige-masaned-zahr-mukhattata-1.webp"
   - "./images/kanab-zawiya-l-beige-masaned-zahr-mukhattata-2.webp"

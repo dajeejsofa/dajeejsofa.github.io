@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب مودرن بيج بقاعدة خشب فاتح"
+titleEn: "Modern Beige Sofa Set with Light Wood Base"
 images:
   - "./images/1000574773.webp"
   - "./images/1000574776.webp"

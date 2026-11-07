@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية بيج حرف L بقماش شانيل وطرف ممدود"
+titleEn: "Beige Chenille L-Shape Corner Sofa with Chaise End"
 images:
   - "./images/kanab-zawiya-shanil-beige-tarf-mamdood-1.webp"
   - "./images/kanab-zawiya-shanil-beige-tarf-mamdood-2.webp"

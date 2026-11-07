@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن كريمي حرف L بأرجل معدن ومقعد طرفي"
+titleEn: "Modern Cream L-Shape Corner Sofa with Metal Legs and End Seat"
 images:
   - "./images/kanab-zawiya-modern-kremi-arjul-maadan-1.webp"
   - "./images/kanab-zawiya-modern-kremi-arjul-maadan-2.webp"

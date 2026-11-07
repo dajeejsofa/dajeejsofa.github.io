@@ -1,5 +1,6 @@
 ---
 title: "مجلس عربي كريمي بجلسة أرضية وكنب مرتفع"
+titleEn: "Cream Arabic Majlis with Floor Seating and Raised Sofa"
 images:
   - "./images/majlis-arabi-kremi-jalsa-ardiya-wa-kanab-1.webp"
   - "./images/majlis-arabi-kremi-jalsa-ardiya-wa-kanab-2.webp"

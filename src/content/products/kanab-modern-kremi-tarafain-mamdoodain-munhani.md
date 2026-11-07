@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن كريمي بطرفين ممدودين منحنيين"
+titleEn: "Modern Cream Sofa with Two Curved Chaise Ends"
 images:
   - "./images/kanab-modern-kremi-tarafain-mamdoodain-munhani-1.webp"
 imageAlt: "كنب مودرن كريمي من ثلاث قطع، قطعة وسط مستقيمة وطرفان ممدودان منحنيان للاسترخاء، مع مخدات كروية"

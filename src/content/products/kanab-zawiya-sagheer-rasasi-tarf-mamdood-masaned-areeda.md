@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية صغير رصاصي بطرف ممدود ومساند عريضة"
+titleEn: "Small Grey Corner Sofa with Chaise End and Wide Arms"
 images:
   - "./images/kanab-zawiya-sagheer-rasasi-tarf-mamdood-masaned-areeda-1.webp"
 imageAlt: "كنب زاوية صغير رصاصي بقماش منسوج بطرف ممدود ومساند عريضة مستقيمة ومخدات ظهر منفصلة"

@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية مودرن بيج بمساند خشب"
+titleEn: "Modern Beige Diwaniya Sofa with Wooden Arms"
 images:
   - "./images/kanab-diwaniya-modern-beige-doha-1.jpg"
 imageAlt: "كنب ديوانية مودرن بيج بمساند خشب منفذ في ديوانية بمنطقة الدوحة في الكويت"

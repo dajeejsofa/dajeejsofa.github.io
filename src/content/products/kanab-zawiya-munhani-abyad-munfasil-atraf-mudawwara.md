@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية منحني أبيض منفصل بأطراف مدوّرة"
+titleEn: "Curved White Modular Corner Sofa with Rounded Ends"
 images:
   - "./images/kanab-zawiya-munhani-abyad-munfasil-atraf-mudawwara-1.webp"
 imageAlt: "كنب زاوية منحني أبيض فاتح من قطع منفصلة بزاوية مقوّسة وأطراف مدوّرة ملتفة"

@@ -8,7 +8,8 @@ import type { EnPage } from '../../data/en';
 import { hoursEn } from '../../data/en';
 import { waLink } from '../../data/whatsapp';
 import { priceFrom, priceTextEn } from '../../lib/catalog';
-import { liveEnPages, productsOf } from '../../lib/en';
+import { liveEnPages, productsOf, enProductsOf } from '../../lib/en';
+import ProductCardEn from '../../components/ProductCardEn.astro';
 
 export async function getStaticPaths() {
   const pages = await liveEnPages();
@@ -20,6 +21,9 @@ const site = Astro.site!.toString().replace(/\/$/, '');
 const path = `/en/${page.slug}/`;
 const products = await productsOf(page);
 const minPrice = priceFrom(products);
+const cards = await enProductsOf(page);
+const listTitle = page.kind === 'service' ? (page.ar === 'tanjeed-kanab' ? 'Our upholstery work' : page.ar === 'tafseel-kanab' ? 'Custom sofas we have made' : 'Our work') : `${page.name} designs we make`;
+const shown = page.ar === 'tafseel-kanab' ? cards.slice(0, 16) : cards;
 const isRepair = page.ar === 'tasleeh-kanab';
 const price = priceTextEn(products);
 const priceShort = priceTextEn(products, true);
@@ -64,10 +68,14 @@ const others = all.filter((p) => p.slug !== page.slug);
     </div>
   </section>
 
-  {products.length > 0 && (
+  {shown.length > 0 && (
     <section class="container-page mt-12">
-      <h2 class="text-2xl font-bold">Photos of our work</h2>
-      <p class="mt-2">We have published {products.length} {products.length === 1 ? 'example' : 'examples'} of this work with photos and prices in Kuwaiti dinars. <a class="underline" href={`/${page.ar}/`} hreflang="ar" lang="ar">عرض الصور (بالعربية)</a></p>
+      <h2 class="text-2xl font-bold">{listTitle}</h2>
+      <p class="mt-2 text-muted">{cards.length} {cards.length === 1 ? 'design' : 'designs'} with photos and prices in Kuwaiti dinars{!isRepair && minPrice ? ', per linear metre with fabric included' : ''}.</p>
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {shown.map((p, i) => <ProductCardEn product={p} eager={i < 2} />)}
+      </div>
+      {shown.length < cards.length && <a class="btn btn-line mt-6" href="/en/sofas/">See all designs ({cards.length})</a>}
     </section>
   )}
 

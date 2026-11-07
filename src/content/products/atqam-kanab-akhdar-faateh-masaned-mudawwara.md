@@ -1,5 +1,6 @@
 ---
 title: "طقم كنب أخضر فاتح بمساند مدوّرة"
+titleEn: "Light Green Sofa Set with Rounded Arms"
 images:
   - "./images/atqam-kanab-akhdar-faateh-masaned-mudawwara-1.webp"
   - "./images/atqam-kanab-akhdar-faateh-masaned-mudawwara-2.webp"

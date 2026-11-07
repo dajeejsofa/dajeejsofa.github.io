@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية صغير بيج حرف L بطرف مستدير"
+titleEn: "Small Beige L-Shape Corner Sofa with Rounded End"
 images:
   - "./images/kanab-zawiya-sagheer-beige-tarf-mustadeer-1.webp"
 imageAlt: "كنب زاوية صغير بيج حرف L بطرف ممدود مستدير مناسب لغرفة جلوس صغيرة"

@@ -1,5 +1,6 @@
 ---
 title: "مجلس عربي مودرن بيج بمساند أسطوانية"
+titleEn: "Modern Beige Arabic Majlis with Cylinder Cushions"
 images:
   - "./images/majlis-arabi-modern-beige-masaned-uswaniya-1.webp"
   - "./images/majlis-arabi-modern-beige-masaned-uswaniya-2.webp"

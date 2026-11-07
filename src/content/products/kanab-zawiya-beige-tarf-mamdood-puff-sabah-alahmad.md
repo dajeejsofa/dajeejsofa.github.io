@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية بيج بطرف ممدود وبوف مربع"
+titleEn: "Beige Corner Sofa with Chaise End and Square Pouf"
 images:
   - "./images/kanab-zawiya-beige-tarf-mamdood-puff-sabah-alahmad-1.webp"
   - "./images/kanab-zawiya-beige-tarf-mamdood-puff-sabah-alahmad-2.webp"

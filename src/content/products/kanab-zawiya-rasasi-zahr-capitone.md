@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية رصاصي حرف L بظهر كابتونيه"
+titleEn: "Grey L-Shape Corner Sofa with Capitonné Back"
 images:
   - "./images/kanab-zawiya-rasasi-zahr-capitone-1.webp"
   - "./images/kanab-zawiya-rasasi-zahr-capitone-2.webp"

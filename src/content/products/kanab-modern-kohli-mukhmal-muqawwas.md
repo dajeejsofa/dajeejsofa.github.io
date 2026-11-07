@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن كحلي مخملي مقوّس"
+titleEn: "Modern Navy Velvet Curved Sofa"
 images:
   - "./images/kanab-modern-kohli-mukhmal-muqawwas-1.webp"
   - "./images/kanab-modern-kohli-mukhmal-muqawwas-2.webp"

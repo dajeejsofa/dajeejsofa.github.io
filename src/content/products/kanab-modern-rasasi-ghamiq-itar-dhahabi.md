@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن رصاصي غامق بإطار ذهبي"
+titleEn: "Modern Dark Grey Sofa with Gold Frame"
 images:
   - "./images/kanab-modern-rasasi-ghamiq-itar-dhahabi-1.webp"
 imageAlt: "كنب مودرن طويل رصاصي غامق بقماش منسوج ومساند مدوّرة يحيط بها وبالقاعدة إطار معدني ذهبي"

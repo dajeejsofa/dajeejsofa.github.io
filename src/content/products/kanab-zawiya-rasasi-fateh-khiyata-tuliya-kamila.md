@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية رصاصي فاتح بخياطة طولية كاملة"
+titleEn: "Light Grey Corner Sofa with Full Vertical Stitching"
 images:
   - "./images/kanab-zawiya-rasasi-fateh-khiyata-tuliya-kamila-1.webp"
   - "./images/kanab-zawiya-rasasi-fateh-khiyata-tuliya-kamila-2.webp"

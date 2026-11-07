@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن حرف L عنابي"
+titleEn: "Modern Burgundy L-Shape Corner Sofa"
 images:
   - "./images/kanab-zawiya-modern-annabi-mubarak-alkabeer-1.webp"
   - "./images/kanab-zawiya-modern-annabi-mubarak-alkabeer-2.webp"

@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن حرف L بيج بظهر مستدير وطرف ممدود"
+titleEn: "Modern Beige L-Shape Corner Sofa with Rounded Back and Chaise End"
 images:
   - "./images/kanab-zawiya-modern-beige-zahr-mustadeer-1.webp"
   - "./images/kanab-zawiya-modern-beige-zahr-mustadeer-2.webp"

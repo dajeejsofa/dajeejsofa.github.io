@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية بيج حرف L بطرف ممدود وأرجل خشب"
+titleEn: "Beige L-Shape Corner Sofa with Chaise End and Wooden Legs"
 images:
   - "./images/kanab-zawiya-l-beige-tarf-mamdood-arjul-khashab-1.webp"
   - "./images/kanab-zawiya-l-beige-tarf-mamdood-arjul-khashab-2.webp"

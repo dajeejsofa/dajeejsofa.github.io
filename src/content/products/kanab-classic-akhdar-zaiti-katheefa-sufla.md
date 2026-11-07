@@ -1,5 +1,6 @@
 ---
 title: "كنب كلاسيك أخضر زيتي بكشكش سفلي"
+titleEn: "Olive Green Classic Sofa with Ruffled Skirt"
 images:
   - "./images/kanab-classic-akhdar-zaiti-katheefa-sufla-1.webp"
   - "./images/kanab-classic-akhdar-zaiti-katheefa-sufla-2.webp"

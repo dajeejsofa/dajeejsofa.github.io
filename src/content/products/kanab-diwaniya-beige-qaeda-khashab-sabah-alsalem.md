@@ -1,5 +1,6 @@
 ---
 title: "كنب ديوانية بيج بظهر مقوّس وقاعدة خشب"
+titleEn: "Beige Diwaniya Sofa with Curved Back and Wooden Base"
 images:
   - "./images/kanab-diwaniya-beige-qaeda-khashab-sabah-alsalem-1.webp"
   - "./images/kanab-diwaniya-beige-qaeda-khashab-sabah-alsalem-2.webp"

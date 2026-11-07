@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن بيج بتصميم بيضاوي مقوّس"
+titleEn: "Modern Beige Oval Curved Sofa"
 images:
   - "./images/kanab-modern-beige-bayda-wi-muqawwas-1.webp"
 imageAlt: "كنبتان مودرن بيج بتصميم بيضاوي مقوّس يلتف فيه الظهر مع المساند وأرجل داكنة في صالة"

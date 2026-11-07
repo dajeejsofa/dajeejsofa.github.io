@@ -1,5 +1,6 @@
 ---
 title: "كنب مودرن منخفض منفصل بيج رمادي بطرفين ممدودين"
+titleEn: "Modern Low Modular Beige-Grey Sofa with Two Chaise Ends"
 images:
   - "./images/kanab-modern-ardi-munfasil-jahra-1.webp"
 imageAlt: "كنب مودرن منخفض من قطع منفصلة بلون بيج رمادي بطرفين ممدودين منفذ في الجهراء"

@@ -1,5 +1,6 @@
 ---
 title: "كنب زاوية مودرن بيج بقماش منسوج حرف L بقطع منفصلة وطرف ممدود"
+titleEn: "Modern Beige Woven Fabric L-Shape Modular Corner Sofa with Chaise End"
 images:
   - "./images/kanab-zawiya-modern-beige-mansooj-qita-munfasila-1.webp"
   - "./images/kanab-zawiya-modern-beige-mansooj-qita-munfasila-2.webp"
