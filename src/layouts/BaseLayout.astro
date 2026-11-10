@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { waSrcScript } from '../lib/wa-src';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Schema from '../components/Schema.astro';
@@ -73,5 +74,6 @@ const enUrl = isEn ? canonical : alt;
     <Footer lang={lang} />
     {!isEn && <Cart />}
     <FloatingWhatsApp lang={lang} />
+    <script is:inline set:html={waSrcScript("قنفات الضجيج")} />
   </body>
 </html>
