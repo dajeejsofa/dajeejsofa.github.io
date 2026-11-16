@@ -1,14 +1,10 @@
 ---
 import { business } from '../data/business';
 ---
-<div data-cart-root hidden class="fixed inset-0 z-50">
-  <div data-cart-close class="absolute inset-0 bg-black/40"></div>
-  <aside
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="cart-title"
-    class="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-xl"
-  >
+<!-- نافذة المتصفح الأصلية <dialog>: تُغلق بلمسة خارجها (closedby) أو زر الرجوع/Esc، وتحصر التركيز داخلها،
+     ولا تُقفل الصفحة بتعديل overflow على body (يمنع قفز الصفحة) — modern-web-guidance -->
+<dialog id="cart-dialog" data-cart-root closedby="any" aria-labelledby="cart-title" class="cart-drawer">
+  <div class="flex h-full flex-col bg-white">
     <div class="flex items-center justify-between border-b border-line p-4">
       <h2 id="cart-title" class="text-lg font-bold">سلة الطلب</h2>
       <button type="button" data-cart-close class="btn btn-line px-3 py-1" aria-label="إغلاق السلة">✕</button>
@@ -23,8 +19,8 @@ import { business } from '../data/business';
       </div>
       <a data-cart-send class="btn btn-wa w-full" href="#" target="_blank" rel="noopener">أرسل الطلب عبر واتساب</a>
     </div>
-  </aside>
-</div>
+  </div>
+</dialog>
 
 <script define:vars={{ shopName: business.name, wa: business.whatsapp }} is:inline>
   (function () {
@@ -107,8 +103,17 @@ import { business } from '../data/business';
       save(items); render();
     }
 
-    function open() { root.hidden = false; document.body.style.overflow = 'hidden'; }
-    function close() { root.hidden = true; document.body.style.overflow = ''; }
+    function open() { if (!root.open) root.showModal(); }
+    function close() { if (root.open) root.close(); }
+    // احتياطي للمتصفحات التي لا تدعم closedby: اللمس خارج محتوى النافذة (على الخلفية) يغلقها
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      root.addEventListener('click', function (e) {
+        if (e.target !== root) return;
+        var r = root.getBoundingClientRect();
+        var inside = r.top <= e.clientY && e.clientY <= r.bottom && r.left <= e.clientX && e.clientX <= r.right;
+        if (!inside) close();
+      });
+    }
 
     document.addEventListener('click', function (e) {
       var t = e.target;
@@ -125,7 +130,6 @@ import { business } from '../data/business';
         save(items); render(); open();
       }
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !root.hidden) close(); });
     window.addEventListener('storage', function (e) { if (e.key === KEY) render(); });
     render();
   })();
