@@ -63,6 +63,9 @@ const enUrl = isEn ? canonical : alt;
     <meta property="og:site_name" content={brand} />
     {og && <meta property="og:image" content={og} />}
     <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
+    <!-- تحميل مسبق للصفحة التالية (Speculation Rules): عند تمرير المؤشر/لمس الرابط تُجهَّز الصفحة فتفتح فوراً.
+         لا يؤثر على الصفحة الحالية ولا على أول دخول من جوجل؛ المتصفحات غير الداعمة تتجاهله — modern-web-guidance -->
+    <script type="speculationrules" is:inline set:html={JSON.stringify({ prerender: [{ where: { and: [{ href_matches: '/*' }, { not: { href_matches: '/admin/*' } }, { not: { selector_matches: '[target=_blank], [rel~=nofollow]' } }] }, eagerness: 'moderate' }] })} />
     <Schema faqs={faqs} breadcrumbs={breadcrumbs} product={product} service={service} lang={lang} />
   </head>
   <body class="flex min-h-screen flex-col pb-20 md:pb-0">

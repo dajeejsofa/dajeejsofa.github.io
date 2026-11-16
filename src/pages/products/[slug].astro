@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image, Picture, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -93,7 +93,7 @@ const crumbs = [
     <div class="mt-5 grid gap-8 lg:grid-cols-2">
       <div class="space-y-3">
         {main && (
-          <Image src={main} alt={productAlt(product)} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 50vw, 100vw" class="w-full rounded-xl border border-line object-cover" loading="eager" fetchpriority="high" />
+          <Picture formats={['avif', 'webp']} fallbackFormat="webp" src={main} alt={productAlt(product)} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 50vw, 100vw" class="w-full rounded-xl border border-line object-cover" loading="eager" fetchpriority="high" />
         )}
         {rest.length > 0 && (
           <div class="grid grid-cols-3 gap-3">

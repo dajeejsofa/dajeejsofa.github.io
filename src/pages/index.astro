@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard.astro';
 import FAQ from '../components/FAQ.astro';
 import { business, fullAddress, services } from '../data/business';
 import { waGeneral } from '../data/whatsapp';
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import { formatKWD } from '../lib/price';
 import { publishedProducts, categoriesWithProducts, productsIn, productsForService, priceFrom, priceTextAr, productImages, productAlt } from '../lib/catalog';
 
@@ -57,7 +57,7 @@ const faqs = [
   <section class="container-page pt-4 md:pt-8">
     <div class="hero relative overflow-hidden rounded-2xl bg-ink">
       {heroImage && (
-        <Image
+        <Picture formats={['avif', 'webp']} fallbackFormat="webp"
           src={heroImage}
           alt={heroAlt}
           widths={[480, 800, 1200, 1600]}

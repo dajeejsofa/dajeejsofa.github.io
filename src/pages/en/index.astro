@@ -5,7 +5,7 @@ import FAQ from '../../components/FAQ.astro';
 import { business, fullAddressEn } from '../../data/business';
 import { hoursEn } from '../../data/en';
 import { waLink } from '../../data/whatsapp';
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import ProductCardEn from '../../components/ProductCardEn.astro';
 import { productsForService, priceTextEn, priceFrom, productImages } from '../../lib/catalog';
 import { liveEnPages, productsOf, enProducts, enProductsOf } from '../../lib/en';
@@ -47,7 +47,7 @@ const faqs = [
   <section class="container-page pt-4 md:pt-8">
     <div class="hero relative overflow-hidden rounded-2xl bg-ink">
       {hero && (
-        <Image src={productImages(hero)[0]} alt={hero.data.titleEn!} widths={[480, 800, 1200, 1600]} sizes="(min-width: 1152px) 1120px, 100vw" class="absolute inset-0 h-full w-full object-cover" loading="eager" fetchpriority="high" />
+        <Picture formats={['avif', 'webp']} fallbackFormat="webp" src={productImages(hero)[0]} alt={hero.data.titleEn!} widths={[480, 800, 1200, 1600]} sizes="(min-width: 1152px) 1120px, 100vw" class="absolute inset-0 h-full w-full object-cover" loading="eager" fetchpriority="high" />
       )}
       <div class="hero-shade absolute inset-0" aria-hidden="true"></div>
       <div class="relative flex h-full flex-col justify-end p-5 md:p-10">
