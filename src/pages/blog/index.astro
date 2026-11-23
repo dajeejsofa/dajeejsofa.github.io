@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { publishedPosts } from '../../lib/blog';
+const posts = await publishedPosts();
+const site = Astro.site!.toString().replace(/\/$/, '');
+const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'مقالات', href: '/blog/' }];
+---
+<BaseLayout
+  title="مقالات ونصائح الكنب والقنفات"
+  description="مقالات عملية عن تفصيل الكنب والقنفات وتنجيدها وتصليحها في الكويت: المقاسات، والأقمشة، والإسفنج، والأسعار بالمتر، من مشغل قنفات الضجيج."
+  noindex={posts.length === 0}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+>
+  <section class="container-page max-w-3xl pt-8">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-3 text-3xl font-bold">مقالات ونصائح الكنب والقنفات</h1>
+    {posts.length === 0 ? <p class="mt-6 text-muted">تُنشر المقالات قريبًا.</p> : (
+      <ul class="mt-6 space-y-6">
+        {posts.map((p) => (
+          <li>
+            <a class="text-xl font-bold text-accent hover:underline" href={`/blog/${p.id}/`}>{p.data.title}</a>
+            <p class="mt-1 text-muted">{p.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

@@ -99,4 +99,21 @@ const reviews = defineCollection({
   }),
 });
 
-export const collections = { products, categories, services, reviews };
+// المقالات المجدولة (طلب المالك 2026-11-24): مقال كل سبت، يظهر صباح pubDate بتوقيت الكويت عبر البناء اليومي.
+// قبل موعده لا تُبنى صفحته ولا يظهر في القوائم ولا sitemap ولا llms.txt (src/lib/blog.ts).
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      pubDate: z.coerce.date(),
+      image: z.preprocess((v) => fixPath(blank(v)), image().optional()),
+      imageAlt: optStr(),
+      draft: z.boolean().default(false),
+      relatedPosts: z.array(z.string()).default([]),
+      faqs,
+      ...seo,
+    }),
+});
+
+export const collections = { products, categories, services, reviews, blog };
