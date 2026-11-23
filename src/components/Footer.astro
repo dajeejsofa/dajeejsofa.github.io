@@ -4,6 +4,7 @@ import { waGeneral, waLink } from '../data/whatsapp';
 import { categoriesWithProducts } from '../lib/catalog';
 import { liveEnPages } from '../lib/en';
 import { hoursEn } from '../data/en';
+import { publishedPosts } from '../lib/blog';
 
 export interface Props { lang?: 'ar' | 'en' }
 const { lang = 'ar' } = Astro.props;
@@ -11,6 +12,7 @@ const isEn = lang === 'en';
 const cats = await categoriesWithProducts();
 const en = await liveEnPages();
 const year = new Date().getFullYear();
+const hasPosts = (await publishedPosts()).length > 0;
 const hours = isEn ? hoursEn(business.openingHours) : business.openingHoursText;
 ---
 <footer class="mt-16 border-t border-line bg-white text-sm">
@@ -31,6 +33,7 @@ const hours = isEn ? hoursEn(business.openingHours) : business.openingHoursText;
           {cats.map((c) => <li><a class="hover:text-accent" href={`/${c.id}/`}>{c.data.title}</a></li>)}
           <li><a class="hover:text-accent" href="/shop/">كل المنتجات</a></li>
           <li><a class="hover:text-accent" href="/araa-alumalaa/">آراء العملاء</a></li>
+          {hasPosts && <li><a class="hover:text-accent" href="/blog/">مقالات ونصائح</a></li>}
         </ul>
       )}
     </div>

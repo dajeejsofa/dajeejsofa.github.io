@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { business, fullAddress, returnPolicy } from '../data/business';
 import { categoriesWithProducts, publishedProducts, productsForService, productsIn, priceFrom, priceTextEn, areasOf, fillPrice } from '../lib/catalog';
 import { liveEnPages, productsOf } from '../lib/en';
+import { publishedPosts } from '../lib/blog';
 
 // ملخص واضح للنشاط لأدوات الذكاء الاصطناعي (llms.txt)
 export const GET: APIRoute = async ({ site }) => {
@@ -14,6 +15,7 @@ export const GET: APIRoute = async ({ site }) => {
   const tanjeedFrom = priceFrom(await productsForService('tanjeed-kanab'));
   const areas = areasOf(all).map((a) => a.area);
   const en = await liveEnPages();
+  const posts = await publishedPosts();
   const lines = [
     `# ${business.name} (${business.nameEn})`,
     '',
@@ -46,6 +48,7 @@ export const GET: APIRoute = async ({ site }) => {
     '## المنتجات',
     `- [كل المنتجات](${u('/shop/')})`,
     ...(await Promise.all(cats.map(async (c) => `- [${fillPrice(c.data.h1, await productsIn(c.id))}](${u(`/${c.id}/`)})`))),
+    ...(posts.length ? ['', '## مقالات', ...posts.map((p) => `- [${p.data.title}](${u(`/blog/${p.id}/`)}): ${p.data.description}`)] : []),
     '',
     '## English',
     `- [${business.nameEn} — custom sofas, sofa upholstery and sofa repair in Kuwait](${u('/en/')})`,

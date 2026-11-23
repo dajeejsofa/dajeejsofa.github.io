@@ -1,0 +1,61 @@
+---
+// صفحة المقال: تُبنى فقط للمقالات التي حان موعدها (src/lib/blog.ts)
+import { render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FAQ from '../../components/FAQ.astro';
+import { business } from '../../data/business';
+import { waGeneral } from '../../data/whatsapp';
+import { publishedPosts, type Post } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await publishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+const { post, posts } = Astro.props as { post: Post; posts: Post[] };
+const d = post.data;
+const { Content } = await render(post);
+const site = Astro.site!.toString().replace(/\/$/, '');
+const url = `${site}/blog/${post.id}/`;
+const og = d.image ? (await getImage({ src: d.image, width: 1200, format: 'jpeg' })).src : undefined;
+const related = d.relatedPosts.map((id) => posts.find((p) => p.id === id)).filter((p): p is Post => Boolean(p));
+const crumbs = [{ name: 'الرئيسية', href: '/' }, { name: 'مقالات', href: '/blog/' }, { name: d.title, href: `/blog/${post.id}/` }];
+const day = d.pubDate.toISOString().slice(0, 10);
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: d.title,
+  description: d.description,
+  datePublished: day,
+  dateModified: day,
+  inLanguage: 'ar-KW',
+  mainEntityOfPage: url,
+  ...(og ? { image: new URL(og, site).toString() } : {}),
+  author: { '@type': 'Organization', name: business.name, url: `${site}/` },
+  publisher: { '@type': 'Organization', name: business.name, url: `${site}/` },
+};
+---
+<BaseLayout
+  title={d.seoTitle || d.title}
+  description={d.description}
+  ogImage={og}
+  faqs={d.faqs.length ? d.faqs : undefined}
+  breadcrumbs={crumbs.map((c) => ({ name: c.name, url: `${site}${c.href}` }))}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(article)} />
+  <article class="container-page max-w-3xl pt-8">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-3 text-3xl font-bold leading-snug">{d.title}</h1>
+    <p class="mt-2 text-sm text-muted"><time datetime={day}>{d.pubDate.toLocaleDateString('ar-KW', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Kuwait' })}</time></p>
+    <div class="prose-ar mt-6 text-lg"><Content /></div>
+    {d.faqs.length > 0 && <FAQ faqs={d.faqs} />}
+    <a class="btn btn-wa mt-8 px-5 py-3" href={waGeneral()} target="_blank" rel="noopener">اسأل على واتساب</a>
+    {related.length > 0 && (
+      <section class="mt-10">
+        <h2 class="text-xl font-bold">مقالات ذات صلة</h2>
+        <ul class="mt-3 list-disc ps-6 space-y-1">{related.map((p) => <li><a class="text-accent underline" href={`/blog/${p.id}/`}>{p.data.title}</a></li>)}</ul>
+      </section>
+    )}
+  </article>
+</BaseLayout>
