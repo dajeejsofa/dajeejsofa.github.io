@@ -6,9 +6,15 @@ export type Category = CollectionEntry<'categories'>;
 const byOrder = <T extends { data: { order: number; title: string } }>(a: T, b: T) =>
   a.data.order - b.data.order || a.data.title.localeCompare(b.data.title, 'ar');
 
-/** المنتجات المنشورة فقط (المسودات لا تظهر في الموقع) */
+// النشر المجدول (طلب المالك 2026-11-23، قبل سفره شهرين): المنتج ذو publishDate القادم يبقى مخفيًا تمامًا —
+// لا تُبنى صفحته ولا يظهر في القوائم ولا sitemap — حتى يحين يومه بتوقيت الكويت؛ البناء اليومي (deploy.yml) يُظهره.
+const todayKuwait = () =>
+  new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuwait', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+export const isDue = (d?: Date) => !d || d.toISOString().slice(0, 10) <= todayKuwait();
+
+/** المنتجات المنشورة فقط (المسودات والمجدولة لموعد قادم لا تظهر في الموقع) */
 export const publishedProducts = async () =>
-  (await getCollection('products', ({ data }) => !data.draft)).sort(byOrder);
+  (await getCollection('products', ({ data }) => !data.draft && isDue(data.publishDate))).sort(byOrder);
 
 /** الأقسام التي فيها منتج منشور واحد على الأقل — القسم الفارغ لا تُنشأ له صفحة */
 export const categoriesWithProducts = async () => {

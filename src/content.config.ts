@@ -56,6 +56,8 @@ const products = defineCollection({
       inStock: z.boolean().default(false), // false = تفصيل حسب الطلب
       order: z.number().default(0),
       draft: z.boolean().default(false),
+      // النشر المجدول: يظهر المنتج صباح هذا اليوم بتوقيت الكويت (src/lib/catalog.ts). فارغ = فورًا
+      publishDate: opt(z.coerce.date()),
       ...seo,
     }),
 });

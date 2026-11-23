@@ -89,6 +89,7 @@ collections:
       - {label: "🌐 الاسم بالإنجليزية", name: "titleEn", widget: "string", required: false, hint: "إن كُتب تظهر للمنتج صفحة في النسخة الإنجليزية من الموقع."}
       - {label: "🌐 الوصف بالإنجليزية", name: "descriptionEn", widget: "text", required: false, hint: "اختياري — إن تُرك فارغًا يُكتب تلقائيًا من الاسم والسعر."}
       - {label: "⚙️ مسودة (لا تظهر في الموقع)", name: "draft", widget: "boolean", default: false}
+      - {label: "📅 تاريخ النشر (فارغ = فورًا، تاريخ قادم = يظهر تلقائيًا صباح ذلك اليوم)", name: "publishDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", picker_utc: true, required: false}
 
   - name: "categories"
     label: "الأقسام"
